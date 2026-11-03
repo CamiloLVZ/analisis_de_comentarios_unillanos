@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+
+.env
+
+.ipynb_checkpoints/
+
+# No publicar datos recolectados
+data/raw/
+data/processed/
+data/final/
