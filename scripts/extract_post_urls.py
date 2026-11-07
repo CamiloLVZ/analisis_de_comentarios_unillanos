@@ -22,7 +22,7 @@ OUTPUT_DIR = BASE_DIR / "data" / "processed" / "post_urls"
 # ==================================================
 
 def load_posts(platform, directory):
-    """Carga publicaciones desde los archivos JSON de una plataforma."""
+    """Carga publicaciones desde los archivos JSON."""
 
     if not directory.exists():
         print(f"[AVISO] No existe el directorio: {directory}")
@@ -32,14 +32,12 @@ def load_posts(platform, directory):
 
     for file_path in sorted(directory.glob("*.json")):
 
-        # Evitar procesar archivos que no sean de publicaciones
         if "post" not in file_path.stem.lower():
             continue
 
         with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
 
-        # Admitir listas u objetos que contengan items
         if isinstance(data, dict):
             data = data.get("items", [])
 
@@ -47,12 +45,21 @@ def load_posts(platform, directory):
             print(f"[AVISO] Formato inesperado: {file_path.name}")
             continue
 
-        valid_posts = [
-            post for post in data
-            if isinstance(post, dict)
-            and post.get("type") == "post"
-            and post.get("url")
-        ]
+        if platform == "facebook":
+            valid_posts = [
+                item for item in data
+                if isinstance(item, dict)
+                and item.get("type") == "post"
+                and item.get("url")
+            ]
+
+        else:
+            # En Instagram, type representa el formato multimedia
+            valid_posts = [
+                item for item in data
+                if isinstance(item, dict)
+                and item.get("url")
+            ]
 
         posts.extend(valid_posts)
 
@@ -62,6 +69,15 @@ def load_posts(platform, directory):
         )
 
     return posts
+
+
+def get_comment_count(platform, post):
+    """Obtiene el contador de comentarios según la plataforma."""
+
+    if platform == "facebook":
+        return post.get("comments") or 0
+
+    return post.get("commentsCount") or 0
 
 
 def extract_urls(posts):
@@ -105,7 +121,7 @@ for platform, directory in SOURCES.items():
     # Solo publicaciones que reportan comentarios
     posts_with_comments = [
         post for post in posts
-        if (post.get("comments") or 0) > 0
+        if get_comment_count(platform, post) > 0
     ]
 
     comment_urls = extract_urls(posts_with_comments)
