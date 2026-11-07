@@ -8,7 +8,7 @@ from pathlib import Path
 # ==================================================
 
 # Cambia esta ruta por la ubicación de tu archivo.
-INPUT_FILE = Path("data/raw/instagram/posts.json")
+INPUT_FILE = Path("data/raw/instagram/posts/posts.json")
 
 # Nombre de la columna que contiene el número de comentarios.
 COMMENTS_COLUMN = "commentsCount"
