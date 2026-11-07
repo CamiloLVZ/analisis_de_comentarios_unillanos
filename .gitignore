@@ -6,7 +6,3 @@ __pycache__/
 
 .ipynb_checkpoints/
 
-# No publicar datos recolectados
-data/raw/
-data/processed/
-data/final/

@@ -15,7 +15,7 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 PLAYLIST_ID = "UUmhXbLrVeyotUiBsaPBcxcA"
 
-START_DATE = datetime(2024, 11, 2, tzinfo=timezone.utc)
+START_DATE = datetime(2020, 1, 1, tzinfo=timezone.utc)
 END_DATE = datetime(2026, 11, 2, 23, 59, 59, tzinfo=timezone.utc)
 
 BASE_URL = "https://www.googleapis.com/youtube/v3/playlistItems"
