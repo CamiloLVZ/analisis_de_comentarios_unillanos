@@ -18,8 +18,8 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 BASE_URL = "https://www.googleapis.com/youtube/v3"
 
-VIDEOS_FILE = PROJECT_ROOT / "data/raw/youtube/videos.json"
-OUTPUT_DIR = PROJECT_ROOT / "data/raw/youtube"
+VIDEOS_FILE = PROJECT_ROOT / "data" / "raw" / "youtube" / "videos" / "videos.json"
+OUTPUT_DIR = PROJECT_ROOT / "data" / "raw" / "youtube" / "comments"
 
 COMMENTS_FILE = OUTPUT_DIR / "comments.json"
 RAW_FILE = OUTPUT_DIR / "comments_api_raw.json"
@@ -29,6 +29,8 @@ if not API_KEY:
 
 if not VIDEOS_FILE.exists():
     raise FileNotFoundError(f"No existe el archivo: {VIDEOS_FILE}")
+
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 session = requests.Session()
 

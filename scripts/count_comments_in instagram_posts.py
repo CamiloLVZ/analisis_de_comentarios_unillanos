@@ -7,8 +7,8 @@ from pathlib import Path
 # CONFIGURACIÓN
 # ==================================================
 
-# Cambia esta ruta por la ubicación de tu archivo.
-INPUT_FILE = Path("data/raw/instagram/posts/posts.json")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+INPUT_FILE = PROJECT_ROOT / "data" / "raw" / "instagram" / "posts" / "posts.json"
 
 # Nombre de la columna que contiene el número de comentarios.
 COMMENTS_COLUMN = "commentsCount"
@@ -107,7 +107,9 @@ print("\n==============================================")
 
 
 # Guardar distribución en CSV
-output_file = Path("data/processed/instagram_post_distribution.csv")
+output_dir = PROJECT_ROOT / "data" / "final" / "processed" / "instagram"
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / "instagram_post_distribution.csv"
 
 pd.DataFrame(
     [

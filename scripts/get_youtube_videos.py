@@ -104,7 +104,7 @@ try:
     videos, raw_pages = get_videos()
 
     # Guardar respuestas originales de la API
-    raw_dir = PROJECT_ROOT / "data" / "raw" / "youtube"
+    raw_dir = PROJECT_ROOT / "data" / "raw" / "youtube" / "videos"
     raw_dir.mkdir(parents=True, exist_ok=True)
 
     raw_file = raw_dir / "videos_api_raw.json"

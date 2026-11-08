@@ -14,9 +14,6 @@ SOURCES = {
     "instagram": BASE_DIR / "data" / "raw" / "instagram" / "posts",
 }
 
-OUTPUT_DIR = BASE_DIR / "data" / "processed" / "post_urls"
-
-
 # ==================================================
 # FUNCIONES
 # ==================================================
@@ -107,11 +104,11 @@ def save_json(data, path):
 # PROCESAMIENTO
 # ==================================================
 
-OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
 for platform, directory in SOURCES.items():
 
     print(f"\n========== {platform.upper()} ==========")
+    output_dir = BASE_DIR / "data" / "processed" / platform / "posts"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     posts = load_posts(platform, directory)
 
@@ -129,12 +126,12 @@ for platform, directory in SOURCES.items():
     # Guardar archivos
     save_json(
         all_urls,
-        OUTPUT_DIR / f"{platform}_all_post_urls.json"
+        output_dir / f"{platform}_all_post_urls.json"
     )
 
     save_json(
         comment_urls,
-        OUTPUT_DIR / f"{platform}_post_urls_with_comments.json"
+        output_dir / f"{platform}_post_urls_with_comments.json"
     )
 
     print(f"\nPublicaciones encontradas: {len(posts)}")
@@ -144,4 +141,4 @@ for platform, directory in SOURCES.items():
 
 
 print("\n========== PROCESO FINALIZADO ==========")
-print(f"Archivos generados en: {OUTPUT_DIR}")
+print("Archivos generados en las carpetas de publicaciones por plataforma.")

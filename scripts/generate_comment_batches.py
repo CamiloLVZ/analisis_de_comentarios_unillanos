@@ -7,11 +7,11 @@ from math import ceil
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 INPUT_FILES = {
-    "facebook": PROJECT_ROOT / "data" / "processed" / "post_urls" / "facebook_post_urls_with_comments.json",
-    "instagram": PROJECT_ROOT / "data" / "processed" / "post_urls" / "instagram_post_urls_with_comments.json",
+    "facebook": PROJECT_ROOT / "data" / "processed" / "facebook" / "posts" / "facebook_post_urls_with_comments.json",
+    "instagram": PROJECT_ROOT / "data" / "processed" / "instagram" / "posts" / "instagram_post_urls_with_comments.json",
 }
 
-OUTPUT_ROOT = PROJECT_ROOT / "data" / "processed" / "comment_batches"
+OUTPUT_ROOT = PROJECT_ROOT / "data" / "processed"
 BATCH_SIZE = 100
 
 ALLOWED_HOSTS = {
@@ -58,7 +58,7 @@ def load_urls(platform: str, file_path: Path) -> list[str]:
 
 
 def write_batches(platform: str, urls: list[str]) -> None:
-    output_dir = OUTPUT_ROOT / platform
+    output_dir = OUTPUT_ROOT / platform / "posts" / "batches"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Elimina únicamente los TXT de lotes anteriores de esta plataforma,
@@ -86,7 +86,8 @@ def write_batches(platform: str, urls: list[str]) -> None:
 
 def main() -> None:
     print(f"Tamaño de lote: {BATCH_SIZE} URLs")
-    print(f"Carpeta de salida: {OUTPUT_ROOT.relative_to(PROJECT_ROOT)}\n")
+    output_template = OUTPUT_ROOT / "<plataforma>" / "posts" / "batches"
+    print(f"Carpeta de salida: {output_template.relative_to(PROJECT_ROOT)}\n")
 
     for platform, input_file in INPUT_FILES.items():
         print(f"[{platform.upper()}]")
