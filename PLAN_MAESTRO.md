@@ -50,7 +50,7 @@ Supuestos: el archivo unificado es la mejor entrada disponible; identificadores 
 | Fase | Objetivo y trabajo | Productos principales | Criterio de cierre |
 |---|---|---|---|
 | 1. Comprensión del negocio | Delimitar problema, audiencia académica, objetivo, preguntas, alcance, riesgos y éxito. | `crisp_dm/01_business_understanding/README.md`, acta de alcance y plan. | Preguntas alineadas con campos disponibles; exclusiones explícitas; no se promete representatividad. |
-| 2. Comprensión de datos | Cargar el CSV, describir esquema, tamaños, faltantes, duplicados, cobertura y categorías; revisar ejemplos localmente sin publicarlos. | `crisp_dm/02_data_understanding/README.md`, perfil reproducible, diccionario. | Totales y limitaciones reproducibles; campos aptos/no aptos identificados; privacidad revisada. |
+| 2. Comprensión de datos | Si hace falta, unificar los JSON ya recolectados; auditar esquema, tamaños, faltantes, duplicados y cobertura. | `crisp_dm/02_data_understanding/unify_raw_data.py`, `audit.py`, README, perfil y diccionario. | CSV unificado reconstruible desde los archivos locales; calidad y limitaciones documentadas. |
 | 3. Preparación | Validar IDs, tipos y textos; conservar fuente; crear versión normalizada y banderas; identificar vacíos/duplicados/no clasificables. | `crisp_dm/03_data_preparation/README.md`, reglas, datos derivados locales. | Preparación ejecutable desde CSV; recuentos antes/después documentados; texto original intacto. |
 | 4. Modelado | Aplicar analizadores de sentimiento y emoción; explorar frecuencias y sugerir categorías con reglas léxicas transparentes revisables; persistir resultados. | `crisp_dm/04_modeling/README.md`, código, resultados locales y reglas temáticas. | Completada: resultados y reglas reproducibles; temas descritos explícitamente como exploratorios, no validados semánticamente. |
 | 5. Evaluación | Comparar anotaciones independientes de dos personas para sentimiento y emoción; reportar acuerdo, métricas por clase y errores en casos concordantes. | `crisp_dm/05_evaluation/README.md`, muestra anotada, evaluador y reporte. | Completada: 120 casos anotados por dos personas; se explicitan el acuerdo, la selección de casos concordantes y las clases con bajo soporte. |
@@ -127,15 +127,16 @@ ARTICULO_FINAL.md
 requirements.txt
 config/analysis.json
 crisp_dm/01_business_understanding/README.md
-crisp_dm/02_data_understanding/{README.md,audit.py,outputs/}
+crisp_dm/02_data_understanding/{README.md,unify_raw_data.py,audit.py,outputs/}
 crisp_dm/03_data_preparation/{README.md,prepare.py,outputs/}
 crisp_dm/04_modeling/{README.md,analyze.py,theme_rules.json,outputs/}
 crisp_dm/05_evaluation/{README.md,evaluate.py,outputs/}
 crisp_dm/06_deployment/{README.md,build_app_data.py,outputs/,deploy_bundle/app.py,deploy_bundle/data/app/}
-scripts/legacy/
+scripts/legacy/             # scraping y descarga histórica
 data/raw/                 # entradas existentes, no alterar
 data/preparados/          # preparación con texto, local y no publicable
-data/processed/           # resultados detallados de análisis
+data/processed/           # resultados detallados del análisis actual
+data/legacy/processed/    # listados y lotes históricos de scraping
 crisp_dm/06_deployment/deploy_bundle/data/app/ # agregados seguros para app
 ```
 

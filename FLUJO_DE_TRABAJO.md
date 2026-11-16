@@ -31,16 +31,17 @@ Identificar los temas, el sentimiento (positivo, negativo, neutral) y las emocio
 │   └── analysis.json               # Parámetros no secretos del análisis
 ├── crisp_dm/
 │   ├── 01_business_understanding/  # Planteamiento, alcance, decisiones
-│   ├── 02_data_understanding/      # README, auditoría y resultados
+│   ├── 02_data_understanding/      # Unificador opcional, auditoría, README y resultados
 │   ├── 03_data_preparation/        # README, preparación y resumen
 │   ├── 04_modeling/                # README, modelo, reglas y resultados
 │   ├── 05_evaluation/              # README, evaluación y métricas
 │   └── 06_deployment/              # README, generador y deploy_bundle/ con app + datos
-├── scripts/legacy/                 # Extracción y unificación anteriores
+├── scripts/legacy/                 # Descargas y scraping históricos
 └── data/
     ├── raw/                        # Entradas originales, solo lectura
     ├── preparados/                 # Datos de trabajo preparados, de acceso local
-    └── processed/                  # Datos analíticos derivados
+    ├── processed/                  # Predicciones y evaluación del análisis actual
+    └── legacy/processed/           # Listados/lotes históricos de scraping
 ```
 
 Cada fase guarda su README, su script si corresponde, sus parámetros y/o salidas en su propia carpeta. Los datos por comentario se conservan localmente bajo `data/`; solo `crisp_dm/06_deployment/deploy_bundle/data/app/` contiene agregados para despliegue. Los scripts antiguos de recolección permanecen archivados en `scripts/legacy/`.
@@ -48,7 +49,7 @@ Cada fase guarda su README, su script si corresponde, sus parámetros y/o salida
 ## Orden de ejecución
 
 1. **Comprensión del negocio:** fijar preguntas contestables, alcance y éxito.
-2. **Comprensión de datos:** perfilar insumos, cobertura, campos, faltantes y riesgos.
+2. **Comprensión de datos:** opcionalmente unificar JSON locales; perfilar insumos, cobertura, campos, faltantes y riesgos.
 3. **Preparación:** normalizar texto sin destruir el original y crear conjuntos analíticos.
 4. **Modelado:** identificar temas y producir predicciones de sentimiento/emoción.
 5. **Evaluación:** contrastar con etiquetas humanas, revisar errores y congelar resultados.
@@ -58,6 +59,8 @@ Cada fase guarda su README, su script si corresponde, sus parámetros y/o salida
 Comandos planeados (se ajustan si la auditoría encuentra otra fuente unificada):
 
 ```powershell
+# Opcional si se reconstruye el CSV unificado desde data/raw/; por defecto lo sobrescribe.
+python crisp_dm/02_data_understanding/unify_raw_data.py
 python crisp_dm/02_data_understanding/audit.py
 python crisp_dm/03_data_preparation/prepare.py
 python crisp_dm/04_modeling/analyze.py

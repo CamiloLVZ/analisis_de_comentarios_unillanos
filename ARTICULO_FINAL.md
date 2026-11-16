@@ -111,9 +111,11 @@ El paquete autocontenido para despliegue está en `crisp_dm/06_deployment/deploy
 
 ## 5. Reproducibilidad
 
-Con el entorno y dependencias documentados en `README.md` y `requirements.txt`, el flujo se ejecuta en este orden:
+Con el entorno y dependencias documentados en `README.md` y `requirements.txt`, el flujo se ejecuta en este orden. El CSV se reconstruyó desde los JSON locales usando `unify_raw_data.py`; la prueba se escribió a un archivo separado y su SHA-256 coincidió con la entrada canónica.
 
 ```powershell
+# Opcional: reconstruir data/final/comments_unified.csv desde data/raw/.
+python crisp_dm/02_data_understanding/unify_raw_data.py
 python crisp_dm/02_data_understanding/audit.py
 python crisp_dm/03_data_preparation/prepare.py
 python crisp_dm/04_modeling/analyze.py

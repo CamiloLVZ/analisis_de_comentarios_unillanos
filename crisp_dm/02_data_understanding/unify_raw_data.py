@@ -1,3 +1,5 @@
+"""Unify previously collected platform JSON files into the canonical CSV."""
+import argparse
 import csv
 import glob
 import json
@@ -7,8 +9,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RAW = PROJECT_ROOT / "data" / "raw"
-OUT_DIR = PROJECT_ROOT / "data" / "processed" / "unified"
-OUT_FILE = OUT_DIR / "comments_unified.csv"
+OUT_FILE = PROJECT_ROOT / "data" / "final" / "comments_unified.csv"
 
 COLUMNS = [
     # --- comentario ---
@@ -215,7 +216,7 @@ def youtube_rows():
 # --------------------------------------------------------------------------
 # main
 # --------------------------------------------------------------------------
-def main():
+def main(output_file: Path = OUT_FILE):
     all_rows, report = [], {}
     for name, fn in (("facebook", facebook_rows), ("instagram", instagram_rows), ("youtube", youtube_rows)):
         rows, info = fn()
@@ -228,18 +229,25 @@ def main():
     if dups:
         raise ValueError(f"comment_id duplicados: {len(dups)} (ej. {dups[:3]})")
 
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     # utf-8-sig: conserva emojis y abre bien en Excel / Power BI
-    with open(OUT_FILE, "w", encoding="utf-8-sig", newline="") as f:
+    with open(output_file, "w", encoding="utf-8-sig", newline="") as f:
         w = csv.DictWriter(f, fieldnames=COLUMNS, quoting=csv.QUOTE_MINIMAL)
         w.writeheader()
         w.writerows(all_rows)
 
-    print(f"Archivo generado: {OUT_FILE}  ({OUT_FILE.stat().st_size / 1_048_576:.1f} MB)")
+    print(f"Archivo generado: {output_file}  ({output_file.stat().st_size / 1_048_576:.1f} MB)")
     print(f"Total de comentarios: {len(all_rows)}")
     for name, info in report.items():
         print(f"  {name:<10} {info}")
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUT_FILE,
+        help="Ruta del CSV destino (por defecto, data/final/comments_unified.csv).",
+    )
+    main(parser.parse_args().output)

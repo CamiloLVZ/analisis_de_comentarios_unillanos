@@ -6,9 +6,16 @@
 
 ## Fuente y ejecución
 
-Entrada: `data/final/comments_unified.csv`, CSV UTF-8 con BOM; una fila por comentario. El unificador original está archivado en `scripts/legacy/unify_comments.py`; los datos crudos están en `data/raw/`.
+Entrada: `data/final/comments_unified.csv`, CSV UTF-8 con BOM; una fila por comentario. Los JSON ya recolectados están en `data/raw/`. Si se necesita reconstruir el CSV canónico, la fase incluye `unify_raw_data.py`; este combina archivos locales y no llama a las APIs.
 
 ```powershell
+# Opcional: reconstruir desde los JSON locales. Por defecto sobrescribe el CSV canónico.
+python crisp_dm/02_data_understanding/unify_raw_data.py
+
+# Para comprobar la reconstrucción sin tocar el archivo canónico:
+python crisp_dm/02_data_understanding/unify_raw_data.py --output data/final/comments_unified.check.csv
+
+# Auditar el CSV canónico:
 python crisp_dm/02_data_understanding/audit.py
 ```
 

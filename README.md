@@ -21,6 +21,12 @@ Si la política de PowerShell impide activar el entorno, invoque `\.venv_project
 
 ## Ejecución en orden
 
+El proyecto ya incluye el CSV unificado. Solo si necesitas reconstruirlo a partir de los JSON guardados en `data/raw/`, ejecuta primero el unificador de fase 2. Sin `--output`, este reemplaza `data/final/comments_unified.csv`; usa `--output` para escribir a otra ruta.
+
+```powershell
+python crisp_dm/02_data_understanding/unify_raw_data.py
+```
+
 ```powershell
 python crisp_dm/02_data_understanding/audit.py
 python crisp_dm/03_data_preparation/prepare.py
@@ -44,8 +50,9 @@ La primera ejecución de modelado descarga los analizadores de sentimiento y emo
 - `data/raw/`: capturas originales; no modificar.
 - `data/final/comments_unified.csv`: entrada canónica actual.
 - `data/preparados/` y `data/processed/model_outputs/`: datos derivados locales con textos/IDs; no desplegar.
+- `data/legacy/processed/`: listados y lotes históricos de scraping, fuera del flujo CRISP-DM actual.
 - `crisp_dm/06_deployment/deploy_bundle/`: app canónica y única copia de las tablas agregadas seguras, recomendado como raíz del despliegue público.
-- `scripts/legacy/`: scripts históricos de extracción/unificación, no requeridos para ejecutar el análisis.
+- `scripts/legacy/`: scripts históricos de descarga y scraping; no se ejecutan en el flujo de análisis.
 - `ARTICULO_FINAL.md`: artículo simplificado con resultados realmente producidos.
 
 ## Privacidad y alcance

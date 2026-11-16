@@ -1,6 +1,6 @@
 # Diccionario de datos del CSV unificado
 
-Los significados se derivan de `scripts/legacy/unify_comments.py` y de los nombres de campos fuente. La disponibilidad varía por plataforma; vacío significa no disponible/no extraído y no se interpreta como cero. Campos con datos personales o enlaces se excluyen del análisis compartible.
+Los significados se derivan de `crisp_dm/02_data_understanding/unify_raw_data.py` y de los nombres de campos fuente. La disponibilidad varía por plataforma; vacío significa no disponible/no extraído y no se interpreta como cero. Campos con datos personales o enlaces se excluyen del análisis compartible.
 
 | Campo | Descripción | Uso en este proyecto |
 |---|---|---|
