@@ -35,7 +35,7 @@
       ]
     },
     "sentiment_confidence.csv": {
-      "bytes": 939,
+      "bytes": 808,
       "format": "csv",
       "columns": [
         "platform",

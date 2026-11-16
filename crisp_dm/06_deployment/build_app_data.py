@@ -98,7 +98,8 @@ def main() -> None:
     (BUNDLE / "requirements.txt").write_text("pandas==3.1.1\nstreamlit==1.67.0\n", encoding="utf-8")
     (BUNDLE / "README.md").write_text(
         "# Paquete de despliegue Streamlit\n\n"
-        "Este directorio contiene únicamente la aplicación y datos agregados anonimizados. "
+        "Este directorio contiene únicamente la aplicación y datos agregados anonimizados, "
+        "incluidos los conteos por banda de confianza del sentimiento. "
         "No incluye CSV de comentarios, autores, IDs, URLs, archivos crudos ni modelos.\n\n"
         "Instale `requirements.txt` y ejecute `streamlit run app.py`. Para desplegar, use este directorio como raíz del repositorio de la app.\n",
         encoding="utf-8",
