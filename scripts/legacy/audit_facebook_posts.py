@@ -7,7 +7,7 @@ import pandas as pd
 
 
 # Directorios
-BASE_DIR = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(__file__).resolve().parents[2]
 DATA_DIR = BASE_DIR / "data" / "raw" / "facebook" / "posts"
 OUTPUT_DIR = BASE_DIR / "data" / "final" / "processed" / "facebook"
 

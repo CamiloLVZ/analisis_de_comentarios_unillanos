@@ -7,7 +7,7 @@ from pathlib import Path
 # CONFIGURACIÓN
 # ==================================================
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 INPUT_FILE = PROJECT_ROOT / "data" / "raw" / "instagram" / "posts" / "posts.json"
 
 # Nombre de la columna que contiene el número de comentarios.

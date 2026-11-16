@@ -11,7 +11,7 @@ from tqdm import tqdm
 # CONFIGURACIÓN
 # --------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / ".env")
 
 API_KEY = os.getenv("YOUTUBE_API_KEY")

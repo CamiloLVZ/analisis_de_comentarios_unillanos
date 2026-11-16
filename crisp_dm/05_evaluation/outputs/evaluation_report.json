@@ -1,0 +1,181 @@
+{
+  "status": "evaluated_with_two_human_annotators",
+  "sample_rows": 120,
+  "annotation_note": "Comparación entre dos anotadores humanos que etiquetaron la muestra de forma independiente.",
+  "sentiment": {
+    "agreed_usable_annotations": 78,
+    "unresolved_or_ambiguous": 22,
+    "metrics": {
+      "n": 78,
+      "accuracy": 0.7435897435897436,
+      "macro_f1": 0.7394533571004159,
+      "per_class": {
+        "POS": {
+          "support": 46,
+          "precision": 1.0,
+          "recall": 0.6739130434782609,
+          "f1": 0.8051948051948052
+        },
+        "NEG": {
+          "support": 15,
+          "precision": 0.8461538461538461,
+          "recall": 0.7333333333333333,
+          "f1": 0.7857142857142856
+        },
+        "NEU": {
+          "support": 17,
+          "precision": 0.47058823529411764,
+          "recall": 0.9411764705882353,
+          "f1": 0.627450980392157
+        }
+      },
+      "confusion_matrix": {
+        "POS": {
+          "POS": 31,
+          "NEG": 1,
+          "NEU": 14
+        },
+        "NEG": {
+          "POS": 0,
+          "NEG": 11,
+          "NEU": 4
+        },
+        "NEU": {
+          "POS": 0,
+          "NEG": 1,
+          "NEU": 16
+        }
+      }
+    }
+  },
+  "emotion": {
+    "agreed_usable_annotations": 67,
+    "unresolved_or_ambiguous": 29,
+    "metrics": {
+      "n": 67,
+      "accuracy": 0.746268656716418,
+      "macro_f1": 0.42946652345148584,
+      "per_class": {
+        "anger": {
+          "support": 1,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        },
+        "joy": {
+          "support": 45,
+          "precision": 1.0,
+          "recall": 0.6888888888888889,
+          "f1": 0.8157894736842105
+        },
+        "sadness": {
+          "support": 3,
+          "precision": 0.75,
+          "recall": 1.0,
+          "f1": 0.8571428571428571
+        },
+        "fear": {
+          "support": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "surprise": {
+          "support": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "disgust": {
+          "support": 3,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "others": {
+          "support": 15,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6666666666666666
+        }
+      },
+      "confusion_matrix": {
+        "anger": {
+          "anger": 1,
+          "joy": 0,
+          "sadness": 0,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 0
+        },
+        "joy": {
+          "anger": 0,
+          "joy": 31,
+          "sadness": 1,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 13
+        },
+        "sadness": {
+          "anger": 0,
+          "joy": 0,
+          "sadness": 3,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 0
+        },
+        "fear": {
+          "anger": 0,
+          "joy": 0,
+          "sadness": 0,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 0
+        },
+        "surprise": {
+          "anger": 0,
+          "joy": 0,
+          "sadness": 0,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 0
+        },
+        "disgust": {
+          "anger": 1,
+          "joy": 0,
+          "sadness": 0,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 2
+        },
+        "others": {
+          "anger": 0,
+          "joy": 0,
+          "sadness": 0,
+          "fear": 0,
+          "surprise": 0,
+          "disgust": 0,
+          "others": 15
+        }
+      }
+    }
+  },
+  "annotator_agreement": {
+    "sentiment": {
+      "both_labeled": 120,
+      "agreed": 98,
+      "agreement": 0.8166666666666667
+    },
+    "emotion": {
+      "both_labeled": 120,
+      "agreed": 91,
+      "agreement": 0.7583333333333333
+    }
+  }
+}

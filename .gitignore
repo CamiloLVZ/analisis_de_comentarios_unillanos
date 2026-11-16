@@ -1,8 +1,14 @@
 .venv/
+.venv_project/
 __pycache__/
 *.pyc
 
 .env
 
 .ipynb_checkpoints/
-
+data/preparados/*
+data/processed/model_outputs/*
+!data/preparados/.gitkeep
+!data/processed/model_outputs/.gitkeep
+!data/app/.gitkeep
+.streamlit/secrets.toml

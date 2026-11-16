@@ -5,7 +5,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RAW = PROJECT_ROOT / "data" / "raw"
 OUT_DIR = PROJECT_ROOT / "data" / "processed" / "unified"
 OUT_FILE = OUT_DIR / "comments_unified.csv"

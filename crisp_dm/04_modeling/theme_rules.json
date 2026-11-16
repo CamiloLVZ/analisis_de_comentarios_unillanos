@@ -1,0 +1,30 @@
+{
+  "method": "Clasificación exploratoria por reglas léxicas transparentes, ajustadas tras revisar frecuencias de palabras y frases. Las categorías no equivalen a un modelo temático validado.",
+  "categories": [
+    {
+      "name": "Programas de acceso y bienestar",
+      "keywords": ["matricula cero", "matrícula cero", "hambre cero", "bienestar", "beca", "alimentacion", "alimentación", "apoyo economico", "apoyo económico"]
+    },
+    {
+      "name": "Admisiones e inscripciones",
+      "keywords": ["inscrip", "admis", "aspirante", "admitid", "pregrado", "posgrado", "matricula", "matrícula", "cupo"]
+    },
+    {
+      "name": "Información y trámites",
+      "keywords": ["informacion", "información", "requisito", "horario", "solicitud", "tramite", "trámite", "certificado", "documento", "correo", "como me", "cómo me", "donde", "dónde", "cuando", "cuándo", "cuanto", "cuánto"]
+    },
+    {
+      "name": "Vida académica e investigación",
+      "keywords": ["facultad", "programa", "carrera", "estudiante", "docente", "investigacion", "investigación", "academico", "académico", "semillero", "curso", "clase", "graduad"]
+    },
+    {
+      "name": "Eventos y actividades",
+      "keywords": ["evento", "feria", "encuentro", "conferencia", "foro", "jornada", "festival", "invitacion", "invitación", "celebracion", "celebración", "congreso", "taller"]
+    },
+    {
+      "name": "Felicitaciones y reconocimiento",
+      "keywords": ["felicit", "gracias", "excelente", "exito", "éxito", "orgullo", "bendicion", "bendición", "feliz", "bravo", "hermos", "maravillos"]
+    }
+  ],
+  "fallback": "Otros / tema no identificado"
+}

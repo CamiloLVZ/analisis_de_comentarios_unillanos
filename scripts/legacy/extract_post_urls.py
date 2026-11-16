@@ -7,7 +7,7 @@ from pathlib import Path
 # CONFIGURACIÓN
 # ==================================================
 
-BASE_DIR = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 SOURCES = {
     "facebook": BASE_DIR / "data" / "raw" / "facebook" / "posts",

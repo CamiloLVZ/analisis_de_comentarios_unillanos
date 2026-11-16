@@ -1,0 +1,221 @@
+{
+  "source": "data/final/comments_unified.csv",
+  "rows": 16471,
+  "columns": [
+    "comment_id",
+    "platform",
+    "parent_comment_id",
+    "is_reply",
+    "depth",
+    "text",
+    "created_at",
+    "like_count",
+    "reply_count",
+    "author_id",
+    "author_name",
+    "mentions",
+    "has_attachment",
+    "comment_url",
+    "react_like",
+    "react_love",
+    "react_care",
+    "react_haha",
+    "react_wow",
+    "react_sad",
+    "react_angry",
+    "post_id",
+    "post_url",
+    "post_title",
+    "post_text",
+    "post_created_at",
+    "post_type",
+    "post_like_count",
+    "post_comment_count",
+    "post_share_count",
+    "post_hashtags",
+    "post_author"
+  ],
+  "unique_comment_ids": 16471,
+  "duplicate_comment_id_rows_global": 0,
+  "unique_posts": 3252,
+  "empty_text": 586,
+  "reply_rows": 2502,
+  "with_emoji_or_symbol_heuristic": 4288,
+  "emoji_only_heuristic": 1307,
+  "comment_date_min_utc": "2020-01-21T21:13:18+00:00",
+  "comment_date_max_utc": "2026-11-08T14:37:53+00:00",
+  "platforms": {
+    "facebook": {
+      "comments": 12089,
+      "unique_comment_ids": 12089,
+      "duplicate_comment_id_rows": 0,
+      "unique_posts": 2038,
+      "empty_text": 560,
+      "replies": 2111,
+      "with_emoji_or_symbol_heuristic": 1741,
+      "emoji_only_heuristic": 193,
+      "missing_comment_date": 0,
+      "missing_post_text": 43
+    },
+    "instagram": {
+      "comments": 4152,
+      "unique_comment_ids": 4152,
+      "duplicate_comment_id_rows": 0,
+      "unique_posts": 1109,
+      "empty_text": 26,
+      "replies": 364,
+      "with_emoji_or_symbol_heuristic": 2492,
+      "emoji_only_heuristic": 1100,
+      "missing_comment_date": 0,
+      "missing_post_text": 2
+    },
+    "youtube": {
+      "comments": 230,
+      "unique_comment_ids": 230,
+      "duplicate_comment_id_rows": 0,
+      "unique_posts": 105,
+      "empty_text": 0,
+      "replies": 27,
+      "with_emoji_or_symbol_heuristic": 55,
+      "emoji_only_heuristic": 14,
+      "missing_comment_date": 0,
+      "missing_post_text": 73
+    }
+  },
+  "missingness": {
+    "comment_id": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "platform": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "parent_comment_id": {
+      "missing": 13969,
+      "empty_string": 13969
+    },
+    "is_reply": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "depth": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "text": {
+      "missing": 586,
+      "empty_string": 586
+    },
+    "created_at": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "like_count": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "reply_count": {
+      "missing": 27,
+      "empty_string": 27
+    },
+    "author_id": {
+      "missing": 230,
+      "empty_string": 230
+    },
+    "author_name": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "mentions": {
+      "missing": 12324,
+      "empty_string": 12324
+    },
+    "has_attachment": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "comment_url": {
+      "missing": 230,
+      "empty_string": 230
+    },
+    "react_like": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_love": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_care": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_haha": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_wow": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_sad": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "react_angry": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "post_id": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "post_url": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "post_title": {
+      "missing": 16241,
+      "empty_string": 16241
+    },
+    "post_text": {
+      "missing": 118,
+      "empty_string": 118
+    },
+    "post_created_at": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "post_type": {
+      "missing": 0,
+      "empty_string": 0
+    },
+    "post_like_count": {
+      "missing": 230,
+      "empty_string": 230
+    },
+    "post_comment_count": {
+      "missing": 230,
+      "empty_string": 230
+    },
+    "post_share_count": {
+      "missing": 4382,
+      "empty_string": 4382
+    },
+    "post_hashtags": {
+      "missing": 14724,
+      "empty_string": 14724
+    },
+    "post_author": {
+      "missing": 0,
+      "empty_string": 0
+    }
+  },
+  "caveats": [
+    "Emoji detection is a Unicode heuristic and may include symbols or miss multi-codepoint graphemes.",
+    "Collection completeness cannot be inferred from this CSV alone.",
+    "Dates are profiled only to document coverage; temporal analysis is out of project scope.",
+    "No comment text, author name, author ID, or URL is written to this profile."
+  ]
+}

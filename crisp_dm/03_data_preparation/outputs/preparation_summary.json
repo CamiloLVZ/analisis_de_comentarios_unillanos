@@ -1,0 +1,31 @@
+{
+  "input_rows": 16471,
+  "duplicate_comment_id_rows_removed": 0,
+  "empty_text_rows_removed": 586,
+  "prepared_rows": 15885,
+  "prepared_by_platform": {
+    "facebook": 11529,
+    "instagram": 4126,
+    "youtube": 230
+  },
+  "prepared_replies_retained": 2484,
+  "prepared_emoji_flagged": 4288,
+  "prepared_emoji_only_flagged": 1280,
+  "manual_sample_rows": 120,
+  "sample_by_platform": {
+    "facebook": 40,
+    "instagram": 40,
+    "youtube": 40
+  },
+  "theme_review_sample_rows": 198,
+  "theme_review_sample_by_platform": {
+    "facebook": 66,
+    "instagram": 66,
+    "youtube": 66
+  },
+  "sample_seed": 314159,
+  "prepared_output": "data/preparados/prepared_comments.csv",
+  "manual_sample_output": "data/processed/model_outputs/evaluation_sample.csv",
+  "theme_review_sample_output": "data/processed/model_outputs/theme_review_sample.csv",
+  "privacy_note": "Both files include comment text and internal comment IDs. They are ignored by git and must not be deployed or shared publicly."
+}

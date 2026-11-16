@@ -1,0 +1,51 @@
+{
+  "outputs": {
+    "overview.json": {
+      "bytes": 1091,
+      "format": "json"
+    },
+    "themes.csv": {
+      "bytes": 2192,
+      "format": "csv",
+      "columns": [
+        "platform",
+        "post_type",
+        "theme",
+        "n"
+      ]
+    },
+    "sentiment.csv": {
+      "bytes": 553,
+      "format": "csv",
+      "columns": [
+        "platform",
+        "post_type",
+        "sentiment_label",
+        "n"
+      ]
+    },
+    "emotions.csv": {
+      "bytes": 1309,
+      "format": "csv",
+      "columns": [
+        "platform",
+        "post_type",
+        "emotion_label",
+        "n"
+      ]
+    }
+  },
+  "comments_aggregated": 15885,
+  "threshold": 10,
+  "privacy_check": "No text, personal identifiers, IDs, URLs, or dates are exported.",
+  "deployment_bundle": "crisp_dm/06_deployment/deploy_bundle",
+  "bundle_contents": [
+    "app.py",
+    "requirements.txt",
+    "README.md",
+    "data/app/overview.json",
+    "data/app/themes.csv",
+    "data/app/sentiment.csv",
+    "data/app/emotions.csv"
+  ]
+}

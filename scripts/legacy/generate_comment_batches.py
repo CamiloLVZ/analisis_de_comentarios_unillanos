@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from math import ceil
 
 # Ejecutar desde la raíz del proyecto.
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 INPUT_FILES = {
     "facebook": PROJECT_ROOT / "data" / "processed" / "facebook" / "posts" / "facebook_post_urls_with_comments.json",

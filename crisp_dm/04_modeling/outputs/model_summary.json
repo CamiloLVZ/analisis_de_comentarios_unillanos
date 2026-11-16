@@ -1,0 +1,33 @@
+{
+  "n_comments_scored": 15885,
+  "sentiment_counts": {
+    "NEU": 9250,
+    "POS": 4312,
+    "NEG": 2323
+  },
+  "emotion_counts": {
+    "others": 10615,
+    "joy": 3916,
+    "anger": 799,
+    "sadness": 466,
+    "surprise": 79,
+    "fear": 9,
+    "disgust": 1
+  },
+  "sentiment_model": "pysentimiento robertuito-sentiment-analysis (Spanish default)",
+  "emotion_model": "pysentimiento robertuito-emotion-analysis (Spanish default)",
+  "input_text": "Original comment text; pysentimiento applies its own social-media preprocessing.",
+  "topic_method": "Clasificación exploratoria por reglas léxicas transparentes, ajustadas tras revisar frecuencias de palabras y frases. Las categorías no equivalen a un modelo temático validado.",
+  "theme_rules": "crisp_dm/04_modeling/theme_rules.json",
+  "model_outputs": "data/processed/model_outputs/scored_comments.csv",
+  "topic_terms": "crisp_dm/04_modeling/outputs/top_terms.csv",
+  "theme_counts": {
+    "Otros / tema no identificado": 10486,
+    "Felicitaciones y reconocimiento": 2346,
+    "Vida académica e investigación": 989,
+    "Información y trámites": 914,
+    "Admisiones e inscripciones": 579,
+    "Programas de acceso y bienestar": 459,
+    "Eventos y actividades": 112
+  }
+}

@@ -1,0 +1,201 @@
+﻿term,frequency,type
+manos,3934,unigram
+aplaudiendo,3226,unigram
+cara,1927,unigram
+felicitaciones,918,unigram
+gracias,762,unigram
+excelente,685,unigram
+corazón,550,unigram
+sonriendo,541,unigram
+colombia,526,unigram
+educación,511,unigram
+estudiantes,503,unigram
+hambre,495,unigram
+ojos,485,unigram
+bandera,461,unigram
+matricula,440,unigram
+cero,395,unigram
+fuego,369,unigram
+dios,345,unigram
+felicidades,328,unigram
+mejor,321,unigram
+llanos,315,unigram
+gran,313,unigram
+oración,306,unigram
+ser,298,unigram
+qué,288,unigram
+solo,288,unigram
+mano,280,unigram
+levantadas,279,unigram
+celebrando,279,unigram
+risa,267,unigram
+llorando,250,unigram
+hacia,247,unigram
+semestre,242,unigram
+feliz,239,unigram
+egresados,234,unigram
+bien,231,unigram
+siempre,230,unigram
+hola,227,unigram
+está,226,unigram
+confeti,226,unigram
+hacer,225,unigram
+jaja,224,unigram
+nuestra,215,unigram
+buenas,210,unigram
+día,209,unigram
+persona,208,unigram
+información,207,unigram
+arriba,205,unigram
+educacion,203,unigram
+juan,202,unigram
+puede,198,unigram
+éxitos,198,unigram
+pulgar,198,unigram
+profe,193,unigram
+pago,187,unigram
+también,185,unigram
+años,182,unigram
+trabajo,180,unigram
+bendiciones,175,unigram
+así,174,unigram
+bueno,173,unigram
+programa,172,unigram
+tan,170,unigram
+hace,165,unigram
+profesional,164,unigram
+cañón,164,unigram
+favor,162,unigram
+buen,160,unigram
+fiesta,148,unigram
+parte,146,unigram
+bendiga,145,unigram
+ver,142,unigram
+tienen,142,unigram
+laura,137,unigram
+buena,137,unigram
+familia,136,unigram
+carrera,136,unigram
+ahora,135,unigram
+camila,134,unigram
+tardes,132,unigram
+sede,132,unigram
+vida,131,unigram
+calidad,130,unigram
+david,129,unigram
+maria,127,unigram
+matrícula,127,unigram
+facultad,124,unigram
+revolviéndose,121,unigram
+año,121,unigram
+cocodrilos,120,unigram
+hacen,119,unigram
+cumpleaños,119,unigram
+rojas,118,unigram
+va,117,unigram
+cada,116,unigram
+inscripción,115,unigram
+rector,115,unigram
+tener,115,unigram
+cómo,115,unigram
+van,114,unigram
+manos aplaudiendo,3226,bigram
+aplaudiendo manos,1739,bigram
+cara sonriendo,533,bigram
+bandera colombia,430,bigram
+colombia bandera,392,bigram
+sonriendo ojos,336,bigram
+matricula cero,320,bigram
+ojos corazón,309,bigram
+manos oración,306,bigram
+manos levantadas,279,bigram
+levantadas celebrando,279,bigram
+hambre educación,268,bigram
+cara llorando,247,bigram
+pulgar hacia,196,bigram
+hacia arriba,190,bigram
+cañón confeti,163,bigram
+hambre educacion,163,bigram
+cara fiesta,147,bigram
+llorando risa,142,bigram
+dios bendiga,138,bigram
+buenas tardes,127,bigram
+cara revolviéndose,121,bigram
+revolviéndose risa,121,bigram
+risa cara,117,bigram
+corazón cara,114,bigram
+bíceps flexionado,98,bigram
+fuego fuego,97,bigram
+celebrando manos,93,bigram
+luces policía,88,bigram
+ojos sonrientes,87,bigram
+oración manos,85,bigram
+feliz cumpleaños,84,bigram
+pago matricula,81,bigram
+sonriendo corazones,79,bigram
+cocodrilos orinoco,71,bigram
+cara cabreada,68,bigram
+alma mater,65,bigram
+ser humano,65,bigram
+cara feliz,63,bigram
+feliz ojos,63,bigram
+bola confeti,63,bigram
+buen día,63,bigram
+cero pago,63,bigram
+señal aprobación,62,bigram
+aprobación mano,62,bigram
+cara manos,62,bigram
+manos abrazando,62,bigram
+felicitaciones manos,57,bigram
+confeti cañón,56,bigram
+policía luces,55,bigram
+mejor opción,54,bigram
+cara lanzando,53,bigram
+lanzando beso,53,bigram
+cara pensativa,52,bigram
+fiesta cara,50,bigram
+san antonio,49,bigram
+persona mano,49,bigram
+facultad ciencias,48,bigram
+matrícula cero,47,bigram
+cara suplicante,46,bigram
+arriba pulgar,46,bigram
+mano frente,45,bigram
+buenos días,44,bigram
+llorando fuerte,40,bigram
+cara desanimada,40,bigram
+mano señal,40,bigram
+cara ojos,39,bigram
+excelente manos,39,bigram
+corazón morado,38,bigram
+sonriendo estrellas,38,bigram
+camila arismendy,38,bigram
+paz tumba,37,bigram
+monica silva,37,bigram
+silva quiceno,37,bigram
+cara mano,36,bigram
+mano boca,36,bigram
+ojos blanco,36,bigram
+excelente trabajo,36,bigram
+buenas noches,35,bigram
+gran ser,35,bigram
+cien puntos,35,bigram
+corazón rojo,35,bigram
+manos formando,35,bigram
+formando corazón,35,bigram
+símbolo socorro,35,bigram
+huelga hambre,34,bigram
+omar yesid,34,bigram
+orinoco cocodrilo,34,bigram
+cocodrilo símbolo,34,bigram
+tarta cumpleaños,33,bigram
+ayuden cocodrilos,33,bigram
+dios siga,32,bigram
+tiempos pandemia,32,bigram
+aplaudiendo cara,32,bigram
+puño alto,31,bigram
+alta calidad,31,bigram
+continúan demostrando,31,bigram
+demostrando qué,31,bigram
+qué educación,31,bigram
+educación derecho,31,bigram

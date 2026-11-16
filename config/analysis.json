@@ -1,0 +1,14 @@
+{
+  "input_csv": "data/final/comments_unified.csv",
+  "random_seed": 314159,
+  "max_manual_sample": 120,
+  "max_theme_sample": 200,
+  "theme_count_target": 6,
+  "minimum_group_size_for_app": 10,
+  "inference_chunk_size": 256,
+  "platforms": ["facebook", "instagram", "youtube"],
+  "excluded_columns_from_app": [
+    "comment_id", "author_id", "author_name", "comment_url", "post_url",
+    "parent_comment_id", "text", "post_text"
+  ]
+}

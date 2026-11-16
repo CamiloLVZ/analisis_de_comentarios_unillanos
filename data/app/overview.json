@@ -1,0 +1,44 @@
+{
+  "title": "Temas, sentimiento y emociones en comentarios de Unillanos",
+  "comments_scored": 15885,
+  "platforms": {
+    "facebook": 11529,
+    "instagram": 4126,
+    "youtube": 230
+  },
+  "post_types": [
+    "image",
+    "photo",
+    "sidecar",
+    "text",
+    "video"
+  ],
+  "themes": [
+    "Admisiones e inscripciones",
+    "Eventos y actividades",
+    "Felicitaciones y reconocimiento",
+    "Información y trámites",
+    "Otros / tema no identificado",
+    "Programas de acceso y bienestar",
+    "Vida académica e investigación"
+  ],
+  "sentiment_classes": [
+    "NEG",
+    "NEU",
+    "POS"
+  ],
+  "emotion_classes": [
+    "Otros / sin emoción básica clara",
+    "anger",
+    "disgust",
+    "fear",
+    "joy",
+    "sadness",
+    "surprise"
+  ],
+  "source_rows": 16471,
+  "empty_text_excluded": 586,
+  "aggregation_note": "Only grouped counts are exported. No comment text, author, comment ID, post ID, URL, or date is included.",
+  "small_group_suppression_threshold": 10,
+  "evaluation_status": "evaluated_with_two_human_annotators"
+}

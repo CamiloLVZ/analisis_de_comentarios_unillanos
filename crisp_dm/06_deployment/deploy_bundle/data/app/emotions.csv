@@ -1,0 +1,36 @@
+﻿platform,post_type,emotion_label,n
+facebook,photo,Otros / sin emoción básica clara,5981
+facebook,photo,Otros grupos de baja frecuencia,8
+facebook,photo,anger,457
+facebook,photo,joy,1633
+facebook,photo,sadness,342
+facebook,photo,surprise,43
+facebook,text,Otros / sin emoción básica clara,218
+facebook,text,Otros grupos de baja frecuencia,7
+facebook,text,anger,12
+facebook,text,joy,47
+facebook,video,Otros / sin emoción básica clara,1753
+facebook,video,Otros grupos de baja frecuencia,5
+facebook,video,anger,164
+facebook,video,joy,817
+facebook,video,sadness,42
+instagram,image,Otros / sin emoción básica clara,327
+instagram,image,Otros grupos de baja frecuencia,1
+instagram,image,anger,26
+instagram,image,joy,142
+instagram,image,sadness,12
+instagram,sidecar,Otros / sin emoción básica clara,548
+instagram,sidecar,anger,34
+instagram,sidecar,joy,359
+instagram,sidecar,sadness,18
+instagram,sidecar,surprise,12
+instagram,video,Otros / sin emoción básica clara,1669
+instagram,video,Otros grupos de baja frecuencia,1
+instagram,video,anger,96
+instagram,video,joy,822
+instagram,video,sadness,40
+instagram,video,surprise,19
+youtube,video,Otros / sin emoción básica clara,119
+youtube,video,Otros grupos de baja frecuencia,5
+youtube,video,anger,10
+youtube,video,joy,96
