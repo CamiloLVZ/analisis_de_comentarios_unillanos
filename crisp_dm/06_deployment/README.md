@@ -6,9 +6,9 @@
 
 ## Productos
 
-- `app.py`: aplicación interactiva sin modelos, sin filas individuales y sin conexión a APIs.
-- `build_app_data.py`: genera únicamente conteos agrupados por plataforma, tipo, tema, sentimiento y emoción. No exporta texto, IDs o URLs.
-- `data/app/`: archivos agregados consumidos por la app.
+- `deploy_bundle/app.py`: aplicación interactiva canónica, sin modelos, sin filas individuales y sin conexión a APIs.
+- `build_app_data.py`: agrega predicciones por plataforma, tipo, tema, sentimiento y emoción y actualiza los datos del bundle. No exporta texto, IDs o URLs.
+- `deploy_bundle/data/app/`: única copia de los agregados consumidos por la app.
 - `deploy_bundle/`: paquete autocontenido para subir como raíz de un repositorio de despliegue; incluye solo Streamlit, pandas y tablas agregadas.
 - `outputs/deployment_manifest.json`: esquema y tamaño de los artefactos de despliegue y declaración de control de privacidad.
 
@@ -16,14 +16,14 @@
 
 ```powershell
 python crisp_dm/06_deployment/build_app_data.py
-streamlit run crisp_dm/06_deployment/app.py
+streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
 Para desplegar públicamente, usar `deploy_bundle/` como raíz del proyecto de la app. Esto evita subir los archivos crudos que siguen en el repositorio de análisis y evita instalar PyTorch/Transformers en el servicio. Ejecutar `build_app_data.py` para refrescar el paquete después de regenerar resultados.
 
 ## Contenido de la interfaz
 
-Resumen, temas sugeridos por reglas léxicas, sentimiento, emociones y una explicación del método/limitaciones. La app informa que la evaluación humana usa una muestra pequeña y solo casos concordantes no ambiguos. No hay evolución temporal, ni comentarios completos, perfiles o IDs. Los grupos con menos de 10 casos se combinan en el gráfico.
+Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee `deploy_bundle/data/app/overview.json`, `themes.csv`, `sentiment.csv` y `emotions.csv`. No ejecuta `build_app_data.py`: ese generador se corre antes, cuando cambian los resultados analíticos, para crear los agregados que consume la app. La interfaz muestra temas, sentimiento, emociones y límites; no hay evolución temporal, comentarios completos, perfiles o IDs. Los grupos con menos de 10 casos se combinan en el gráfico.
 
 ## Cierre de fase
 

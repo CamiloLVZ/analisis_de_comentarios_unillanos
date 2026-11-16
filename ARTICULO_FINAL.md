@@ -119,7 +119,7 @@ python crisp_dm/03_data_preparation/prepare.py
 python crisp_dm/04_modeling/analyze.py
 python crisp_dm/05_evaluation/evaluate.py
 python crisp_dm/06_deployment/build_app_data.py
-streamlit run crisp_dm/06_deployment/app.py
+streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
 La inferencia completa se ejecutó sobre CPU. La preparación fija semilla para las muestras. Las salidas detalladas con texto permanecen fuera del paquete público. La configuración y las versiones instaladas están registradas en los archivos del proyecto.
@@ -153,4 +153,4 @@ La decisión metodológica fue conservar emojis y respuestas: pueden aportar con
 - Plan y alcance: `PLAN_MAESTRO.md`.
 - Registro operativo y avance: `FLUJO_DE_TRABAJO.md`.
 - Documentación por fase: `crisp_dm/01_business_understanding/` a `crisp_dm/06_deployment/`.
-- Aplicación y paquete: `crisp_dm/06_deployment/app.py` y `crisp_dm/06_deployment/deploy_bundle/`.
+- Aplicación canónica y paquete: `crisp_dm/06_deployment/deploy_bundle/app.py`.

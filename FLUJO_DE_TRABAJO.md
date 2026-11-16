@@ -35,16 +35,15 @@ Identificar los temas, el sentimiento (positivo, negativo, neutral) y las emocio
 │   ├── 03_data_preparation/        # README, preparación y resumen
 │   ├── 04_modeling/                # README, modelo, reglas y resultados
 │   ├── 05_evaluation/              # README, evaluación y métricas
-│   └── 06_deployment/              # README, generador, app y deploy_bundle/
+│   └── 06_deployment/              # README, generador y deploy_bundle/ con app + datos
 ├── scripts/legacy/                 # Extracción y unificación anteriores
 └── data/
     ├── raw/                        # Entradas originales, solo lectura
     ├── preparados/                 # Datos de trabajo preparados, de acceso local
-    ├── processed/                  # Datos analíticos derivados
-    └── app/                        # Agregados anonimizados consumidos por app
+    └── processed/                  # Datos analíticos derivados
 ```
 
-Cada fase guarda su README, su script si corresponde, sus parámetros y/o salidas en su propia carpeta. Los datos por comentario se conservan localmente bajo `data/`; solo `data/app/` contiene agregados para despliegue. Los scripts antiguos de recolección permanecen archivados en `scripts/legacy/`.
+Cada fase guarda su README, su script si corresponde, sus parámetros y/o salidas en su propia carpeta. Los datos por comentario se conservan localmente bajo `data/`; solo `crisp_dm/06_deployment/deploy_bundle/data/app/` contiene agregados para despliegue. Los scripts antiguos de recolección permanecen archivados en `scripts/legacy/`.
 
 ## Orden de ejecución
 
@@ -64,7 +63,7 @@ python crisp_dm/03_data_preparation/prepare.py
 python crisp_dm/04_modeling/analyze.py
 python crisp_dm/05_evaluation/evaluate.py
 python crisp_dm/06_deployment/build_app_data.py
-streamlit run crisp_dm/06_deployment/app.py
+streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
 Si la inferencia de emoción o sentimiento no puede ejecutarse por limitaciones de instalación, descarga o recursos, el flujo debe fallar de forma explícita y no sustituir silenciosamente el modelo por reglas de palabras. Una ejecución sin red solo puede utilizar modelos cacheados.

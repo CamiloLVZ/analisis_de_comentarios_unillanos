@@ -27,7 +27,7 @@ python crisp_dm/03_data_preparation/prepare.py
 python crisp_dm/04_modeling/analyze.py
 python crisp_dm/05_evaluation/evaluate.py
 python crisp_dm/06_deployment/build_app_data.py
-streamlit run crisp_dm/06_deployment/app.py
+streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
 La fase 5 compara anotaciones independientes de dos personas en una muestra de 120 comentarios y reporta su acuerdo y el desempeño exploratorio del modelo en los casos concordantes no ambiguos. La muestra contiene comentarios e IDs internos, permanece local y no se despliega. Para emoción, `others` significa “otros/sin emoción básica clara”.
@@ -44,8 +44,7 @@ La primera ejecución de modelado descarga los analizadores de sentimiento y emo
 - `data/raw/`: capturas originales; no modificar.
 - `data/final/comments_unified.csv`: entrada canónica actual.
 - `data/preparados/` y `data/processed/model_outputs/`: datos derivados locales con textos/IDs; no desplegar.
-- `data/app/`: solo tablas agregadas y seguras para visualización.
-- `crisp_dm/06_deployment/deploy_bundle/`: paquete aislado con la app y agregados, recomendado como raíz del despliegue público.
+- `crisp_dm/06_deployment/deploy_bundle/`: app canónica y única copia de las tablas agregadas seguras, recomendado como raíz del despliegue público.
 - `scripts/legacy/`: scripts históricos de extracción/unificación, no requeridos para ejecutar el análisis.
 - `ARTICULO_FINAL.md`: artículo simplificado con resultados realmente producidos.
 

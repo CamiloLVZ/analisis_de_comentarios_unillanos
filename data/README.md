@@ -9,9 +9,9 @@
 
 - `preparados/prepared_comments.csv`: texto original y preprocesado, IDs internos y variables derivadas. Contiene texto de comentarios; es local, ignorado por Git y no debe desplegarse.
 - `processed/model_outputs/`: predicciones por comentario y plantillas de anotación con texto/IDs. Local e ignorado por Git.
-- `app/`: tablas agregadas para visualización, sin comentarios, IDs, nombres, fechas o URLs. Esta es la única carpeta de datos que la app necesita.
+- `../crisp_dm/06_deployment/deploy_bundle/data/app/`: tablas agregadas para visualización, sin comentarios, IDs, nombres, fechas o URLs. Esta es la única carpeta de datos que la app necesita.
 
-El paquete preparado para despliegue está en `../crisp_dm/06_deployment/deploy_bundle/`; al publicarlo como repositorio separado solo contendrá la aplicación y estos agregados.
+El paquete preparado para despliegue está en `../crisp_dm/06_deployment/deploy_bundle/`; la app y su única copia de agregados viven juntas en ese paquete.
 
 ## Material heredado
 

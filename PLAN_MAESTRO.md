@@ -40,7 +40,7 @@ Supuestos: el archivo unificado es la mejor entrada disponible; identificadores 
 ## 5. Resultados previstos
 
 - `data/processed/`: tabla analítica y predicciones a nivel comentario, restringidas a uso local si contienen texto.
-- `data/app/`: archivos agregados y anonimizados que consume Streamlit.
+- `crisp_dm/06_deployment/deploy_bundle/data/app/`: archivos agregados y anonimizados que consume Streamlit.
 - App con resumen, temas, sentimiento, emociones y filtros por plataforma/tipo de publicación; sin series temporales ni filas de usuarios.
 - Informe simplificado en `ARTICULO_FINAL.md` con método, resultados obtenidos, limitaciones y conclusiones.
 - Guías CRISP-DM en `crisp_dm/NN_*/README.md`, README de ejecución y scripts reproducibles.
@@ -54,7 +54,7 @@ Supuestos: el archivo unificado es la mejor entrada disponible; identificadores 
 | 3. Preparación | Validar IDs, tipos y textos; conservar fuente; crear versión normalizada y banderas; identificar vacíos/duplicados/no clasificables. | `crisp_dm/03_data_preparation/README.md`, reglas, datos derivados locales. | Preparación ejecutable desde CSV; recuentos antes/después documentados; texto original intacto. |
 | 4. Modelado | Aplicar analizadores de sentimiento y emoción; explorar frecuencias y sugerir categorías con reglas léxicas transparentes revisables; persistir resultados. | `crisp_dm/04_modeling/README.md`, código, resultados locales y reglas temáticas. | Completada: resultados y reglas reproducibles; temas descritos explícitamente como exploratorios, no validados semánticamente. |
 | 5. Evaluación | Comparar anotaciones independientes de dos personas para sentimiento y emoción; reportar acuerdo, métricas por clase y errores en casos concordantes. | `crisp_dm/05_evaluation/README.md`, muestra anotada, evaluador y reporte. | Completada: 120 casos anotados por dos personas; se explicitan el acuerdo, la selección de casos concordantes y las clases con bajo soporte. |
-| 6. Despliegue | Agregar resultados, crear aplicación y documentación de ejecución/despliegue; revisar privacidad y funcionamiento. | `crisp_dm/06_deployment/README.md`, `app.py`, agregados y paquete aislado `deploy_bundle/`. | La app funciona localmente, usa datos agregados y no revela IDs, autores ni textos completos; el usuario puede desplegar el bundle como repo independiente. |
+| 6. Despliegue | Agregar resultados, crear aplicación y documentación de ejecución/despliegue; revisar privacidad y funcionamiento. | `crisp_dm/06_deployment/README.md`, `deploy_bundle/app.py`, agregados y paquete aislado. | La app funciona localmente, usa datos agregados y no revela IDs, autores ni textos completos; el usuario puede desplegar el bundle como repo independiente. |
 
 ## 7. Plan de trabajo para dos personas / tres días
 
@@ -131,12 +131,12 @@ crisp_dm/02_data_understanding/{README.md,audit.py,outputs/}
 crisp_dm/03_data_preparation/{README.md,prepare.py,outputs/}
 crisp_dm/04_modeling/{README.md,analyze.py,theme_rules.json,outputs/}
 crisp_dm/05_evaluation/{README.md,evaluate.py,outputs/}
-crisp_dm/06_deployment/{README.md,app.py,build_app_data.py,outputs/,deploy_bundle/}
+crisp_dm/06_deployment/{README.md,build_app_data.py,outputs/,deploy_bundle/app.py,deploy_bundle/data/app/}
 scripts/legacy/
 data/raw/                 # entradas existentes, no alterar
 data/preparados/          # preparación con texto, local y no publicable
 data/processed/           # resultados detallados de análisis
-data/app/                 # agregados seguros para app
+crisp_dm/06_deployment/deploy_bundle/data/app/ # agregados seguros para app
 ```
 
 Los scripts de extracción actuales se mantienen en `scripts/legacy/` como antecedentes, no se ejecutan durante este proyecto de análisis.

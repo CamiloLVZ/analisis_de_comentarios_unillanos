@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import shutil
 from pathlib import Path
 
 import pandas as pd
@@ -12,8 +11,9 @@ CONFIG = json.loads((ROOT / "config" / "analysis.json").read_text(encoding="utf-
 SCORES = ROOT / "data" / "processed" / "model_outputs" / "scored_comments.csv"
 AUDIT = ROOT / "crisp_dm" / "02_data_understanding" / "outputs" / "quality_profile.json"
 EVALUATION = ROOT / "crisp_dm" / "05_evaluation" / "outputs" / "evaluation_report.json"
-OUT = ROOT / "data" / "app"
 BUNDLE = Path(__file__).resolve().parent / "deploy_bundle"
+OUT = BUNDLE / "data" / "app"
+APP_FILE = BUNDLE / "app.py"
 MIN_GROUP = int(CONFIG["minimum_group_size_for_app"])
 
 
@@ -77,9 +77,9 @@ def main() -> None:
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     # A small, self-contained folder for deployment. It intentionally excludes
     # the original dataset, model scores, IDs, and all analysis dependencies.
+    if not APP_FILE.exists():
+        raise FileNotFoundError(f"Falta la aplicación canónica: {APP_FILE}")
     BUNDLE.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(Path(__file__).resolve().parent / "app.py", BUNDLE / "app.py")
-    shutil.copytree(OUT, BUNDLE / "data" / "app", dirs_exist_ok=True)
     (BUNDLE / "requirements.txt").write_text("pandas==3.1.1\nstreamlit==1.67.0\n", encoding="utf-8")
     (BUNDLE / "README.md").write_text(
         "# Paquete de despliegue Streamlit\n\n"
