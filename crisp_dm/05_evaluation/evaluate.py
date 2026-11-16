@@ -87,6 +87,7 @@ def main() -> None:
             "sentiment": {},
             "emotion": {},
             "annotator_agreement": {},
+            "selective_sentiment": {},
         }
         for task, mapping in (("sentiment", SENTIMENT_MAP), ("emotion", EMOTION_MAP)):
             coder1 = [normalize(row.get(f"{task}_gold_1"), mapping) for row in sample]
@@ -112,6 +113,24 @@ def main() -> None:
                 "unresolved_or_ambiguous": sum(both and not is_agreed for both, is_agreed in zip(paired, agreed)),
                 "metrics": score([coder1[i] for i in valid], [model[i] for i in valid], expected),
             }
+            if task == "sentiment":
+                confidence = [
+                    float(score_by_id[sample[i]["comment_id"]].get("sentiment_confidence") or 0)
+                    for i in valid
+                ]
+                predictions = [model[i] for i in valid]
+                references = [coder1[i] for i in valid]
+                for threshold in (0.6, 0.7, 0.8, 0.9):
+                    selected = [j for j, value in enumerate(confidence) if value >= threshold]
+                    report["selective_sentiment"][f"{threshold:.1f}"] = {
+                        "minimum_confidence": threshold,
+                        "n": len(selected),
+                        "coverage_of_agreed_non_ambiguous": len(selected) / len(valid) if valid else None,
+                        "accuracy": (
+                            sum(references[j] == predictions[j] for j in selected) / len(selected)
+                            if selected else None
+                        ),
+                    }
 
         evaluated = [task for task in ("sentiment", "emotion") if report[task]["metrics"]["n"]]
         if len(evaluated) == 2:
@@ -134,6 +153,15 @@ def main() -> None:
                 lines += [f"- Casos concordantes no ambiguos: {metrics['n']}", f"- Accuracy: {metrics['accuracy']:.3f}", f"- Macro-F1: {metrics['macro_f1']:.3f}", f"- Por clase: `{json.dumps(metrics['per_class'], ensure_ascii=False)}`"]
             else:
                 lines.append("- No hay suficientes etiquetas concordantes y no ambiguas para calcular métricas.")
+        selective = report.get("selective_sentiment", {})
+        if selective:
+            lines += ["", "## Sentimiento con umbral de confianza (análisis exploratorio)", "", "| Confianza mínima | Casos cubiertos | Cobertura del subconjunto evaluable | Accuracy |", "|---:|---:|---:|---:|"]
+            denominator = report["sentiment"]["metrics"]["n"]
+            for threshold, details in selective.items():
+                accuracy = "—" if details["accuracy"] is None else f"{details['accuracy']:.1%}"
+                coverage = "—" if details["coverage_of_agreed_non_ambiguous"] is None else f"{details['coverage_of_agreed_non_ambiguous']:.1%}"
+                lines.append(f"| {float(threshold):.1f} | {details['n']}/{denominator} | {coverage} | {accuracy} |")
+            lines += ["", "El umbral no cambia las predicciones originales: describe el desempeño al abstenerse de interpretar los casos menos confiados. La muestra es pequeña, estratificada y filtrada a anotaciones humanas concordantes no ambiguas; estas cifras son indicativas, no una garantía de precisión para el corpus completo."]
     (OUT / "evaluation_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Evaluación: {report['status']}")
 

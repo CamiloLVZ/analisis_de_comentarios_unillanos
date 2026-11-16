@@ -2,7 +2,7 @@
 
 ## Resumen
 
-Este proyecto presenta un análisis exploratorio de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube. Se siguió CRISP-DM para auditar y preparar los datos, estimar sentimiento y emoción en español con `pysentimiento`, proponer categorías temáticas mediante reglas léxicas y construir una aplicación Streamlit con resultados agregados. Tras retirar 586 registros sin texto y no encontrar IDs duplicados, se analizaron 15.885 comentarios. El sentimiento estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %. La clase emocional más frecuente fue `others` (66,8 %), seguida de alegría (24,7 %). La categoría temática residual alcanzó 66,0 %, lo cual muestra que el diccionario inicial no cubre gran parte del corpus. En una muestra de 120 comentarios anotada independientemente por dos personas, el acuerdo fue 81,7 % para sentimiento y 75,8 % para emoción. En los casos concordantes no ambiguos, el modelo obtuvo accuracy de 74,4 % para sentimiento y 74,6 % para emoción; las métricas son exploratorias por el tamaño y selección de la muestra. Los emojis y las respuestas se conservaron; no se hizo análisis temporal ni comparación de hilos.
+Este proyecto presenta un análisis exploratorio de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube. Se siguió CRISP-DM para auditar y preparar los datos, estimar sentimiento y emoción en español con `pysentimiento`, proponer categorías temáticas mediante reglas léxicas y construir una aplicación Streamlit con resultados agregados. Tras retirar 586 registros sin texto y no encontrar IDs duplicados, se analizaron 15.885 comentarios. El sentimiento estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %. La clase emocional más frecuente fue `others` (66,8 %), seguida de alegría (24,7 %). La categoría temática residual alcanzó 66,0 %, lo cual muestra que el diccionario inicial no cubre gran parte del corpus. En una muestra de 120 comentarios anotada independientemente por dos personas, el acuerdo fue 81,7 % para sentimiento y 75,8 % para emoción. En los casos concordantes no ambiguos, el modelo obtuvo accuracy de 74,4 % para sentimiento y 74,6 % para emoción. Un análisis exploratorio por confianza encontró 92,9 % de accuracy en 56 casos con confianza ≥0,7, pero el umbral se examinó sobre la misma muestra pequeña y no constituye validación independiente. Los emojis y las respuestas se conservaron; no se hizo análisis temporal ni comparación de hilos.
 
 **Palabras clave:** CRISP-DM, análisis de sentimiento, emociones, redes sociales, comentarios, Streamlit.
 
@@ -49,6 +49,8 @@ El script `crisp_dm/02_data_understanding/audit.py` perfiló tamaños, campos, f
 `crisp_dm/03_data_preparation/prepare.py` retiró los textos vacíos, normalizó texto para inspección, mantuvo la forma original para el modelado y preservó respuestas. No se eliminaron emojis: `pysentimiento` los procesa internamente y el análisis auxiliar los representa mediante descripciones en texto. Esta representación puede aportar señales de aprobación o afecto, aunque sus palabras (“aplaudiendo”, “corazones”) pueden inflar frecuencias léxicas y no equivalen a menciones literales. Los textos compuestos únicamente por emojis se identifican como tales, pero no se forzó una etiqueta alternativa.
 
 Se generaron una muestra de evaluación de **120 comentarios** (40 por plataforma) y una muestra para revisar temas de **198 comentarios** (66 por plataforma). Ambas contienen texto e identificadores internos, son productos locales y no forman parte del paquete de despliegue.
+
+En los 15.885 textos preparados, 1.280 (8,1 %) son solo emojis y 2.728 (17,2 %) tienen dos palabras o menos. La longitud se usa como indicador de posible información limitada, no como criterio para eliminar: los comentarios cortos pueden comunicar una opinión, una pregunta o una reacción válida.
 
 ### 4.4 Modelado
 
@@ -103,11 +105,13 @@ La muestra estratificada contiene 120 comentarios (40 por plataforma), etiquetad
 
 Estas métricas comparan el modelo con las etiquetas acordadas solo donde ambas personas coinciden y no hay ambigüedad. Este filtro puede favorecer los casos más claros y elevar las métricas frente al conjunto entero. La muestra es pequeña; para emoción, varias clases tuvieron muy pocos o ningún caso concordante válido. El macro-F1 promedia las siete clases y asigna cero a las clases sin soporte en esta muestra, por lo que no es una estimación estable del desempeño general.
 
+Como diagnóstico adicional, se midió la exactitud selectiva del sentimiento al excluir predicciones con menor confianza. Con umbral ≥0,7, 52 de 56 predicciones evaluables coincidieron con la anotación humana (92,9 %), cubriendo 71,8 % de los 78 casos concordantes no ambiguos. En el corpus completo, 8.235 de 15.885 predicciones (51,8 %) alcanzan ese umbral. Este corte se eligió después de observar varios umbrales sobre la misma muestra; la exactitud puede estar sobreestimada y debe leerse como evidencia exploratoria. La app muestra esta banda separada y mantiene intactas las etiquetas originales.
+
 ### 4.6 Despliegue
 
-Se construyó una app Streamlit con pestañas de resumen, temas, sentimiento, emociones y método, con filtros por plataforma y tipo de publicación. Los gráficos usan conteos agregados; los grupos menores de diez se agrupan. La app advierte que la evaluación usa una muestra pequeña y casos concordantes no ambiguos. No incluye fechas ni evolución temporal.
+Se construyó una app Streamlit con pestañas de resumen, temas, sentimiento, emociones y método, con filtros por plataforma y tipo de publicación. Los gráficos usan conteos agregados; los grupos menores de diez se agrupan. La pestaña de sentimiento incluye bandas de confianza y una métrica de cobertura para el umbral exploratorio de 0,7; no cambia las etiquetas. La app advierte que la evaluación usa una muestra pequeña y casos concordantes no ambiguos. No incluye fechas ni evolución temporal.
 
-El paquete autocontenido para despliegue está en `crisp_dm/06_deployment/deploy_bundle/`: incluye `app.py`, dependencias ligeras y cuatro archivos de datos agregados. Debe usarse como raíz de un repositorio separado, no desplegarse desde la raíz del repositorio de análisis, que contiene datos originales. El despliegue remoto queda a cargo del usuario.
+El paquete autocontenido para despliegue está en `crisp_dm/06_deployment/deploy_bundle/`: incluye `app.py`, dependencias ligeras y cinco archivos de datos agregados. Debe usarse como raíz de un repositorio separado, no desplegarse desde la raíz del repositorio de análisis, que contiene datos originales. El despliegue remoto queda a cargo del usuario.
 
 ## 5. Reproducibilidad
 
@@ -129,18 +133,19 @@ La inferencia completa se ejecutó sobre CPU. La preparación fija semilla para 
 ## 6. Limitaciones
 
 1. **Evaluación exploratoria:** las métricas se calculan en un subconjunto concordante no ambiguo de una muestra de 120 comentarios; el filtrado puede favorecer los casos claros y no permite generalizar al corpus completo.
-2. **Temas exploratorios:** reglas léxicas simples no resuelven sinonimia, ironía, polisemia ni temas nuevos; 66 % quedó en la categoría residual.
-3. **Desbalance de plataformas:** el tamaño de la recolección varía mucho y no hay denominadores de impresiones o alcance.
-4. **Contexto limitado:** las respuestas se analizaron individualmente sin su hilo; comentarios como “sí” pueden ser ambiguos.
-5. **Emojis:** conservarlos evita perder señales potenciales, pero su interpretación depende del contexto y las descripciones automáticas afectan frecuencias de términos.
-6. **Cobertura:** la extracción disponible no necesariamente representa todas las publicaciones o comentarios de las cuentas.
-7. **Clases raras:** algunas emociones aparecen con muy baja frecuencia; sus porcentajes no deben sobreinterpretarse.
+2. **Umbral de confianza exploratorio:** el corte 0,7 se escogió tras comparar su resultado en la misma muestra usada para evaluar; no es calibración independiente, y su accuracy selectiva puede estar sobreestimada.
+3. **Temas exploratorios:** reglas léxicas simples no resuelven sinonimia, ironía, polisemia ni temas nuevos; 66 % quedó en la categoría residual. La muestra temática aún no tiene etiquetas humanas.
+4. **Desbalance de plataformas:** el tamaño de la recolección varía mucho y no hay denominadores de impresiones o alcance.
+5. **Contexto limitado:** las respuestas se analizaron individualmente sin su hilo; comentarios como “sí” pueden ser ambiguos.
+6. **Emojis:** conservarlos evita perder señales potenciales, pero su interpretación depende del contexto y las descripciones automáticas afectan frecuencias de términos.
+7. **Cobertura:** la extracción disponible no necesariamente representa todas las publicaciones o comentarios de las cuentas.
+8. **Clases raras:** algunas emociones aparecen con muy baja frecuencia; sus porcentajes no deben sobreinterpretarse.
 
 Los benchmarks publicados por los autores de `pysentimiento` no son métricas de este estudio y no se trasladan como garantía de desempeño local.
 
 ## 7. Conclusiones
 
-Se completó un flujo reproducible CRISP-DM desde la auditoría hasta una app Streamlit local, aplicando modelos en español a 15.885 comentarios con texto. Las estimaciones muestran predominio de sentimiento neutral y de la clase `others` en emoción; la regla temática inicial solo identificó categorías específicas en cerca de un tercio del corpus. Los resultados sirven para explorar y generar hipótesis sobre los comentarios capturados, no para medir la opinión de toda la comunidad.
+Se completó un flujo reproducible CRISP-DM desde la auditoría hasta una app Streamlit local, aplicando modelos en español a 15.885 comentarios con texto. Las estimaciones muestran predominio de sentimiento neutral y de la clase `others` en emoción; la regla temática inicial solo identificó categorías específicas en cerca de un tercio del corpus. La banda de confianza muestra un modo más prudente de explorar el sentimiento, aunque su resultado alto procede de una muestra pequeña y no independiente. Los resultados sirven para explorar y generar hipótesis sobre los comentarios capturados, no para medir la opinión de toda la comunidad.
 
 La decisión metodológica fue conservar emojis y respuestas: pueden aportar contenido temático y afectivo y su eliminación habría borrado señales, aunque se documentó el riesgo de ruido. No se analizaron comparativamente las respuestas ni se hizo experimento de ablación de emojis, conforme al alcance. El trabajo futuro es revisar los desacuerdos de las anotaciones humanas y ampliar las reglas de temas con una codificación manual de la muestra temática; después se pueden actualizar los agregados.
 

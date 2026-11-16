@@ -97,7 +97,7 @@ Usar `pysentimiento` como clasificación preentrenada. Sentimiento y emoción so
 
 1. Resumen: N analizable, volumen y distribución por plataforma.
 2. Temas: frecuencia/categorías y filtro de plataforma.
-3. Sentimiento: barras o dona con conteos y porcentajes.
+3. Sentimiento: barras o dona con conteos y porcentajes, acompañadas de bandas de confianza; el corte ≥0,7 es exploratorio y no recodifica predicciones.
 4. Emociones: distribución por clase, con tabla aclaratoria.
 5. Filtros opcionales por plataforma y tipo de publicación; retirar opciones si generan celdas muy pequeñas.
 6. Método y límites visibles. Sin fechas en filtros/gráficos, comentarios completos, nombres de autor, URLs ni IDs.

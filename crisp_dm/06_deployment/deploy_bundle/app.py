@@ -20,12 +20,14 @@ st.set_page_config(page_title="Voces en la conversación | Unillanos", page_icon
 
 
 @st.cache_data
-def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     overview = json.loads((DATA / "overview.json").read_text(encoding="utf-8"))
     themes = pd.read_csv(DATA / "themes.csv", encoding="utf-8-sig")
     sentiment = pd.read_csv(DATA / "sentiment.csv", encoding="utf-8-sig")
     emotions = pd.read_csv(DATA / "emotions.csv", encoding="utf-8-sig")
-    return overview, themes, sentiment, emotions
+    confidence_path = DATA / "sentiment_confidence.csv"
+    confidence = pd.read_csv(confidence_path, encoding="utf-8-sig") if confidence_path.exists() else pd.DataFrame()
+    return overview, themes, sentiment, emotions, confidence
 
 
 def filtered(df: pd.DataFrame, platforms: list[str], post_types: list[str]) -> pd.DataFrame:
@@ -46,7 +48,7 @@ def distribution(df: pd.DataFrame, label: str) -> tuple[pd.DataFrame, int]:
 
 
 try:
-    overview, themes, sentiment, emotions = load_data()
+    overview, themes, sentiment, emotions, confidence = load_data()
 except FileNotFoundError:
     st.title("Voces en la conversación | Unillanos")
     st.warning("Aún no están generados los resultados agregados. Ejecute las fases 2 a 6 en orden; consulte el README.")
@@ -107,6 +109,19 @@ with tab_sentiment:
     else:
         st.info("No hay comentarios en los filtros seleccionados.")
     st.caption("POS = positivo, NEG = negativo, NEU = neutral. El clasificador puede equivocarse con ironía, mensajes cortos y contexto faltante.")
+    if not confidence.empty:
+        st.subheader("Confianza de las predicciones de sentimiento")
+        confidence_f = filtered(confidence, selected_platforms, selected_types)
+        confidence_table, confidence_total = distribution(
+            confidence_f.rename(columns={"confidence_band": "Banda de confianza"}),
+            "Banda de confianza",
+        )
+        if not confidence_table.empty:
+            high_n = int(confidence_f.loc[confidence_f["confidence_band"] == "0,7 o más", "n"].sum())
+            high_pct = high_n / confidence_total * 100 if confidence_total else 0
+            st.metric("Con confianza ≥ 0,7", f"{high_n:,} ({high_pct:.1f} %)")
+            st.bar_chart(confidence_table.set_index("Banda de confianza")["Comentarios"])
+        st.caption("La banda ≥ 0,7 es una referencia exploratoria: en la muestra humana concordante logró 92,9 % de accuracy en 56 casos (71,8 % de cobertura). No cambia las etiquetas originales y no garantiza ese desempeño en todos los comentarios.")
 
 with tab_emotions:
     st.subheader("Emoción estimada")

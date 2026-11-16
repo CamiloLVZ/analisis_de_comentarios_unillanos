@@ -26,6 +26,10 @@ En emoción, varias clases tienen muy pocos casos o ninguno en el subconjunto ev
 
 Los resultados detallados, matrices de confusión y métricas por clase están en `outputs/evaluation_report.json` y `outputs/evaluation_report.md`.
 
+### Análisis selectivo por confianza
+
+Se calculó adicionalmente la accuracy entre los casos concordantes no ambiguos cuya confianza de sentimiento supera varios umbrales. Con confianza ≥0,7, el modelo acertó 52 de 56 casos (92,9 %), cubriendo 71,8 % de los 78 casos evaluables. En todo el corpus, 8.235 de 15.885 predicciones (51,8 %) alcanzan ese umbral. Esta vista permite comunicar incertidumbre sin cambiar una predicción a neutral ni borrar casos. El umbral se eligió tras observar estos resultados en la misma muestra; por tanto, la mejora aparente es exploratoria y probablemente optimista. No debe presentarse como una nueva métrica de validación independiente.
+
 ## Limitaciones
 
 - El acuerdo entre personas no demuestra que la etiqueta acordada sea una verdad absoluta; sirve para detectar ambigüedad y fijar una referencia reproducible.

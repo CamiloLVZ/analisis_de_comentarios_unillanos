@@ -33,6 +33,16 @@
         "emotion_label",
         "n"
       ]
+    },
+    "sentiment_confidence.csv": {
+      "bytes": 939,
+      "format": "csv",
+      "columns": [
+        "platform",
+        "post_type",
+        "confidence_band",
+        "n"
+      ]
     }
   },
   "comments_aggregated": 15885,
@@ -46,6 +56,7 @@
     "data/app/overview.json",
     "data/app/themes.csv",
     "data/app/sentiment.csv",
-    "data/app/emotions.csv"
+    "data/app/emotions.csv",
+    "data/app/sentiment_confidence.csv"
   ]
 }

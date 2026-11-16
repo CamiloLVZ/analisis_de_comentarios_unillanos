@@ -40,7 +40,7 @@ La fase 5 compara anotaciones independientes de dos personas en una muestra de 1
 
 **No ejecutes de nuevo `prepare.py` sin respaldar `evaluation_sample.csv`**, porque la preparación vuelve a crear la muestra y puede borrar las etiquetas humanas.
 
-La primera ejecución de modelado descarga los analizadores de sentimiento y emoción de `pysentimiento`. La fase de modelado puede tomar varios minutos en CPU. Después la aplicación utiliza resultados agregados guardados y no ejecuta los modelos.
+La primera ejecución de modelado descarga los analizadores de sentimiento y emoción de `pysentimiento`. La fase de modelado puede tomar varios minutos en CPU. Después la aplicación utiliza resultados agregados guardados y no ejecuta los modelos. La pestaña de sentimiento también muestra bandas de confianza; el umbral ≥0,7 es una referencia exploratoria basada en una muestra pequeña y no modifica las etiquetas.
 
 ## Estructura
 

@@ -54,7 +54,7 @@ Cada fase guarda su README, su script si corresponde, sus parámetros y/o salida
 4. **Modelado:** identificar temas y producir predicciones de sentimiento/emoción.
 5. **Evaluación:** contrastar con etiquetas humanas, revisar errores y congelar resultados.
 6. **Despliegue:** generar tablas agregadas, construir la app y documentar ejecución.
-7. **Artículo final:** resumir el método y resultados verificables sin inventar evidencia.
+7. **Artículo final:** resumir el método y resultados verificables sin inventar evidencia; interpretar la vista de confianza como exploratoria y no como validación independiente.
 
 Comandos planeados (se ajustan si la auditoría encuentra otra fuente unificada):
 

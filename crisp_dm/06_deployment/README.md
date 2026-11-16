@@ -23,7 +23,7 @@ Para desplegar públicamente, usar `deploy_bundle/` como raíz del proyecto de l
 
 ## Contenido de la interfaz
 
-Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee `deploy_bundle/data/app/overview.json`, `themes.csv`, `sentiment.csv` y `emotions.csv`. No ejecuta `build_app_data.py`: ese generador se corre antes, cuando cambian los resultados analíticos, para crear los agregados que consume la app. La interfaz muestra temas, sentimiento, emociones y límites; no hay evolución temporal, comentarios completos, perfiles o IDs. Los grupos con menos de 10 casos se combinan en el gráfico.
+Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee `deploy_bundle/data/app/overview.json`, `themes.csv`, `sentiment.csv`, `emotions.csv` y `sentiment_confidence.csv`. No ejecuta `build_app_data.py`: ese generador se corre antes, cuando cambian los resultados analíticos, para crear los agregados que consume la app. La pestaña de sentimiento incluye bandas de confianza; ≥0,7 es una referencia exploratoria basada en la muestra humana pequeña y no altera las etiquetas. La interfaz muestra temas, sentimiento, emociones y límites; no hay evolución temporal, comentarios completos, perfiles o IDs. Los grupos con menos de 10 casos se combinan en el gráfico.
 
 ## Cierre de fase
 

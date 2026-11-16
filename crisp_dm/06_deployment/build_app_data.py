@@ -40,6 +40,21 @@ def main() -> None:
         result = result.groupby(groups, dropna=False)["n"].sum().reset_index()
         result.to_csv(OUT / filename, index=False, encoding="utf-8-sig")
 
+    # Confidence is reported as a separate diagnostic, never as a replacement
+    # for the original sentiment label. The 0.7 reference is exploratory.
+    confidence = pd.to_numeric(scores["sentiment_confidence"], errors="coerce").fillna(0)
+    scores["confidence_band"] = pd.cut(
+        confidence,
+        bins=[-float("inf"), 0.6, 0.7, float("inf")],
+        labels=["Menor a 0,6", "0,6 a menor de 0,7", "0,7 o más"],
+        right=False,
+    ).astype(str)
+    confidence_counts = (
+        scores.groupby(["platform", "post_type", "confidence_band"], observed=False)
+        .size().rename("n").reset_index()
+    )
+    confidence_counts.to_csv(OUT / "sentiment_confidence.csv", index=False, encoding="utf-8-sig")
+
     audit = json.loads(AUDIT.read_text(encoding="utf-8")) if AUDIT.exists() else {}
     evaluation = json.loads(EVALUATION.read_text(encoding="utf-8")) if EVALUATION.exists() else {"status": "not_run"}
     overview = {
@@ -60,7 +75,7 @@ def main() -> None:
     output_inventory = {
         "overview.json": {"bytes": int((OUT / "overview.json").stat().st_size), "format": "json"}
     }
-    for name in ["themes.csv", "sentiment.csv", "emotions.csv"]:
+    for name in ["themes.csv", "sentiment.csv", "emotions.csv", "sentiment_confidence.csv"]:
         output_inventory[name] = {
             "bytes": int((OUT / name).stat().st_size),
             "format": "csv",
@@ -89,7 +104,7 @@ def main() -> None:
         encoding="utf-8",
     )
     manifest["deployment_bundle"] = "crisp_dm/06_deployment/deploy_bundle"
-    manifest["bundle_contents"] = ["app.py", "requirements.txt", "README.md", "data/app/overview.json", "data/app/themes.csv", "data/app/sentiment.csv", "data/app/emotions.csv"]
+    manifest["bundle_contents"] = ["app.py", "requirements.txt", "README.md", "data/app/overview.json", "data/app/themes.csv", "data/app/sentiment.csv", "data/app/emotions.csv", "data/app/sentiment_confidence.csv"]
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Datos agregados para Streamlit: {len(scores):,} comentarios; sin campos identificables.")
 

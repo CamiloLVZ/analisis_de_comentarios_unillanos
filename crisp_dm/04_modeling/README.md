@@ -52,12 +52,17 @@ La categoría residual grande indica que el diccionario es incompleto. No debe l
 
 Entre los términos normalizados más frecuentes aparecen “manos”, “aplaudiendo”, “felicitaciones”, “gracias”, “excelente”, “corazones”, “educación”, “estudiantes” y “matrícula”. Parte de la frecuencia de “manos/aplaudiendo/corazones” proviene de emojis convertidos a descripciones, por lo que sirve como señal afectiva exploratoria, no como conteo puramente verbal.
 
+### Diagnóstico de información disponible en el texto
+
+En el corpus preparado, 1.280 comentarios (8,1 %) son solo emojis y 2.728 (17,2 %) tienen como máximo dos palabras. Estas señales pueden ayudar a explicar parte de las predicciones neutrales o sin emoción básica, pero no prueban que esos textos sean inútiles: “¿Cuándo abren?” o “¡Excelente!” son breves y sí comunican algo. Por eso no se eliminaron ni se recodificaron automáticamente. La muestra para revisar temas (198 filas) está disponible, pero sus columnas `theme_gold_1` y `theme_gold_2` siguen vacías; no se cambiaron reglas a partir de intuiciones no contrastadas.
+
 ## Salidas y uso
 
 - `outputs/top_terms.csv`: frecuencias agregadas de 100 unigramas y 100 bigramas; apoya revisión/cambio de categorías.
 - `outputs/theme_counts.csv`: conteos de temas sugeridos por plataforma.
 - `outputs/model_summary.json`: modelos usados y distribución global de etiquetas/temas.
 - `data/processed/model_outputs/scored_comments.csv`: predicciones/probabilidades/indicadores por ID; local e ignorado por Git.
+- La distribución por confianza de sentimiento se deriva para la aplicación desde `sentiment_confidence` sin modificar las etiquetas originales.
 
 La fase 5 contrasta estas predicciones con una muestra pequeña etiquetada por dos revisores. La fase 6 consume únicamente categorías y conteos agregados. Los benchmarks de los autores no predicen necesariamente este dominio: sus resultados para RoBERTuito son aproximados a macro-F1 70 en sentimiento y 55 en emoción, medidos en sus conjuntos de evaluación ([resultados de `pysentimiento`](https://github.com/pysentimiento/pysentimiento/blob/master/docs/TASKS.md)).
 
