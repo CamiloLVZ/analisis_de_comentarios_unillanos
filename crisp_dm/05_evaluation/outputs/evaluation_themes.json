@@ -1,0 +1,20 @@
+{
+  "theme_rules_sha256": "a69292d738828d2bbd1c8569b5dea235b404e7cd59708e811868bf0f969f3266",
+  "n_sample": 198,
+  "inter_annotator_agreement": {
+    "all_rows": {
+      "n": 198,
+      "po": 0.6061,
+      "kappa": 0.5147
+    },
+    "excluding_ambiguous": {
+      "n": 144,
+      "po": 0.7153,
+      "kappa": 0.6226
+    }
+  },
+  "ambiguous_count": 54,
+  "needs_context_count": 93,
+  "disagreements_count": 80,
+  "evaluation_against_rules": null
+}

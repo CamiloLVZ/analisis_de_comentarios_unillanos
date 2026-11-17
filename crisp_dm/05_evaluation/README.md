@@ -36,13 +36,28 @@ Se calculó la accuracy entre los casos concordantes no ambiguos cuya confianza 
 
 En todo el corpus, 8.235 de 15.885 predicciones (51,8 %) alcanzan el umbral $\ge 0,7$. El umbral se eligió tras observar estos resultados en la misma muestra; por tanto, la mejora aparente es exploratoria y probablemente optimista. No debe presentarse como una nueva métrica de validación independiente.
 
-## Evaluación del Componente Temático Refinado
+## Evaluación del Componente Temático (Fase 5)
 
-Al no existir anotación humana independiente en `theme_review_sample.csv`, se evaluó la robustez de las reglas léxicas mediante:
-1. **Reducción de colisiones léxicas:** Se verificó que patrones como `\bcursos?\b` no capturan palabras ajenas como *"concurso"*, *"recurso"* o *"discurso"* (81 falsos positivos corregidos frente a la versión preliminar).
-2. **Eliminación de palabras funcionales ambiguas:** Palabras como *"cuando"*, *"donde"* y *"cuanto"* fueron sustituidas por sintagmas claros de consulta de trámites.
-3. **Desarticulación del residual:** Se separó con éxito el 25,8 % de interacciones puramente sociales o sin texto (`Sin contenido temático suficiente`), permitiendo que el residual no categorizado bajara del 66,0 % al 34,4 %.
-4. **Declaración ética:** No se calculan métricas formales de precisión/recall en temas ni se generan pseudoetiquetas con IA presentadas como humanas.
+Para evaluar la taxonomía temática formalmente contra las anotaciones independientes de dos personas, se desarrolló el script `evaluate_themes.py`:
+
+```powershell
+python crisp_dm/05_evaluation/evaluate_themes.py `
+    --anotador-a data/processed/model_outputs/theme_labeling_anotador_A.csv `
+    --anotador-b data/processed/model_outputs/theme_labeling_anotador_B.csv `
+    --clave data/processed/model_outputs/theme_labeling_clave.csv `
+    --scores data/processed/model_outputs/scored_comments.csv
+```
+
+### Procedimiento de Dos Pasos:
+1. **Paso 1 (Acuerdo Inter-Anotador y Detección de Desacuerdos):**  
+   Calcula el acuerdo observado ($P_o$) y el índice Kappa de Cohen ($\kappa$) entre los dos anotadores independientes para todas las filas ($N=198$) y excluyendo casos ambiguos. Exporta automáticamente a `data/processed/model_outputs/desacuerdos_para_resolver.csv` (privado e ignorado por git) todas las filas donde hubo discrepancia o ambigüedad, dejando la columna `tema_final` vacía para que ambos anotadores acuerden el consenso humano.
+2. **Paso 2 (Evaluación Formal contra Reglas Congeladas):**  
+   Una vez los anotadores hayan resuelto y completado la columna `tema_final` en `desacuerdos_para_resolver.csv`, se vuelve a ejecutar el script (o pasando `--consenso ruta/al/archivo.csv`). El script calcula:
+   * Precisión y Recall por categoría (ponderados por plataforma y sin ponderar).
+   * Intervalos de confianza de Wilson al 95 % para precisión y recall.
+   * Regla de supresión de grupos pequeños: las categorías con soporte menor a 10 ($n < 10$) se marcan explícitamente como "no interpretables".
+   * Cobertura real y fugas hacia las categorías de respaldo ("Otros temas no identificados" y "Sin contenido temático suficiente").
+   * Reportes agregados anónimos en `outputs/evaluation_themes.json` y `outputs/evaluation_themes.md`, registrando el hash `theme_rules_sha256`.
 
 ## Limitaciones
 
