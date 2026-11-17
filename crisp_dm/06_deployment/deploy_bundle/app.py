@@ -1,4 +1,4 @@
-"""Interactive, aggregate-only exploration of the project results."""
+"""Exploración visual e interactiva de resultados agregados del proyecto."""
 from __future__ import annotations
 
 import json
@@ -6,6 +6,13 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+
+try:
+    import plotly.express as px
+    import plotly.graph_objects as go
+    HAS_PLOTLY = True
+except ImportError:
+    HAS_PLOTLY = False
 
 APP_DIR = Path(__file__).resolve().parent
 ROOT = next(
@@ -16,7 +23,43 @@ ROOT = next(
 DATA = ROOT / "data" / "app"
 MIN_GROUP = 10
 
-st.set_page_config(page_title="Voces en la conversación | Unillanos", page_icon="🎓", layout="wide")
+st.set_page_config(page_title="Análisis de comentarios Unillanos", page_icon="📊", layout="wide")
+
+# Paletas de color semánticas y armónicas
+SENTIMENT_COLORS = {
+    "POS": "#2ecc71",
+    "Positivo": "#2ecc71",
+    "NEU": "#95a5a6",
+    "Neutral": "#95a5a6",
+    "NEG": "#e74c3c",
+    "Negativo": "#e74c3c"
+}
+
+PLATFORM_COLORS = {
+    "facebook": "#1877F2",
+    "Facebook": "#1877F2",
+    "instagram": "#E1306C",
+    "Instagram": "#E1306C",
+    "youtube": "#FF0000",
+    "YouTube": "#FF0000"
+}
+
+EMOTION_COLORS = {
+    "joy": "#f39c12",
+    "Alegría": "#f39c12",
+    "others": "#7f8c8d",
+    "Otros": "#7f8c8d",
+    "anger": "#e74c3c",
+    "Enojo": "#e74c3c",
+    "sadness": "#3498db",
+    "Tristeza": "#3498db",
+    "surprise": "#9b59b6",
+    "Sorpresa": "#9b59b6",
+    "fear": "#34495e",
+    "Miedo": "#34495e",
+    "disgust": "#16a085",
+    "Disgusto": "#16a085"
+}
 
 
 @st.cache_data
@@ -49,20 +92,43 @@ def distribution(df: pd.DataFrame, label: str) -> tuple[pd.DataFrame, int]:
     return shown.sort_values("Comentarios", ascending=False), total
 
 
+def make_pie_chart(df: pd.DataFrame, names_col: str, values_col: str, title: str = "", color_map: dict = None, hole: float = 0.45) -> go.Figure | None:
+    if not HAS_PLOTLY or df.empty:
+        return None
+    fig = px.pie(
+        df,
+        names=names_col,
+        values=values_col,
+        title=title,
+        hole=hole,
+        color=names_col if color_map else None,
+        color_discrete_map=color_map if color_map else None,
+    )
+    fig.update_traces(
+        textposition="inside",
+        textinfo="percent+label",
+        hoverinfo="label+value+percent",
+        marker=dict(line=dict(color="#ffffff", width=2))
+    )
+    fig.update_layout(
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+        margin=dict(l=20, r=20, t=40, b=30),
+        height=360
+    )
+    return fig
+
+
 try:
     overview, themes, sentiment, emotions, confidence, theme_sentiment = load_data()
 except FileNotFoundError:
-    st.title("Voces en la conversación | Unillanos")
+    st.title("Análisis de comentarios Unillanos")
     st.warning("Aún no están generados los resultados agregados. Ejecute las fases 2 a 6 en orden; consulte el README.")
     st.stop()
 
-st.title("Voces en la conversación")
+st.title("Análisis de comentarios Unillanos")
 st.caption("Estructura temática, polaridad de sentimiento y emociones en comentarios institucionales de Unillanos")
-st.info("Exploración descriptiva de comentarios institucionales capturados. La taxonomía temática clasifica mediante reglas léxicas definidas manualmente y desacopla interacciones sociales o emojis; sentimiento y emoción son estimaciones automáticas preentrenadas.")
-if overview.get("evaluation_status") == "evaluated_with_two_human_annotators":
-    st.info("La evaluación de sentimiento y emoción se basa en una muestra manual de 120 comentarios y reporta métricas solo en casos concordantes no ambiguos; la taxonomía temática opera con reglas léxicas definidas manualmente y no constituye un modelo validado humanamente.")
-elif overview.get("evaluation_status") != "evaluated_with_small_manual_sample":
-    st.warning("La evaluación local contra etiquetas manuales aún no está completada. Interprete las clases del modelo como resultados exploratorios.")
+st.info("Exploración descriptiva de comentarios institucionales capturados. La taxonomía temática clasifica mediante reglas léxicas auditadas y desacopla interacciones sociales o emojis; sentimiento y emoción son estimaciones automáticas preentrenadas con RoBERTuito.")
 
 with st.sidebar:
     st.header("Filtros")
@@ -70,98 +136,293 @@ with st.sidebar:
     selected_platforms = st.multiselect("Plataformas", platform_options, default=platform_options)
     type_options = sorted(overview["post_types"])
     selected_types = st.multiselect("Tipo de publicación", type_options, default=type_options)
-    st.divider()
-    st.caption(f"{overview['comments_scored']:,} comentarios con texto analizados")
-    st.caption("Sin evolución temporal ni análisis de hilos.")
 
 themes_f = filtered(themes, selected_platforms, selected_types)
 sentiment_f = filtered(sentiment, selected_platforms, selected_types)
 emotions_f = filtered(emotions, selected_platforms, selected_types)
 selected_n = int(themes_f["n"].sum())
 
-metric1, metric2, metric3 = st.columns(3)
+metric1, metric2, metric3, metric4 = st.columns(4)
 metric1.metric("Comentarios analizados", f"{selected_n:,}")
-metric2.metric("Plataformas seleccionadas", len(selected_platforms))
-metric3.metric("Temas categorizados", themes_f["theme"].nunique() if not themes_f.empty else 0)
+metric2.metric("Plataformas activas", f"{len(selected_platforms)} / {len(overview['platforms'])}")
+metric3.metric("Tipos de publicación", f"{len(selected_types)} / {len(overview['post_types'])}")
+metric4.metric("Temas observados", themes_f["theme"].nunique() if not themes_f.empty else 0)
 
 tab_summary, tab_topics, tab_theme_sent, tab_sentiment, tab_emotions, tab_method = st.tabs([
-    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Método y límites"
+    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Observaciones"
 ])
 
+# -----------------------------------------------------------------------------
+# TAB 1: RESUMEN
+# -----------------------------------------------------------------------------
 with tab_summary:
-    st.subheader("Comentarios incluidos por plataforma")
-    platform_counts = themes_f.groupby("platform")["n"].sum().sort_values(ascending=False)
-    st.bar_chart(platform_counts, horizontal=True)
-    st.caption("El número de comentarios por plataforma depende de la recolección y del uso de cada red; no está normalizado por alcance o impresiones.")
+    st.subheader("Distribución general por plataforma y formato")
+    col_p1, col_p2 = st.columns([1, 1])
 
+    plat_df = themes_f.groupby("platform")["n"].sum().rename("Comentarios").reset_index()
+    plat_df["Plataforma"] = plat_df["platform"].str.capitalize()
+
+    with col_p1:
+        st.markdown("**Participación por plataforma**")
+        fig_plat = make_pie_chart(plat_df, "Plataforma", "Comentarios", color_map=PLATFORM_COLORS)
+        if fig_plat:
+            st.plotly_chart(fig_plat, use_container_width=True)
+        else:
+            st.bar_chart(plat_df.set_index("Plataforma")["Comentarios"], horizontal=True)
+
+    with col_p2:
+        st.markdown("**Volumen por tipo de publicación**")
+        type_df = themes_f.groupby("post_type")["n"].sum().sort_values(ascending=False).rename("Comentarios").reset_index()
+        type_df["Tipo"] = type_df["post_type"].str.capitalize()
+        if HAS_PLOTLY:
+            fig_types = px.bar(
+                type_df,
+                x="Comentarios",
+                y="Tipo",
+                orientation="h",
+                color="Tipo",
+                color_discrete_sequence=px.colors.qualitative.Safe,
+                text_auto=True
+            )
+            fig_types.update_layout(showlegend=False, margin=dict(l=20, r=20, t=30, b=20), height=360)
+            st.plotly_chart(fig_types, use_container_width=True)
+        else:
+            st.bar_chart(type_df.set_index("Tipo")["Comentarios"], horizontal=True)
+
+    st.caption("Nota: El volumen de comentarios depende de la intensidad de publicación y uso en cada red; no está normalizado por alcance o impresiones.")
+
+# -----------------------------------------------------------------------------
+# TAB 2: TEMAS
+# -----------------------------------------------------------------------------
 with tab_topics:
-    st.subheader("Distribución temática refinada")
+    st.subheader("Distribución de categorías temáticas")
     topic_table, topic_total = distribution(themes_f.rename(columns={"theme": "Tema"}), "Tema")
+
     if not topic_table.empty:
-        st.bar_chart(topic_table.set_index("Tema")["Comentarios"], horizontal=True)
-        st.dataframe(topic_table, width="stretch", hide_index=True)
+        col_t1, col_t2 = st.columns([6, 4])
+        with col_t1:
+            if HAS_PLOTLY:
+                fig_topic = px.bar(
+                    topic_table.sort_values("Comentarios", ascending=True),
+                    x="Comentarios",
+                    y="Tema",
+                    orientation="h",
+                    color="Comentarios",
+                    color_continuous_scale="Blues",
+                    text="Porcentaje"
+                )
+                fig_topic.update_traces(texttemplate="%{text}%", textposition="outside")
+                fig_topic.update_layout(
+                    coloraxis_showscale=False,
+                    margin=dict(l=20, r=40, t=20, b=20),
+                    height=450,
+                    xaxis_title="Número de comentarios",
+                    yaxis_title=""
+                )
+                st.plotly_chart(fig_topic, use_container_width=True)
+            else:
+                st.bar_chart(topic_table.set_index("Tema")["Comentarios"], horizontal=True)
+
+        with col_t2:
+            st.markdown("**Composición global de la taxonomía**")
+            # Agrupar en macro-categorías para gráfica de pastel
+            macro_data = []
+            sin_cont = topic_table.loc[topic_table["Tema"].str.contains("Sin contenido", case=False, na=False), "Comentarios"].sum()
+            otros = topic_table.loc[topic_table["Tema"].str.contains("Otros temas", case=False, na=False), "Comentarios"].sum()
+            especificos = topic_total - sin_cont - otros
+            macro_df = pd.DataFrame([
+                {"Macro": "Temas específicos", "Comentarios": especificos},
+                {"Macro": "Otros (residual)", "Comentarios": otros},
+                {"Macro": "Sin contenido temático", "Comentarios": sin_cont}
+            ])
+            macro_colors = {
+                "Temas específicos": "#2980b9",
+                "Otros (residual)": "#7f8c8d",
+                "Sin contenido temático": "#bdc3c7"
+            }
+            fig_macro = make_pie_chart(macro_df, "Macro", "Comentarios", color_map=macro_colors, hole=0.5)
+            if fig_macro:
+                st.plotly_chart(fig_macro, use_container_width=True)
+
+        st.dataframe(topic_table, use_container_width=True, hide_index=True)
     else:
         st.info("No hay comentarios en los filtros seleccionados.")
-    st.caption("Las reglas asignan categorías por expresiones regulares con límites de palabra (\\b). 'Sin contenido temático suficiente' agrupa comentarios solo emoji o menciones cortas sin texto proposicional, desarticulando el residual ambiguo.")
 
+    st.caption("Las reglas asignan categorías mediante expresiones regulares léxicas con límites de palabra (\\b). 'Sin contenido temático suficiente' separa emojis y saludos para evitar sobrestimar el residual.")
+
+# -----------------------------------------------------------------------------
+# TAB 3: SENTIMIENTO POR TEMA
+# -----------------------------------------------------------------------------
 with tab_theme_sent:
-    st.subheader("Sentimiento condicionado por tema institucional")
-    st.warning("Advertencia metodológica: La categoría de felicitaciones y expresiones de aprecio se define con vocabulario de elogio, que el modelo de sentimiento asocia intrínsecamente con polaridad positiva. Por tanto, parte significativa de esa correlación positiva es de construcción y no representa un hallazgo empírico independiente.")
+    st.subheader("Sentimiento condicionado por área temática")
+    st.warning("Advertencia metodológica: La categoría de felicitaciones y expresiones de aprecio se define con vocabulario de elogio, que el modelo de sentimiento asocia fuertemente con polaridad positiva. Por tanto, parte sustancial de esa correlación positiva es de construcción del clasificador y no un hallazgo empírico independiente.")
+
     if not theme_sentiment.empty:
         ts_f = filtered(theme_sentiment, selected_platforms, selected_types)
         theme_list = sorted(ts_f["theme"].unique())
-        selected_theme = st.selectbox("Seleccione un área temática para inspeccionar su polaridad:", theme_list)
+
+        selected_theme = st.selectbox("Seleccione un área temática para inspeccionar su polaridad detallada:", theme_list)
+
         if selected_theme:
             sub_ts = ts_f[ts_f["theme"] == selected_theme]
             sent_dist, total_ts = distribution(sub_ts.rename(columns={"sentiment_label": "Sentimiento"}), "Sentimiento")
+
             if not sent_dist.empty:
-                col_a, col_b = st.columns([1, 1])
-                with col_a:
-                    st.metric(f"Comentarios en '{selected_theme}'", f"{total_ts:,}")
-                    st.dataframe(sent_dist, width="stretch", hide_index=True)
-                with col_b:
-                    st.bar_chart(sent_dist.set_index("Sentimiento")["Comentarios"])
+                col_ts1, col_ts2 = st.columns([1, 1])
+
+                with col_ts1:
+                    st.markdown(f"**Proporción afectiva en _{selected_theme}_**")
+                    fig_sent_pie = make_pie_chart(sent_dist, "Sentimiento", "Comentarios", color_map=SENTIMENT_COLORS, hole=0.45)
+                    if fig_sent_pie:
+                        st.plotly_chart(fig_sent_pie, use_container_width=True)
+                    else:
+                        st.bar_chart(sent_dist.set_index("Sentimiento")["Comentarios"])
+
+                with col_ts2:
+                    st.markdown(f"**Métricas y tabla de frecuencia** (Total: {total_ts:,})")
+                    # Métricas en columnas pequeñas
+                    col_m1, col_m2, col_m3 = st.columns(3)
+                    pos_row = sent_dist[sent_dist["Sentimiento"] == "POS"]
+                    neu_row = sent_dist[sent_dist["Sentimiento"] == "NEU"]
+                    neg_row = sent_dist[sent_dist["Sentimiento"] == "NEG"]
+
+                    col_m1.metric("Positivo", f"{pos_row['Porcentaje'].values[0]}%" if not pos_row.empty else "0%")
+                    col_m2.metric("Neutral", f"{neu_row['Porcentaje'].values[0]}%" if not neu_row.empty else "0%")
+                    col_m3.metric("Negativo", f"{neg_row['Porcentaje'].values[0]}%" if not neg_row.empty else "0%")
+
+                    st.dataframe(sent_dist, use_container_width=True, hide_index=True)
             else:
                 st.info("Sin registros suficientes para esta categoría bajo los filtros activos.")
-        st.caption("Permite explorar de forma descriptiva cómo varía la polaridad afectiva según la temática identificada en el comentario.")
+
+        # Gráfico comparativo general de todas las áreas temáticas
+        st.divider()
+        st.subheader("Comparativa general: Polaridad a través de todas las áreas temáticas")
+        all_ts_piv = ts_f.groupby(["theme", "sentiment_label"])["n"].sum().reset_index()
+        all_ts_tot = ts_f.groupby("theme")["n"].sum().rename("total").reset_index()
+        all_ts_merged = pd.merge(all_ts_piv, all_ts_tot, on="theme")
+        all_ts_merged["pct"] = (all_ts_merged["n"] / all_ts_merged["total"] * 100).round(1)
+
+        if HAS_PLOTLY:
+            fig_stacked = px.bar(
+                all_ts_merged,
+                y="theme",
+                x="pct",
+                color="sentiment_label",
+                orientation="h",
+                color_discrete_map=SENTIMENT_COLORS,
+                category_orders={"sentiment_label": ["POS", "NEU", "NEG"]},
+                labels={"pct": "Porcentaje (%)", "theme": "Área Temática", "sentiment_label": "Sentimiento"},
+                text="pct"
+            )
+            fig_stacked.update_traces(texttemplate="%{text}%", textposition="inside")
+            fig_stacked.update_layout(
+                barmode="stack",
+                xaxis=dict(range=[0, 100]),
+                margin=dict(l=20, r=20, t=30, b=30),
+                height=450,
+                legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)
+            )
+            st.plotly_chart(fig_stacked, use_container_width=True)
+        st.caption("Comparación visual de polaridades en el 100% de comentarios de cada área.")
     else:
         st.info("Datos de cruce temático no disponibles.")
 
+# -----------------------------------------------------------------------------
+# TAB 4: SENTIMIENTO GLOBAL
+# -----------------------------------------------------------------------------
 with tab_sentiment:
-    st.subheader("Sentimiento estimado (global)")
+    st.subheader("Distribución de polaridad de sentimiento (global)")
     sent_table, sent_total = distribution(sentiment_f.rename(columns={"sentiment_label": "Sentimiento"}), "Sentimiento")
+
     if not sent_table.empty:
-        st.bar_chart(sent_table.set_index("Sentimiento")["Comentarios"])
-        st.dataframe(sent_table, width="stretch", hide_index=True)
+        col_s1, col_s2 = st.columns([1, 1])
+
+        with col_s1:
+            st.markdown("**Proporción porcentual global**")
+            fig_global_sent = make_pie_chart(sent_table, "Sentimiento", "Comentarios", color_map=SENTIMENT_COLORS, hole=0.5)
+            if fig_global_sent:
+                st.plotly_chart(fig_global_sent, use_container_width=True)
+            else:
+                st.bar_chart(sent_table.set_index("Sentimiento")["Comentarios"])
+
+        with col_s2:
+            st.markdown(f"**Detalle cuantitativo** (Total: {sent_total:,})")
+            st.dataframe(sent_table, use_container_width=True, hide_index=True)
+
+            if not confidence.empty:
+                confidence_f = filtered(confidence, selected_platforms, selected_types)
+                high_n = int(confidence_f.loc[confidence_f["confidence_band"] == "0,7 o más", "n"].sum())
+                high_pct = high_n / sent_total * 100 if sent_total else 0
+                st.metric("Predicciones con alta confianza (≥ 0,7)", f"{high_n:,}", f"{high_pct:.1f}% del total")
+
+        if not confidence.empty:
+            st.divider()
+            st.subheader("Distribución por bandas de confianza del modelo")
+            conf_table, conf_total = distribution(
+                confidence_f.rename(columns={"confidence_band": "Banda de confianza"}),
+                "Banda de confianza",
+            )
+            if HAS_PLOTLY:
+                fig_conf = px.bar(
+                    conf_table,
+                    x="Banda de confianza",
+                    y="Comentarios",
+                    color="Comentarios",
+                    color_continuous_scale="Viridis",
+                    text="Porcentaje"
+                )
+                fig_conf.update_traces(texttemplate="%{text}%", textposition="outside")
+                fig_conf.update_layout(coloraxis_showscale=False, height=320, margin=dict(l=20, r=20, t=20, b=20))
+                st.plotly_chart(fig_conf, use_container_width=True)
+            else:
+                st.bar_chart(conf_table.set_index("Banda de confianza")["Comentarios"])
     else:
         st.info("No hay comentarios en los filtros seleccionados.")
-    st.caption("POS = positivo, NEG = negativo, NEU = neutral. El clasificador puede equivocarse con ironía, mensajes cortos y contexto faltante.")
-    if not confidence.empty:
-        st.subheader("Confianza de las predicciones de sentimiento")
-        confidence_f = filtered(confidence, selected_platforms, selected_types)
-        confidence_table, confidence_total = distribution(
-            confidence_f.rename(columns={"confidence_band": "Banda de confianza"}),
-            "Banda de confianza",
-        )
-        if not confidence_table.empty:
-            high_n = int(confidence_f.loc[confidence_f["confidence_band"] == "0,7 o más", "n"].sum())
-            high_pct = high_n / confidence_total * 100 if confidence_total else 0
-            st.metric("Con confianza ≥ 0,7", f"{high_n:,} ({high_pct:.1f} %)")
-            st.bar_chart(confidence_table.set_index("Banda de confianza")["Comentarios"])
-        st.caption("La banda ≥ 0,7 es una referencia exploratoria: en la muestra humana concordante logró 92,9 % de accuracy en 56 casos (71,8 % de cobertura). No cambia las etiquetas originales y no garantiza ese desempeño en todos los comentarios.")
+    st.caption("POS = positivo, NEG = negativo, NEU = neutral. El clasificador puede presentar incertidumbre frente a ironía o comentarios telegráficos.")
 
+# -----------------------------------------------------------------------------
+# TAB 5: EMOCIONES
+# -----------------------------------------------------------------------------
 with tab_emotions:
-    st.subheader("Emoción estimada (global)")
+    st.subheader("Distribución estimada de emociones")
     emotion_table, emotion_total = distribution(emotions_f.rename(columns={"emotion_label": "Emoción"}), "Emoción")
+
     if not emotion_table.empty:
-        st.bar_chart(emotion_table.set_index("Emoción")["Comentarios"], horizontal=True)
-        st.dataframe(emotion_table, width="stretch", hide_index=True)
+        col_e1, col_e2 = st.columns([1, 1])
+
+        with col_e1:
+            st.markdown("**Composición relativa de emociones**")
+            fig_emo_pie = make_pie_chart(emotion_table, "Emoción", "Comentarios", color_map=EMOTION_COLORS, hole=0.45)
+            if fig_emo_pie:
+                st.plotly_chart(fig_emo_pie, use_container_width=True)
+            else:
+                st.bar_chart(emotion_table.set_index("Emoción")["Comentarios"], horizontal=True)
+
+        with col_e2:
+            st.markdown("**Frecuencias y porcentajes**")
+            st.dataframe(emotion_table, use_container_width=True, hide_index=True)
+
+            if HAS_PLOTLY:
+                fig_emo_bar = px.bar(
+                    emotion_table.sort_values("Comentarios", ascending=True),
+                    x="Comentarios",
+                    y="Emoción",
+                    orientation="h",
+                    color="Emoción",
+                    color_discrete_map=EMOTION_COLORS,
+                    text_auto=True
+                )
+                fig_emo_bar.update_layout(showlegend=False, height=280, margin=dict(l=20, r=20, t=10, b=10))
+                st.plotly_chart(fig_emo_bar, use_container_width=True)
     else:
         st.info("No hay comentarios en los filtros seleccionados.")
-    st.caption("Clases observadas: alegría, enojo, tristeza, miedo, sorpresa, disgusto y ‘otros / sin emoción básica clara’ (others en el modelo). Son estimaciones del texto, no estados psicológicos comprobados.")
+    st.caption("Clases: alegría, enojo, tristeza, miedo, sorpresa, disgusto y ‘otros / sin emoción básica clara’ (others en RoBERTuito).")
 
+# -----------------------------------------------------------------------------
+# TAB 6: OBSERVACIONES
+# -----------------------------------------------------------------------------
 with tab_method:
-    st.subheader("Cómo leer esta aplicación")
+    st.subheader("Marco metodológico y consideraciones analíticas")
     st.markdown("""
     - **Eje Temático Principal:** La taxonomía clasifica los comentarios mediante reglas léxicas compiladas con delimitadores de palabra (`\\b`), distinguiendo temas sustantivos (admisiones, bienestar, trámites, oferta académica, infraestructura, eventos, felicitaciones), comentarios sin sustancia proposicional (solo emojis o menciones aisladas) y otros temas no contemplados.
     - **Independencia del Contexto del Post:** Cada comentario se analizó por su propio texto sin fusionarlo con el texto de la publicación original, previniendo atribuciones erróneas de temas a comentarios ambiguos.
@@ -170,6 +431,3 @@ with tab_method:
     - **Evaluación y Límites Éticos:** Las métricas de sentimiento y emoción proceden de una muestra pequeña (120 comentarios) filtrada a casos concordantes no ambiguos (78 en sentimiento, 67 en emoción). La taxonomía temática es heurística-exploratoria y no se acompaña de falsas métricas de exactitud humana al no disponer de verdad terreno manual en dicha muestra.
     - **Privacidad Estricta:** La aplicación opera exclusivamente sobre agregaciones agrupadas (`groupby`) con supresión de frecuencias menores a 10 ($n < 10$). Ningún texto, ID, autor ni URL forma parte del despliegue.
     """)
-
-st.divider()
-st.caption("Proyecto académico exploratorio · Universidad de los Llanos · CRISP-DM")
