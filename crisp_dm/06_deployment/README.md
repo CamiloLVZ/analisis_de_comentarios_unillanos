@@ -2,13 +2,19 @@
 
 ## Estado
 
-**Completada para ejecución local y entrega del paquete.** Los agregados se generaron desde la salida del modelo y la app fue verificada localmente. La publicación remota queda a cargo del usuario.
+**Completada para ejecución local y entrega del paquete.** Los agregados se generaron desde la salida del modelado refinado y la aplicación fue actualizada y verificada localmente. La publicación remota queda a cargo del usuario.
 
 ## Productos
 
-- `deploy_bundle/app.py`: aplicación interactiva canónica, sin modelos, sin filas individuales y sin conexión a APIs.
-- `build_app_data.py`: agrega predicciones por plataforma, tipo, tema, sentimiento y emoción y actualiza los datos del bundle. No exporta texto, IDs o URLs.
-- `deploy_bundle/data/app/`: única copia de los agregados consumidos por la app.
+- `deploy_bundle/app.py`: aplicación interactiva canónica en Streamlit con visualizaciones por plataforma, temas refinados, sentimiento condicionado por tema institucional, polaridad global, emociones y notas de alcance.
+- `build_app_data.py`: genera tablas agrupadas anónimas y actualiza los datos del bundle. No exporta texto, IDs, autores ni URLs.
+- `deploy_bundle/data/app/`: directorio canónico de los agregados consumidos por la app:
+  - `themes.csv`: conteos temáticos agrupados.
+  - `theme_sentiment.csv`: cruce de temas por polaridad afectiva.
+  - `sentiment.csv`: sentimiento global por plataforma y formato.
+  - `emotions.csv`: emociones por plataforma y formato.
+  - `sentiment_confidence.csv`: diagnóstico de confianza.
+  - `overview.json`: metadatos y configuración general.
 - `deploy_bundle/`: paquete autocontenido para subir como raíz de un repositorio de despliegue; incluye solo Streamlit, pandas y tablas agregadas.
 - `outputs/deployment_manifest.json`: esquema y tamaño de los artefactos de despliegue y declaración de control de privacidad.
 
@@ -19,12 +25,18 @@ python crisp_dm/06_deployment/build_app_data.py
 streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
-Para desplegar públicamente, usar `deploy_bundle/` como raíz del proyecto de la app. Esto evita subir los archivos crudos que siguen en el repositorio de análisis y evita instalar PyTorch/Transformers en el servicio. Ejecutar `build_app_data.py` para refrescar el paquete después de regenerar resultados.
+Para desplegar públicamente, usar `deploy_bundle/` como raíz del proyecto de la app. Esto evita subir los archivos crudos que siguen en el repositorio de análisis y evita instalar PyTorch/Transformers en el servicio.
 
 ## Contenido de la interfaz
 
-Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee `deploy_bundle/data/app/overview.json`, `themes.csv`, `sentiment.csv`, `emotions.csv` y `sentiment_confidence.csv`. No ejecuta `build_app_data.py`: ese generador se corre antes, cuando cambian los resultados analíticos, para crear los agregados que consume la app. La pestaña de sentimiento incluye bandas de confianza; ≥0,7 es una referencia exploratoria basada en la muestra humana pequeña y no altera las etiquetas. La interfaz muestra temas, sentimiento, emociones y límites; no hay evolución temporal, comentarios completos, perfiles o IDs. Los grupos con menos de 10 casos se combinan en el gráfico.
+Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee los archivos agregados en `data/app/`. Contiene:
+1. **Resumen:** Volumen por plataforma y filtros globales.
+2. **Temas:** Distribución de las 7 áreas sustantivas, la clase funcional "Sin contenido temático suficiente" y el residual "Otros temas no identificados".
+3. **Sentimiento por tema:** Vista condicional que permite explorar cómo se distribuye la polaridad (POS/NEG/NEU) dentro de cada área temática de la universidad.
+4. **Sentimiento global:** Polaridad general y bandas de confianza diagnósticas.
+5. **Emociones:** Estimación global de emociones básicas.
+6. **Método y límites:** Explicación técnica de la taxonomía, conservación de emojis, independencia del texto del post y limitaciones éticas de evaluación.
 
 ## Cierre de fase
 
-Verificado: el paquete autocontenido contiene únicamente app, dependencias ligeras y datos agrupados; los datos agregados reflejan la evaluación humana actualizada. El usuario puede desplegar el directorio `deploy_bundle/` como raíz de un repositorio independiente. No desplegar desde la raíz del repositorio analítico, que conserva archivos de comentarios originales.
+Verificado: el paquete autocontenido contiene únicamente app, dependencias ligeras y datos agrupados; la suma de comentarios cierra de forma exacta en 15.885 sin exponer datos sensibles.

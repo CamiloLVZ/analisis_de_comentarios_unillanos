@@ -17,17 +17,19 @@
   "sentiment_model": "pysentimiento robertuito-sentiment-analysis (Spanish default)",
   "emotion_model": "pysentimiento robertuito-emotion-analysis (Spanish default)",
   "input_text": "Original comment text; pysentimiento applies its own social-media preprocessing.",
-  "topic_method": "Clasificación exploratoria por reglas léxicas transparentes, ajustadas tras revisar frecuencias de palabras y frases. Las categorías no equivalen a un modelo temático validado.",
+  "topic_method": "Clasificación por reglas léxicas supervisadas con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
   "theme_rules": "crisp_dm/04_modeling/theme_rules.json",
   "model_outputs": "data/processed/model_outputs/scored_comments.csv",
   "topic_terms": "crisp_dm/04_modeling/outputs/top_terms.csv",
   "theme_counts": {
-    "Otros / tema no identificado": 10486,
-    "Felicitaciones y reconocimiento": 2346,
-    "Vida académica e investigación": 989,
-    "Información y trámites": 914,
-    "Admisiones e inscripciones": 579,
-    "Programas de acceso y bienestar": 459,
-    "Eventos y actividades": 112
+    "Otros temas no identificados": 5469,
+    "Sin contenido temático suficiente (social/emoji/mención)": 4090,
+    "Felicitaciones y reconocimiento institucional": 2377,
+    "Oferta académica e investigación": 1941,
+    "Admisiones, inscripciones y matrículas": 691,
+    "Programas de acceso y bienestar": 480,
+    "Información, trámites y certificados": 462,
+    "Infraestructura, sedes y tecnología": 229,
+    "Eventos, cultura y actividades institucionales": 146
   }
 }

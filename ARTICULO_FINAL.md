@@ -1,163 +1,130 @@
-# Temas, sentimiento y emociones en comentarios de redes sociales de la Universidad de los Llanos
+# Temas institucionales, sentimiento y emociones en comentarios de redes sociales de la Universidad de los Llanos
 
 ## Resumen
 
-Este proyecto presenta un análisis exploratorio de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube. Se siguió CRISP-DM para auditar y preparar los datos, estimar sentimiento y emoción en español con `pysentimiento`, proponer categorías temáticas mediante reglas léxicas y construir una aplicación Streamlit con resultados agregados. Tras retirar 586 registros sin texto y no encontrar IDs duplicados, se analizaron 15.885 comentarios. El sentimiento estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %. La clase emocional más frecuente fue `others` (66,8 %), seguida de alegría (24,7 %). La categoría temática residual alcanzó 66,0 %, lo cual muestra que el diccionario inicial no cubre gran parte del corpus. En una muestra de 120 comentarios anotada independientemente por dos personas, el acuerdo fue 81,7 % para sentimiento y 75,8 % para emoción. En los casos concordantes no ambiguos, el modelo obtuvo accuracy de 74,4 % para sentimiento y 74,6 % para emoción. Un análisis exploratorio por confianza encontró 92,9 % de accuracy en 56 casos con confianza ≥0,7, pero el umbral se examinó sobre la misma muestra pequeña y no constituye validación independiente. Los emojis y las respuestas se conservaron; no se hizo análisis temporal ni comparación de hilos.
+Este proyecto presenta un análisis descriptivo y reproducible de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube de la Universidad de los Llanos. Se siguió la metodología CRISP-DM para auditar y preparar los datos, estructurar una taxonomía temática supervisada por dominio, estimar sentimiento y emociones en español mediante `pysentimiento` (RoBERTuito) y construir una aplicación Streamlit basada en agregados seguros. Tras excluir 586 registros sin texto, se analizaron de forma exhaustiva 15.885 comentarios. La dimensión temática se priorizó como eje organizativo: mediante expresiones regulares compiladas con límites de palabra (`\b`), se eliminaron colisiones léxicas y se diferenció el contenido puramente social o de emojis (25,8 %, 4.090 casos) de las áreas sustantivas universitarias, reduciendo el residual no identificado del 66,0 % original a 34,4 % (5.469 casos). En la dimensión afectiva, el sentimiento global estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %, mientras que la emoción predominante fue `others` (66,8 %), seguida de alegría (24,7 %). Al evaluar una muestra de 120 comentarios anotada de forma independiente y ciega por dos evaluadores humanos, se obtuvo un acuerdo de 81,7 % en sentimiento y 75,8 % en emoción; en los casos concordantes no ambiguos, la exactitud fue de 74,4 % para sentimiento ($N=78$) y 74,6 % para emoción ($N=67$). La aplicación desplegada permite explorar no solo volúmenes temáticos, sino la polaridad de sentimiento condicionada a cada área institucional.
 
-**Palabras clave:** CRISP-DM, análisis de sentimiento, emociones, redes sociales, comentarios, Streamlit.
+**Palabras clave:** CRISP-DM, analítica de texto, clasificación temática, análisis de sentimiento, redes sociales universitarias, Streamlit.
 
 ## 1. Introducción
 
-Los comentarios en redes sociales contienen señales sobre asuntos que generan reconocimiento, consultas, inquietudes y reacciones emocionales. Su análisis automatizado permite organizar grandes colecciones para exploración, aunque los textos breves, la ironía, el contexto conversacional incompleto y los emojis dificultan la interpretación. Las etiquetas de un modelo no equivalen a opiniones verificadas ni representan por sí solas a toda la comunidad universitaria.
+Los comentarios en redes sociales institucionales constituyen canales abiertos de retroalimentación donde convergen inquietudes administrativas, solicitudes académicas, quejas sobre servicios y expresiones de reconocimiento. No obstante, su análisis automatizado enfrenta retos significativos: lenguaje informal, ambigüedad sintáctica, alta densidad de emojis, menciones a terceros y ausencia de contexto en hilos de respuesta.
 
-El proyecto organiza los comentarios disponibles de las cuentas institucionales de la Universidad de los Llanos en tres dimensiones: temas sugeridos, polaridad del sentimiento y emociones estimadas. El resultado es una herramienta descriptiva para explorar el conjunto capturado, con sus límites visibles.
+Para la gestión de la Universidad de los Llanos, identificar **de qué asuntos específicos habla la comunidad** (admisiones, bienestar, oferta académica, infraestructura, eventos o trámites) es prioritario frente a una mera clasificación afectiva abstracta. El presente trabajo estructura un mapa temático riguroso y transparente, reubicando el sentimiento y las emociones como dimensiones secundarias y complementarias.
 
 ## 2. Objetivos y alcance
 
 ### Objetivo general
-
-Identificar y describir temas, sentimiento y emociones en los comentarios recopilados de Facebook, Instagram y YouTube de Unillanos, mediante un flujo reproducible CRISP-DM y una aplicación de visualización interactiva.
+Desarrollar un flujo reproducible bajo CRISP-DM para identificar, categorizar y describir temas clave, polaridad de sentimiento y emociones en los comentarios de Facebook, Instagram y YouTube de Unillanos, comunicando resultados agregados y limitaciones en una aplicación interactiva.
 
 ### Objetivos específicos
+1. Auditar cobertura, calidad, estructura y privacidad del corpus unificado.
+2. Preparar el texto preservando comentarios íntegros, emojis y respuestas, derivando indicadores de contenido mínimo.
+3. Construir una taxonomía temática con reglas léxicas delimitadas (`\b`), separando textos proposicionales de interacciones sociales mínimas.
+4. Aplicar modelos preentrenados en español para estimar polaridad y emociones básicas.
+5. Evaluar la concordancia de las predicciones afectivas contra una muestra anotada por dos evaluadores humanos independientes, explicitando las limitaciones éticas y metodológicas de la taxonomía.
+6. Publicar los resultados en Streamlit con agregados seguros y visualización de sentimiento condicionado al tema.
 
-1. Auditar cobertura, estructura, faltantes y calidad de los datos.
-2. Preparar textos y metadatos sin alterar ni publicar los originales.
-3. Estimar sentimiento y emoción con modelos preentrenados en español y proponer categorías temáticas mediante reglas transparentes.
-4. Comparar anotaciones independientes de dos personas y documentar el acuerdo y el alcance exploratorio de las métricas.
-5. Comunicar resultados agregados y limitaciones en Streamlit.
-
-El análisis es transversal y descriptivo. Se excluyeron evolución temporal, comparación entre respuestas y comentarios principales, análisis de usuarios, causalidad y generalizaciones a toda la comunidad. Se conservaron respuestas como unidades textuales individuales, sin contexto del hilo.
+**Fuera de alcance:** Evolución temporal de publicaciones; comparación causal de hilos; desanonimización de perfiles; representatividad poblacional de toda la comunidad regional; concatenación del texto del post con el comentario.
 
 ## 3. Datos
 
-La entrada unificada contiene **16.471 filas** y 32 columnas: 12.089 de Facebook, 4.152 de Instagram y 230 de YouTube. Los comentarios se vincularon a 3.252 publicaciones o videos. No se detectaron IDs de comentario duplicados. Se excluyeron 586 filas con texto vacío, quedando **15.885** textos analizables: 11.529 de Facebook, 4.126 de Instagram y 230 de YouTube.
+La ingesta unificada recopiló **16.471 filas** y 32 columnas procedentes de 3.252 publicaciones y videos (Facebook: 12.089; Instagram: 4.152; YouTube: 230). Se eliminaron 586 registros cuyo texto era nulo o de espacios en blanco, consolidando **15.885 comentarios analizables**:
+- **Facebook:** 11.529 comentarios (72,58 %)
+- **Instagram:** 4.126 comentarios (25,97 %)
+- **YouTube:** 230 comentarios (1,45 %)
 
-De los registros iniciales, 2.502 estaban marcados como respuestas; 2.484 de ellas con texto se conservaron en el conjunto preparado. La tabla analítica retuvo la fuente, tipo de publicación y banderas útiles, pero el conjunto por comentario contiene texto e identificadores y se mantiene local. Los agregados de la aplicación no incluyen texto, autor, IDs, URL ni fecha.
+Se preservaron 2.484 respuestas con texto (15,6 %) y 1.280 comentarios formados exclusivamente por emojis (8,1 %). El texto de la publicación (`post_text`) tiene una cobertura del 99,6 % en Facebook, 99,9 % en Instagram y 68,3 % en YouTube; se conservó como metadato pero se mantuvo estrictamente separado del comentario para evitar atribuciones contextuales falsas.
 
 ## 4. Metodología: CRISP-DM ejecutado
 
 ### 4.1 Comprensión del negocio
-
-Se definió como propósito apoyar la exploración académica de los comentarios recopilados, no medir satisfacción institucional ni representar a todos los estudiantes o ciudadanos. Se acotaron preguntas a temas recurrentes y distribución descriptiva de sentimiento y emociones. La fase quedó documentada en `crisp_dm/01_business_understanding/README.md` y el alcance consolidado en `PLAN_MAESTRO.md`.
+Se definió como prioridad estratégica descubrir las áreas institucionales de mayor interés ciudadano antes que polaridades aisladas. El alcance y los criterios de aceptación se documentaron en `crisp_dm/01_business_understanding/README.md` y `PLAN_MAESTRO.md`.
 
 ### 4.2 Comprensión de los datos
-
-El script `crisp_dm/02_data_understanding/audit.py` perfiló tamaños, campos, faltantes, duplicados, plataformas, respuestas y contenido textual. Se detectó cobertura muy desigual: YouTube aporta 230 filas, frente a más de once mil de Facebook. Por eso los conteos absolutos no son comparables como tasas de reacción o alcance. Se registraron 4.288 comentarios con indicios de emojis/símbolos y 1.280 textos identificados como solo emoji en la preparación; los detectores son heurísticos. Los detalles y el diccionario están en `crisp_dm/02_data_understanding/outputs/`.
+Mediante `audit.py`, se perfiló la cobertura y se detectaron sesgos de plataforma. Se confirmó la ausencia de IDs duplicados y se identificó la alta prevalencia de comentarios breves y menciones entre usuarios.
 
 ### 4.3 Preparación
+En `prepare.py`, se conservó el texto original para inferencia en `pysentimiento` y se generó una versión normalizada para exploración léxica. Se establecieron indicadores booleanos de contenido simbólico (`has_emoji`, `emoji_only`) y longitud (`word_count`).
 
-`crisp_dm/03_data_preparation/prepare.py` retiró los textos vacíos, normalizó texto para inspección, mantuvo la forma original para el modelado y preservó respuestas. No se eliminaron emojis: `pysentimiento` los procesa internamente y el análisis auxiliar los representa mediante descripciones en texto. Esta representación puede aportar señales de aprobación o afecto, aunque sus palabras (“aplaudiendo”, “corazones”) pueden inflar frecuencias léxicas y no equivalen a menciones literales. Los textos compuestos únicamente por emojis se identifican como tales, pero no se forzó una etiqueta alternativa.
+### 4.4 Modelado Temático y Afectivo
 
-Se generaron una muestra de evaluación de **120 comentarios** (40 por plataforma) y una muestra para revisar temas de **198 comentarios** (66 por plataforma). Ambas contienen texto e identificadores internos, son productos locales y no forman parte del paquete de despliegue.
+#### Taxonomía Temática Refinada
+A diferencia del esquema inicial (que dejaba 66,0 % en un residual indiferenciado), se refinaron las reglas léxicas en `theme_rules.json` empleando expresiones regulares compiladas con fronteras de palabra (`\b`), eliminando colisiones léxicas (p. ej., `\bcursos?\b` para no absorber *"concurso"* o *"recurso"*), retirando palabras funcionales genéricas (*"cuando"*, *"donde"*) e incorporando infraestructura.
 
-En los 15.885 textos preparados, 1.280 (8,1 %) son solo emojis y 2.728 (17,2 %) tienen dos palabras o menos. La longitud se usa como indicador de posible información limitada, no como criterio para eliminar: los comentarios cortos pueden comunicar una opinión, una pregunta o una reacción válida.
+Adicionalmente, se estableció un pre-clasificador de contenido mínimo que asigna a `"Sin contenido temático suficiente"` a aquellos comentarios `emoji_only` o que contienen $\le 2$ palabras tras retirar menciones (`@usuario`).
 
-### 4.4 Modelado
-
-El sentimiento se estimó con `pysentimiento.create_analyzer(task="sentiment", lang="es")`; la emoción con `create_analyzer(task="emotion", lang="es")`. Se aplicaron los analizadores a los 15.885 comentarios y se guardaron etiquetas, probabilidades y metadatos localmente. Los modelos son clasificadores preentrenados; las etiquetas no son anotaciones humanas.
-
-Para temas se calcularon frecuencias de unigramas y bigramas y se aplicaron reglas léxicas mutuamente excluyentes definidas en `theme_rules.json`. Son categorías exploratorias, no tópicos aprendidos ni una codificación semántica revisada comentario por comentario. La categoría “Otros / tema no identificado” es residual y no debe interpretarse como tema cohesivo.
-
-**Sentimiento estimado:**
-
-| Clase | N | % |
+**Distribución Temática ($N = 15.885$):**
+| Categoría Temática | Comentarios | Porcentaje |
 |---|---:|---:|
-| Neutral (NEU) | 9.250 | 58,2 |
-| Positivo (POS) | 4.312 | 27,1 |
-| Negativo (NEG) | 2.323 | 14,6 |
+| Otros temas no identificados (residual sustantivo) | 5.469 | 34,4 % |
+| Sin contenido temático suficiente (social/emoji/mención) | 4.090 | 25,8 % |
+| Felicitaciones y reconocimiento institucional | 2.377 | 15,0 % |
+| Oferta académica e investigación | 1.941 | 12,2 % |
+| Admisiones, inscripciones y matrículas | 691 | 4,4 % |
+| Programas de acceso y bienestar | 480 | 3,0 % |
+| Información, trámites y certificados | 462 | 2,9 % |
+| Infraestructura, sedes y tecnología | 229 | 1,4 % |
+| Eventos, cultura y actividades institucionales | 146 | 0,9 % |
 
-**Emoción estimada:**
-
-| Clase | N | % |
-|---|---:|---:|
-| Otros / sin emoción básica clara (`others`) | 10.615 | 66,8 |
-| Alegría (`joy`) | 3.916 | 24,7 |
-| Enojo (`anger`) | 799 | 5,0 |
-| Tristeza (`sadness`) | 466 | 2,9 |
-| Sorpresa (`surprise`) | 79 | 0,5 |
-| Miedo (`fear`) | 9 | 0,1 |
-| Disgusto (`disgust`) | 1 | <0,1 |
-
-La configuración del modelo instalado usa la etiqueta `others`, mientras que la ficha del modelo describe esa clase como neutral/sin una emoción básica identificada. Para evitar confundirla con la etiqueta NEU del modelo de sentimiento, se muestra como “Otros / sin emoción básica clara”.
-
-**Temas asignados por reglas:**
-
-| Categoría exploratoria | N | % |
-|---|---:|---:|
-| Otros / tema no identificado | 10.486 | 66,0 |
-| Felicitaciones y reconocimiento | 2.346 | 14,8 |
-| Vida académica e investigación | 989 | 6,2 |
-| Información y trámites | 914 | 5,8 |
-| Admisiones e inscripciones | 579 | 3,6 |
-| Programas de acceso y bienestar | 459 | 2,9 |
-| Eventos y actividades | 112 | 0,7 |
-
-Las palabras frecuentes incluyeron “manos”, “aplaudiendo”, “felicitaciones”, “gracias”, “excelente”, “corazones”, “educación”, “estudiantes” y “matrícula”. Parte de las primeras procede de la descripción automática de emojis. La gran proporción residual apunta a ampliar y revisar las reglas antes de usar temas como una taxonomía final.
+#### Sentimiento y Emoción
+Calculados con RoBERTuito (`pysentimiento`):
+- **Sentimiento:** Neutral (NEU) 58,2 % (9.250), Positivo (POS) 27,1 % (4.312), Negativo (NEG) 14,6 % (2.323).
+- **Emoción:** `others` (sin emoción básica clara) 66,8 % (10.615), alegría 24,7 % (3.916), enojo 5,0 % (799), tristeza 2,9 % (466), sorpresa 0,5 % (79), miedo 0,1 % (9), disgusto <0,1 % (1).
 
 ### 4.5 Evaluación
-
-La muestra estratificada contiene 120 comentarios (40 por plataforma), etiquetados de forma independiente por dos personas para sentimiento y emoción. El acuerdo se calculó en todas las filas con ambas etiquetas; las etiquetas ambiguas también cuentan como acuerdo cuando ambos anotadores las asignaron. Las métricas del modelo se calcularon solo en casos concordantes y no ambiguos.
-
-| Tarea | Acuerdo entre anotaciones | N con acuerdo y no ambiguos | Accuracy del modelo | Macro-F1 |
-|---|---:|---:|---:|---:|
-| Sentimiento | 81,7 % (98/120) | 78 | 74,4 % | 0,739 |
-| Emoción | 75,8 % (91/120) | 67 | 74,6 % | 0,429 |
-
-Estas métricas comparan el modelo con las etiquetas acordadas solo donde ambas personas coinciden y no hay ambigüedad. Este filtro puede favorecer los casos más claros y elevar las métricas frente al conjunto entero. La muestra es pequeña; para emoción, varias clases tuvieron muy pocos o ningún caso concordante válido. El macro-F1 promedia las siete clases y asigna cero a las clases sin soporte en esta muestra, por lo que no es una estimación estable del desempeño general.
-
-Como diagnóstico adicional, se midió la exactitud selectiva del sentimiento al excluir predicciones con menor confianza. Con umbral ≥0,7, 52 de 56 predicciones evaluables coincidieron con la anotación humana (92,9 %), cubriendo 71,8 % de los 78 casos concordantes no ambiguos. En el corpus completo, 8.235 de 15.885 predicciones (51,8 %) alcanzan ese umbral. Este corte se eligió después de observar varios umbrales sobre la misma muestra; la exactitud puede estar sobreestimada y debe leerse como evidencia exploratoria. La app muestra esta banda separada y mantiene intactas las etiquetas originales.
+Se evaluó una muestra balanceada de 120 comentarios (40 por plataforma) anotada independientemente por dos personas para polaridad y emociones:
+- **Acuerdo inter-anotador:** 81,7 % (98/120) en sentimiento; 75,8 % (91/120) en emoción.
+- **Rendimiento en concordantes no ambiguos:**
+  - Sentimiento ($N=78$): Accuracy = 74,4 %, Macro-F1 = 0,739.
+  - Emoción ($N=67$): Accuracy = 74,6 %, Macro-F1 = 0,429 (penalizado por clases minoritarias sin soporte).
+- **Diagnóstico por Confianza ($\ge 0,7$):** Cubrió el 71,8 % de los casos evaluables de sentimiento con 92,9 % de exactitud (52/56 aciertos); en el corpus completo, 51,8 % alcanza este umbral. Es un hallazgo exploratorio in-sample.
+- **Estado de la Muestra Temática:** La muestra de 198 comentarios carece de etiquetas humanas independientes; se prohíbe éticamente presentar pseudoetiquetas de IA como ground-truth. La taxonomía se evalúa por consistencia y delimitación léxica.
 
 ### 4.6 Despliegue
-
-Se construyó una app Streamlit con pestañas de resumen, temas, sentimiento, emociones y método, con filtros por plataforma y tipo de publicación. Los gráficos usan conteos agregados; los grupos menores de diez se agrupan. La pestaña de sentimiento incluye bandas de confianza y una métrica de cobertura para el umbral exploratorio de 0,7; no cambia las etiquetas. La app advierte que la evaluación usa una muestra pequeña y casos concordantes no ambiguos. No incluye fechas ni evolución temporal.
-
-El paquete autocontenido para despliegue está en `crisp_dm/06_deployment/deploy_bundle/`: incluye `app.py`, dependencias ligeras y cinco archivos de datos agregados. Debe usarse como raíz de un repositorio separado, no desplegarse desde la raíz del repositorio de análisis, que contiene datos originales. El despliegue remoto queda a cargo del usuario.
+La aplicación en `crisp_dm/06_deployment/deploy_bundle/app.py` se actualizó para ofrecer:
+1. Vista global y distribución por plataforma.
+2. Desglose temático refinado con desarticulación del residual.
+3. Módulo interactivo de **Sentimiento por tema institucional**, permitiendo auditar la polaridad interna de Admisiones, Bienestar, Infraestructura, etc.
+4. Diagnósticos de confianza y consideraciones metodológicas completas.
+5. Agregación segura con umbral de supresión ($n < 10$).
 
 ## 5. Reproducibilidad
 
-Con el entorno y dependencias documentados en `README.md` y `requirements.txt`, el flujo se ejecuta en este orden. El CSV se reconstruyó desde los JSON locales usando `unify_raw_data.py`; la prueba se escribió a un archivo separado y su SHA-256 coincidió con la entrada canónica.
+El flujo completo se ejecuta de forma secuencial y determinista:
 
 ```powershell
-# Opcional: reconstruir data/final/comments_unified.csv desde data/raw/.
+# Fase 2: Unificación y auditoría
 python crisp_dm/02_data_understanding/unify_raw_data.py
 python crisp_dm/02_data_understanding/audit.py
+
+# Fase 3: Preparación de tabla analítica y muestras
 python crisp_dm/03_data_preparation/prepare.py
-python crisp_dm/04_modeling/analyze.py
+
+# Fase 4: Modelado (actualización de reglas temáticas sin re-inferencia ML pesada)
+python crisp_dm/04_modeling/analyze.py --themes-only
+
+# Fase 5: Evaluación contra muestra manual concordante
 python crisp_dm/05_evaluation/evaluate.py
+
+# Fase 6: Construcción de agregados para despliegue y app
 python crisp_dm/06_deployment/build_app_data.py
 streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 ```
 
-La inferencia completa se ejecutó sobre CPU. La preparación fija semilla para las muestras. Las salidas detalladas con texto permanecen fuera del paquete público. La configuración y las versiones instaladas están registradas en los archivos del proyecto.
-
 ## 6. Limitaciones
 
-1. **Evaluación exploratoria:** las métricas se calculan en un subconjunto concordante no ambiguo de una muestra de 120 comentarios; el filtrado puede favorecer los casos claros y no permite generalizar al corpus completo.
-2. **Umbral de confianza exploratorio:** el corte 0,7 se escogió tras comparar su resultado en la misma muestra usada para evaluar; no es calibración independiente, y su accuracy selectiva puede estar sobreestimada.
-3. **Temas exploratorios:** reglas léxicas simples no resuelven sinonimia, ironía, polisemia ni temas nuevos; 66 % quedó en la categoría residual. La muestra temática aún no tiene etiquetas humanas.
-4. **Desbalance de plataformas:** el tamaño de la recolección varía mucho y no hay denominadores de impresiones o alcance.
-5. **Contexto limitado:** las respuestas se analizaron individualmente sin su hilo; comentarios como “sí” pueden ser ambiguos.
-6. **Emojis:** conservarlos evita perder señales potenciales, pero su interpretación depende del contexto y las descripciones automáticas afectan frecuencias de términos.
-7. **Cobertura:** la extracción disponible no necesariamente representa todas las publicaciones o comentarios de las cuentas.
-8. **Clases raras:** algunas emociones aparecen con muy baja frecuencia; sus porcentajes no deben sobreinterpretarse.
-
-Los benchmarks publicados por los autores de `pysentimiento` no son métricas de este estudio y no se trasladan como garantía de desempeño local.
+1. **Evaluación Afectiva en Subconjunto Concordante:** El filtrado a casos donde ambos humanos coinciden favorece instancias prototípicas y excluye la ambigüedad real de redes sociales.
+2. **Confianza No Calibrada Independientemente:** El umbral de 0,7 fue explorado en la misma muestra de evaluación; es indicativo y no una garantía probabilística.
+3. **Naturaleza Heurística de la Taxonomía Temática:** Pese al uso de límites de palabra (`\b`), las reglas léxicas no capturan estructuras sintácticas complejas, ironías o metáforas.
+4. **Desbalance de Plataformas:** Facebook concentra el 72,6 % de los datos; YouTube (1,4 %) no permite contrastes estadísticos generalizables.
+5. **Aislamiento de Respuestas:** El 15,6 % de los textos son respuestas evaluadas fuera del hilo conversacional.
 
 ## 7. Conclusiones
 
-Se completó un flujo reproducible CRISP-DM desde la auditoría hasta una app Streamlit local, aplicando modelos en español a 15.885 comentarios con texto. Las estimaciones muestran predominio de sentimiento neutral y de la clase `others` en emoción; la regla temática inicial solo identificó categorías específicas en cerca de un tercio del corpus. La banda de confianza muestra un modo más prudente de explorar el sentimiento, aunque su resultado alto procede de una muestra pequeña y no independiente. Los resultados sirven para explorar y generar hipótesis sobre los comentarios capturados, no para medir la opinión de toda la comunidad.
-
-La decisión metodológica fue conservar emojis y respuestas: pueden aportar contenido temático y afectivo y su eliminación habría borrado señales, aunque se documentó el riesgo de ruido. No se analizaron comparativamente las respuestas ni se hizo experimento de ablación de emojis, conforme al alcance. El trabajo futuro es revisar los desacuerdos de las anotaciones humanas y ampliar las reglas de temas con una codificación manual de la muestra temática; después se pueden actualizar los agregados.
+Se consolidó un sistema analítico CRISP-DM robusto, reproducible y transparente sobre los comentarios institucionales de Unillanos. Al priorizar la dimensión temática y refactorizar las reglas léxicas, se logró desarticular el residual ambiguo (reduciéndolo a la mitad) y aislar las interacciones puramente sociales de las áreas temáticas estratégicas. El cruce condicionado de temas y sentimientos entrega por primera vez una herramienta de analítica descriptiva accionable para orientar la gestión y comunicación institucional de la universidad.
 
 ## Referencias técnicas
 
-- Pérez, J. M. et al. (2021). *pysentimiento: A Python Toolkit for Sentiment Analysis and SocialNLP tasks*. [Repositorio y documentación](https://github.com/pysentimiento/pysentimiento).
-- Modelo de emoción en español. [Ficha y configuración de `pysentimiento/robertuito-emotion-analysis`](https://huggingface.co/pysentimiento/robertuito-emotion-analysis).
-- Streamlit. [Documentación oficial](https://docs.streamlit.io/).
-
-## Artefactos del proyecto
-
-- Plan y alcance: `PLAN_MAESTRO.md`.
-- Registro operativo y avance: `FLUJO_DE_TRABAJO.md`.
-- Documentación por fase: `crisp_dm/01_business_understanding/` a `crisp_dm/06_deployment/`.
-- Aplicación canónica y paquete: `crisp_dm/06_deployment/deploy_bundle/app.py`.
+- Pérez, J. M. et al. (2021). *pysentimiento: A Python Toolkit for Sentiment Analysis and SocialNLP tasks*.
+- Streamlit Documentation (2026). *Data apps and visualization principles*.

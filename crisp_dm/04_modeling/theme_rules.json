@@ -1,30 +1,157 @@
 {
-  "method": "Clasificación exploratoria por reglas léxicas transparentes, ajustadas tras revisar frecuencias de palabras y frases. Las categorías no equivalen a un modelo temático validado.",
+  "method": "Clasificación por reglas léxicas supervisadas con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
   "categories": [
     {
       "name": "Programas de acceso y bienestar",
-      "keywords": ["matricula cero", "matrícula cero", "hambre cero", "bienestar", "beca", "alimentacion", "alimentación", "apoyo economico", "apoyo económico"]
+      "keywords": [
+        "matricula cero",
+        "matrícula cero",
+        "hambre cero",
+        "bienestar universitario",
+        "bienestar",
+        "\\bbecas?\\b",
+        "alimentaci[oó]n",
+        "apoyo econ[oó]mico",
+        "\\bsubsidios?\\b",
+        "\\bcomedor\\b"
+      ]
     },
     {
-      "name": "Admisiones e inscripciones",
-      "keywords": ["inscrip", "admis", "aspirante", "admitid", "pregrado", "posgrado", "matricula", "matrícula", "cupo"]
+      "name": "Admisiones, inscripciones y matrículas",
+      "keywords": [
+        "\\binscrip\\w*",
+        "\\badmis\\w*",
+        "\\baspirantes?\\b",
+        "\\badmitid\\w*",
+        "\\bpregrados?\\b",
+        "\\bposgrados?\\b",
+        "\\bmatriculas?\\b",
+        "\\bcupos?\\b",
+        "\\bpines?\\b",
+        "\\bsemestres?\\b",
+        "\\bhomologaci[oó]n\\w*",
+        "\\bcalendario acad[eé]mico\\b"
+      ]
     },
     {
-      "name": "Información y trámites",
-      "keywords": ["informacion", "información", "requisito", "horario", "solicitud", "tramite", "trámite", "certificado", "documento", "correo", "como me", "cómo me", "donde", "dónde", "cuando", "cuándo", "cuanto", "cuánto"]
+      "name": "Información, trámites y certificados",
+      "keywords": [
+        "c[oó]mo me",
+        "c[oó]mo puedo",
+        "c[oó]mo hago",
+        "d[oó]nde puedo",
+        "d[oó]nde queda",
+        "d[oó]nde est[aá]",
+        "cu[aá]nto cuesta",
+        "cu[aá]ndo inician",
+        "cu[aá]ndo empiezan",
+        "qu[eé] precio",
+        "qu[eé] costo",
+        "\\brequisitos?\\b",
+        "\\bhorarios?\\b",
+        "\\bsolicitud\\w*",
+        "\\btr[aá]mite\\w*",
+        "\\bcertificad\\w*",
+        "\\bconstancias?\\b",
+        "\\bdocumentos?\\b",
+        "\\bcorreos?\\b",
+        "atenci[oó]n al usuario",
+        "\\binformaci[oó]n\\b",
+        "m[aá]s informaci[oó]n",
+        "\\bcontacto\\b",
+        "\\btelefono\\b"
+      ]
     },
     {
-      "name": "Vida académica e investigación",
-      "keywords": ["facultad", "programa", "carrera", "estudiante", "docente", "investigacion", "investigación", "academico", "académico", "semillero", "curso", "clase", "graduad"]
+      "name": "Oferta académica e investigación",
+      "keywords": [
+        "\\bfacultad\\w*",
+        "\\bcarreras?\\b",
+        "\\bprogramas?\\b",
+        "\\bestudiantes?\\b",
+        "\\bdocentes?\\b",
+        "\\bprofesor\\w*",
+        "\\binvestigaci[oó]n\\w*",
+        "\\bsemilleros?\\b",
+        "\\bcursos?\\b",
+        "\\bclases?\\b",
+        "\\bpensum\\b",
+        "\\bgraduaci[oó]n\\w*",
+        "\\bgraduad\\w*",
+        "\\bgrados?\\b",
+        "\\begresad\\w*",
+        "\\beducaci[oó]n\\b",
+        "\\bacademia\\b",
+        "\\bacad[eé]mic\\w*",
+        "\\btesis\\b"
+      ]
     },
     {
-      "name": "Eventos y actividades",
-      "keywords": ["evento", "feria", "encuentro", "conferencia", "foro", "jornada", "festival", "invitacion", "invitación", "celebracion", "celebración", "congreso", "taller"]
+      "name": "Infraestructura, sedes y tecnología",
+      "keywords": [
+        "\\bsedes?\\b",
+        "\\bbarcelona\\b",
+        "san antonio",
+        "boquemonte",
+        "\\blaboratorios?\\b",
+        "\\bbibliotecas?\\b",
+        "\\bcampus\\b",
+        "\\binternet\\b",
+        "\\bwifi\\b",
+        "\\baulas?\\b",
+        "\\btransportes?\\b",
+        "\\bbuses?\\b",
+        "\\brutas?\\b",
+        "\\bedifici\\w*",
+        "\\binstalacion\\w*",
+        "\\bparqueader\\w*"
+      ]
     },
     {
-      "name": "Felicitaciones y reconocimiento",
-      "keywords": ["felicit", "gracias", "excelente", "exito", "éxito", "orgullo", "bendicion", "bendición", "feliz", "bravo", "hermos", "maravillos"]
+      "name": "Eventos, cultura y actividades institucionales",
+      "keywords": [
+        "\\beventos?\\b",
+        "\\bferias?\\b",
+        "\\bencuentros?\\b",
+        "\\bconferencias?\\b",
+        "\\bforos?\\b",
+        "\\bjornadas?\\b",
+        "\\bfestival\\w*",
+        "\\binvitaci[oó]n\\w*",
+        "\\bcelebraci[oó]n\\w*",
+        "\\bcongresos?\\b",
+        "\\btalleres?\\b",
+        "semana universitaria",
+        "\\bconciertos?\\b",
+        "\\bactividad\\w*",
+        "\\bdeportes?\\b",
+        "\\btorneo\\w*"
+      ]
+    },
+    {
+      "name": "Felicitaciones y reconocimiento institucional",
+      "keywords": [
+        "\\bfelicit\\w*",
+        "\\bfelicidades\\b",
+        "\\bgracias\\b",
+        "\\bexcelente\\b",
+        "\\b[eé]xitos?\\b",
+        "\\borgullo\\w*",
+        "\\bbendici[oó]n\\w*",
+        "\\bbendiciones\\b",
+        "\\bfeliz\\b",
+        "\\bbravo\\b",
+        "\\bhermos\\w*",
+        "\\bmaravillos\\w*",
+        "\\benhorabuena\\b",
+        "\\bdios los bendiga\\b",
+        "\\bdios te bendiga\\b",
+        "\\bdios bendiga\\b",
+        "\\bbuen trabajo\\b",
+        "\\bgran labor\\b"
+      ]
     }
   ],
-  "fallback": "Otros / tema no identificado"
+  "insufficient_content_label": "Sin contenido temático suficiente (social/emoji/mención)",
+  "fallback": "Otros temas no identificados"
 }

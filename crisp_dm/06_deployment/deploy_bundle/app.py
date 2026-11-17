@@ -20,14 +20,16 @@ st.set_page_config(page_title="Voces en la conversación | Unillanos", page_icon
 
 
 @st.cache_data
-def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     overview = json.loads((DATA / "overview.json").read_text(encoding="utf-8"))
     themes = pd.read_csv(DATA / "themes.csv", encoding="utf-8-sig")
     sentiment = pd.read_csv(DATA / "sentiment.csv", encoding="utf-8-sig")
     emotions = pd.read_csv(DATA / "emotions.csv", encoding="utf-8-sig")
     confidence_path = DATA / "sentiment_confidence.csv"
     confidence = pd.read_csv(confidence_path, encoding="utf-8-sig") if confidence_path.exists() else pd.DataFrame()
-    return overview, themes, sentiment, emotions, confidence
+    ts_path = DATA / "theme_sentiment.csv"
+    theme_sentiment = pd.read_csv(ts_path, encoding="utf-8-sig") if ts_path.exists() else pd.DataFrame()
+    return overview, themes, sentiment, emotions, confidence, theme_sentiment
 
 
 def filtered(df: pd.DataFrame, platforms: list[str], post_types: list[str]) -> pd.DataFrame:
@@ -48,17 +50,17 @@ def distribution(df: pd.DataFrame, label: str) -> tuple[pd.DataFrame, int]:
 
 
 try:
-    overview, themes, sentiment, emotions, confidence = load_data()
+    overview, themes, sentiment, emotions, confidence, theme_sentiment = load_data()
 except FileNotFoundError:
     st.title("Voces en la conversación | Unillanos")
     st.warning("Aún no están generados los resultados agregados. Ejecute las fases 2 a 6 en orden; consulte el README.")
     st.stop()
 
 st.title("Voces en la conversación")
-st.caption("Temas, sentimiento y emociones en los comentarios recolectados de redes institucionales de Unillanos")
-st.info("Exploración descriptiva de comentarios capturados. Las etiquetas de sentimiento y emoción son estimaciones automáticas y no representan a toda la comunidad universitaria.")
+st.caption("Estructura temática, polaridad de sentimiento y emociones en comentarios institucionales de Unillanos")
+st.info("Exploración descriptiva de comentarios institucionales capturados. La taxonomía temática prioriza áreas de gestión y desacopla interacciones sociales o emojis; sentimiento y emoción son estimaciones automáticas preentrenadas.")
 if overview.get("evaluation_status") == "evaluated_with_two_human_annotators":
-    st.info("La comparación se basa en una muestra pequeña y solo en los casos concordantes no ambiguos; no representa a todas las plataformas ni a toda la comunidad.")
+    st.info("La evaluación de sentimiento y emoción se basa en una muestra manual de 120 comentarios y reporta métricas solo en casos concordantes no ambiguos; la taxonomía temática opera con reglas léxicas supervisadas por dominio y no constituye un modelo validado humanamente.")
 elif overview.get("evaluation_status") != "evaluated_with_small_manual_sample":
     st.warning("La evaluación local contra etiquetas manuales aún no está completada. Interprete las clases del modelo como resultados exploratorios.")
 
@@ -82,7 +84,9 @@ metric1.metric("Comentarios analizados", f"{selected_n:,}")
 metric2.metric("Plataformas seleccionadas", len(selected_platforms))
 metric3.metric("Temas categorizados", themes_f["theme"].nunique() if not themes_f.empty else 0)
 
-tab_summary, tab_topics, tab_sentiment, tab_emotions, tab_method = st.tabs(["Resumen", "Temas", "Sentimiento", "Emociones", "Método y límites"])
+tab_summary, tab_topics, tab_theme_sent, tab_sentiment, tab_emotions, tab_method = st.tabs([
+    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Método y límites"
+])
 
 with tab_summary:
     st.subheader("Comentarios incluidos por plataforma")
@@ -91,17 +95,39 @@ with tab_summary:
     st.caption("El número de comentarios por plataforma depende de la recolección y del uso de cada red; no está normalizado por alcance o impresiones.")
 
 with tab_topics:
-    st.subheader("Temas sugeridos por reglas léxicas")
+    st.subheader("Distribución temática refinada")
     topic_table, topic_total = distribution(themes_f.rename(columns={"theme": "Tema"}), "Tema")
     if not topic_table.empty:
         st.bar_chart(topic_table.set_index("Tema")["Comentarios"], horizontal=True)
         st.dataframe(topic_table, width="stretch", hide_index=True)
     else:
         st.info("No hay comentarios en los filtros seleccionados.")
-    st.caption("Las reglas asignan categorías por términos asociados. ‘Otros / tema no identificado’ significa que no coincidió una regla y no equivale a un tema homogéneo.")
+    st.caption("Las reglas asignan categorías por expresiones regulares con límites de palabra (\\b). 'Sin contenido temático suficiente' agrupa comentarios solo emoji o menciones cortas sin texto proposicional, desarticulando el residual ambiguo.")
+
+with tab_theme_sent:
+    st.subheader("Sentimiento condicionado por tema institucional")
+    if not theme_sentiment.empty:
+        ts_f = filtered(theme_sentiment, selected_platforms, selected_types)
+        theme_list = sorted(ts_f["theme"].unique())
+        selected_theme = st.selectbox("Seleccione un área temática para inspeccionar su polaridad:", theme_list)
+        if selected_theme:
+            sub_ts = ts_f[ts_f["theme"] == selected_theme]
+            sent_dist, total_ts = distribution(sub_ts.rename(columns={"sentiment_label": "Sentimiento"}), "Sentimiento")
+            if not sent_dist.empty:
+                col_a, col_b = st.columns([1, 1])
+                with col_a:
+                    st.metric(f"Comentarios en '{selected_theme}'", f"{total_ts:,}")
+                    st.dataframe(sent_dist, width="stretch", hide_index=True)
+                with col_b:
+                    st.bar_chart(sent_dist.set_index("Sentimiento")["Comentarios"])
+            else:
+                st.info("Sin registros suficientes para esta categoría bajo los filtros activos.")
+        st.caption("Permite evaluar cómo varía la polaridad afectiva según el ámbito de interacción universitaria.")
+    else:
+        st.info("Datos de cruce temático no disponibles.")
 
 with tab_sentiment:
-    st.subheader("Sentimiento estimado")
+    st.subheader("Sentimiento estimado (global)")
     sent_table, sent_total = distribution(sentiment_f.rename(columns={"sentiment_label": "Sentimiento"}), "Sentimiento")
     if not sent_table.empty:
         st.bar_chart(sent_table.set_index("Sentimiento")["Comentarios"])
@@ -124,7 +150,7 @@ with tab_sentiment:
         st.caption("La banda ≥ 0,7 es una referencia exploratoria: en la muestra humana concordante logró 92,9 % de accuracy en 56 casos (71,8 % de cobertura). No cambia las etiquetas originales y no garantiza ese desempeño en todos los comentarios.")
 
 with tab_emotions:
-    st.subheader("Emoción estimada")
+    st.subheader("Emoción estimada (global)")
     emotion_table, emotion_total = distribution(emotions_f.rename(columns={"emotion_label": "Emoción"}), "Emoción")
     if not emotion_table.empty:
         st.bar_chart(emotion_table.set_index("Emoción")["Comentarios"], horizontal=True)
@@ -136,12 +162,12 @@ with tab_emotions:
 with tab_method:
     st.subheader("Cómo leer esta aplicación")
     st.markdown("""
-    - Se conservaron comentarios principales y respuestas; cada texto se analizó individualmente y sin contexto del hilo.
-    - Se conservaron los emojis para la entrada a los analizadores. Su interpretación puede variar según contexto y cultura.
-    - Sentimiento y emoción son clasificaciones preentrenadas de `pysentimiento` para español. El modelo instalado devuelve `others` para la clase que el model card describe como neutral/sin emoción básica identificada.
-    - Los temas se asignan mediante reglas léxicas transparentes y requieren interpretación humana.
-    - Las plataformas tienen tamaños de muestra distintos y los conteos no están ajustados por alcance.
-    - No se muestran comentarios, autores, IDs, URLs ni fechas. Las categorías con menos de 10 casos se agrupan para reducir lecturas de grupos pequeños.
+    - **Eje Temático Principal:** La taxonomía clasifica los comentarios mediante reglas léxicas compiladas con delimitadores de palabra (`\\b`), distinguiendo temas sustantivos (admisiones, bienestar, trámites, oferta académica, infraestructura, eventos, felicitaciones), comentarios sin sustancia proposicional (solo emojis o menciones aisladas) y otros temas no contemplados.
+    - **Independencia del Contexto del Post:** Cada comentario se analizó por su propio texto sin fusionarlo con el texto de la publicación original, previniendo atribuciones erróneas de temas a comentarios ambiguos.
+    - **Conservación de Emojis y Respuestas:** Se conservaron todos los registros para el modelado afectivo. Los comentarios solo emoji se identifican explícitamente en temas para no inflar artificialmente categorías académicas ni residuales.
+    - **Sentimiento y Emoción Secundarios:** Corresponden a modelos preentrenados de `pysentimiento` para español (RoBERTuito). La clase `others` en emoción describe ausencia de emoción básica identificada/neutralidad emocional, no ausencia comprobada de afecto.
+    - **Evaluación y Límites Éticos:** Las métricas de sentimiento y emoción proceden de una muestra pequeña (120 comentarios) filtrada a casos concordantes no ambiguos (78 en sentimiento, 67 en emoción). La taxonomía temática es heurística-exploratoria y no se acompaña de falsas métricas de exactitud humana al no disponer de verdad terreno manual en dicha muestra.
+    - **Privacidad Estricta:** La aplicación opera exclusivamente sobre agregaciones agrupadas (`groupby`) con supresión de frecuencias menores a 10 ($n < 10$). Ningún texto, ID, autor ni URL forma parte del despliegue.
     """)
 
 st.divider()

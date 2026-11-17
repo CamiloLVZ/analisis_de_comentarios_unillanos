@@ -14,13 +14,15 @@
     "video"
   ],
   "themes": [
-    "Admisiones e inscripciones",
-    "Eventos y actividades",
-    "Felicitaciones y reconocimiento",
-    "Información y trámites",
-    "Otros / tema no identificado",
+    "Admisiones, inscripciones y matrículas",
+    "Eventos, cultura y actividades institucionales",
+    "Felicitaciones y reconocimiento institucional",
+    "Información, trámites y certificados",
+    "Infraestructura, sedes y tecnología",
+    "Oferta académica e investigación",
+    "Otros temas no identificados",
     "Programas de acceso y bienestar",
-    "Vida académica e investigación"
+    "Sin contenido temático suficiente (social/emoji/mención)"
   ],
   "sentiment_classes": [
     "NEG",

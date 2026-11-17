@@ -54,18 +54,46 @@ def analyzer_records(analyzer, texts: list[str], prefix: str) -> list[dict]:
 
 
 def strip_accents(text: str) -> str:
-    return "".join(char for char in unicodedata.normalize("NFKD", text) if not unicodedata.combining(char))
+    return "".join(char for char in unicodedata.normalize("NFKD", str(text)) if not unicodedata.combining(char))
 
 
-def assign_theme(text: str, rules: dict) -> str:
-    normalized = strip_accents(str(text).lower())
+def compile_theme_rules(rules: dict) -> list[tuple[str, list[re.Pattern]]]:
+    compiled = []
     for category in rules["categories"]:
-        for keyword in category["keywords"]:
-            needle = strip_accents(keyword.lower())
-            # Use substring for stems such as "inscrip"/"felicit"; phrase matches are literal.
-            if needle and needle in normalized:
-                return category["name"]
-    return rules["fallback"]
+        patterns = []
+        for kw in category["keywords"]:
+            pat = strip_accents(kw)
+            patterns.append(re.compile(pat, re.IGNORECASE))
+        compiled.append((category["name"], patterns))
+    return compiled
+
+
+def assign_theme_row(
+    text: str,
+    text_normalized: str,
+    emoji_only: bool,
+    compiled_categories: list[tuple[str, list[re.Pattern]]],
+    rules: dict,
+) -> str:
+    norm = strip_accents(str(text_normalized or "").lower())
+    for category_name, patterns in compiled_categories:
+        for pattern in patterns:
+            if pattern.search(norm):
+                return category_name
+
+    insufficient_label = rules.get(
+        "insufficient_content_label",
+        "Sin contenido temático suficiente (social/emoji/mención)",
+    )
+    if emoji_only:
+        return insufficient_label
+
+    clean_text = re.sub(r"(@\w+|https?://\S+)", "", str(text or "")).strip()
+    words = re.findall(r"\b\w+\b", clean_text)
+    if len(words) <= 2:
+        return insufficient_label
+
+    return rules.get("fallback", "Otros temas no identificados")
 
 
 def main() -> None:
@@ -81,13 +109,26 @@ def main() -> None:
     PHASE_OUT.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
     theme_rules = json.loads(THEME_RULES.read_text(encoding="utf-8"))
+    compiled_cats = compile_theme_rules(theme_rules)
+
     if args.themes_only:
         if not SCORES.exists():
             raise FileNotFoundError("No existen scores; ejecute el modelado completo antes de reasignar temas")
         scores = pd.read_csv(SCORES, encoding="utf-8-sig", low_memory=False)
         if len(scores) != len(df):
             raise ValueError("La tabla de scores y la tabla preparada tienen tamaños distintos")
-        scores["theme"] = df["text_normalized"].fillna("").map(lambda value: assign_theme(value, theme_rules)).values
+
+        new_themes = [
+            assign_theme_row(
+                row["text"],
+                row["text_normalized"],
+                bool(row["emoji_only"]),
+                compiled_cats,
+                theme_rules,
+            )
+            for _, row in df.iterrows()
+        ]
+        scores["theme"] = new_themes
         scores.to_csv(SCORES, index=False, encoding="utf-8-sig")
         scores.groupby(["theme", "platform"], dropna=False).size().rename("n").reset_index().to_csv(PHASE_OUT / "theme_counts.csv", index=False, encoding="utf-8-sig")
         summary_file = PHASE_OUT / "model_summary.json"
@@ -98,15 +139,26 @@ def main() -> None:
             summary_file.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
         print("Temas reasignados con las reglas actuales; los scores no se modificaron.")
         return
+
     if df["comment_id"].duplicated().any():
         raise ValueError("Hay comment_id duplicados en los datos preparados")
-    texts = df["text"].fillna("").astype(str).tolist()
 
-    themes = df["text_normalized"].fillna("").map(lambda value: assign_theme(value, theme_rules))
     token_counts(df["text_normalized"]).to_csv(TERMS, index=False, encoding="utf-8-sig")
     if args.terms_only:
         print(f"Frecuencias recalculadas: {TERMS.relative_to(ROOT)}")
         return
+
+    texts = df["text"].fillna("").astype(str).tolist()
+    themes = [
+        assign_theme_row(
+            row["text"],
+            row["text_normalized"],
+            bool(row["emoji_only"]),
+            compiled_cats,
+            theme_rules,
+        )
+        for _, row in df.iterrows()
+    ]
     print("Cargando modelo de sentimiento español…", flush=True)
     sentiment = create_analyzer(task="sentiment", lang="es")
     sentiment_rows = analyzer_records(sentiment, texts, "sentiment")
@@ -114,7 +166,7 @@ def main() -> None:
     print("Cargando modelo de emoción español…", flush=True)
     emotion = create_analyzer(task="emotion", lang="es")
     emotion_rows = analyzer_records(emotion, texts, "emotion")
-    scores = pd.concat([df[["comment_id", "platform", "post_id", "post_type", "is_reply", "has_emoji", "emoji_only"]].reset_index(drop=True), themes.rename("theme"), pd.DataFrame(sentiment_rows), pd.DataFrame(emotion_rows)], axis=1)
+    scores = pd.concat([df[["comment_id", "platform", "post_id", "post_type", "is_reply", "has_emoji", "emoji_only"]].reset_index(drop=True), pd.Series(themes, name="theme"), pd.DataFrame(sentiment_rows), pd.DataFrame(emotion_rows)], axis=1)
     scores.to_csv(SCORES, index=False, encoding="utf-8-sig")
     scores.groupby(["theme", "platform"], dropna=False).size().rename("n").reset_index().to_csv(PHASE_OUT / "theme_counts.csv", index=False, encoding="utf-8-sig")
     summary = {
@@ -128,6 +180,7 @@ def main() -> None:
         "theme_rules": THEME_RULES.relative_to(ROOT).as_posix(),
         "model_outputs": SCORES.relative_to(ROOT).as_posix(),
         "topic_terms": TERMS.relative_to(ROOT).as_posix(),
+        "theme_counts": {str(k): int(v) for k, v in scores["theme"].value_counts().items()},
     }
     (PHASE_OUT / "model_summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Modelo listo: {len(scores):,} comentarios; salidas detalladas en {SCORES.relative_to(ROOT)}")

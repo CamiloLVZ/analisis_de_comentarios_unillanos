@@ -1,0 +1,268 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{microtype}
+\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}
+\newcommand{\pc}{\,\%}
+\hyphenation{pysenti-mento Unillanos CRISP-DM Streamlit}
+
+\begin{document}
+
+\title{Temas, sentimiento y emociones en comentarios de redes sociales de la Universidad de los Llanos: un an\'alisis exploratorio bajo CRISP-DM}
+
+% TODO: completar nombre(s), apellidos y correo de contacto antes de enviar.
+\author{
+\IEEEauthorblockN{Camilo [Apellidos]}
+\IEEEauthorblockA{Programa de Ingenier\'ia de Sistemas\\
+Universidad de los Llanos\\
+Villavicencio, Colombia\\
+\relax[correo institucional]}
+}
+
+\maketitle
+
+\begin{abstract}
+Este trabajo presenta un an\'alisis exploratorio de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube de la Universidad de los Llanos. Se sigui\'o la metodolog\'ia CRISP-DM para auditar y preparar los datos, estimar sentimiento y emoci\'on en espa\~nol con \texttt{pysentimiento}, proponer categor\'ias tem\'aticas mediante reglas l\'exicas y desplegar los resultados agregados en una aplicaci\'on Streamlit. Tras retirar 586 registros sin texto y no hallar identificadores duplicados, se analizaron 15.885 comentarios. El sentimiento estimado fue neutral en 58,2\pc, positivo en 27,1\pc{} y negativo en 14,6\pc; la clase de emoci\'on m\'as frecuente fue \emph{otros} (66,8\pc), seguida de alegr\'ia (24,7\pc). La categor\'ia tem\'atica residual alcanz\'o 66,0\pc, lo que indica que el diccionario inicial cubre solo una parte del corpus. En una muestra de 120 comentarios anotada de forma independiente por dos personas, el acuerdo observado fue 81,7\pc{} para sentimiento y 75,8\pc{} para emoci\'on; en los casos concordantes y no ambiguos, el modelo obtuvo una exactitud de 74,4\pc{} y 74,6\pc, respectivamente. Dado el tama\~no y el filtrado de la muestra, estas m\'etricas son exploratorias. Los resultados describen el conjunto capturado y no deben generalizarse a toda la comunidad universitaria.
+
+\medskip
+\noindent\textit{Abstract}---We present an exploratory analysis of 16,471 comments collected from the institutional Facebook, Instagram and YouTube accounts of Universidad de los Llanos (Colombia). Following CRISP-DM, we audited and prepared the data, estimated sentiment and emotion with pretrained Spanish models (\texttt{pysentimiento}), proposed thematic categories with transparent lexical rules, and deployed aggregated results in a Streamlit app. Of 15,885 analyzed comments, 58.2\% were neutral, 27.1\% positive and 14.6\% negative; 66.8\% fell in the residual emotion class and 24.7\% in joy. On a 120-comment sample labeled independently by two annotators, observed agreement was 81.7\% (sentiment) and 75.8\% (emotion); the model reached 74.4\% and 74.6\% accuracy on agreed, unambiguous cases. These figures are exploratory and do not generalize to the whole university community.
+\end{abstract}
+
+\begin{IEEEkeywords}
+CRISP-DM, an\'alisis de sentimiento, emociones, redes sociales, comentarios, Streamlit.
+\end{IEEEkeywords}
+
+%--------------------------------------------------------------------
+\section{Introducci\'on}
+Los comentarios en redes sociales contienen se\~nales sobre los asuntos que generan reconocimiento, consultas, inquietudes y reacciones emocionales frente a una instituci\'on. Su an\'alisis automatizado permite organizar grandes colecciones para exploraci\'on, aunque los textos breves, la iron\'ia, el contexto conversacional incompleto y los emojis dificultan la interpretaci\'on. Adem\'as, las etiquetas de un modelo no equivalen a opiniones verificadas ni representan por s\'i solas a toda la comunidad universitaria.
+
+Este trabajo organiza los comentarios disponibles de las cuentas institucionales de la Universidad de los Llanos (Unillanos) en tres dimensiones: \emph{temas} sugeridos, \emph{polaridad} del sentimiento y \emph{emociones} estimadas. El resultado es una herramienta descriptiva para explorar el conjunto capturado, con sus l\'imites expl\'icitos. Las contribuciones son:
+\begin{itemize}
+\item un corpus unificado de 16.471 comentarios de tres plataformas con un esquema com\'un, auditado en calidad y cobertura;
+\item un flujo reproducible CRISP-DM que combina modelos preentrenados en espa\~nol con reglas tem\'aticas transparentes;
+\item una evaluaci\'on exploratoria contra anotaci\'on humana independiente de dos personas, con sus salvedades; y
+\item una aplicaci\'on Streamlit que publica \'unicamente resultados agregados.
+\end{itemize}
+
+\section{Marco de referencia}
+\textbf{CRISP-DM.} Es un modelo de proceso para miner\'ia de datos organizado en seis fases: comprensi\'on del negocio, comprensi\'on de los datos, preparaci\'on, modelado, evaluaci\'on y despliegue \cite{chapman2000}. Se adopt\'o por su orientaci\'on a documentar decisiones en cada fase.
+
+\textbf{Sentimiento y emoci\'on en espa\~nol.} \texttt{pysentimiento} es una biblioteca para miner\'ia de opiniones y tareas de PLN en redes sociales \cite{perez2021}. Sus analizadores en espa\~nol se basan en RoBERTuito, un modelo de lenguaje preentrenado con texto de redes sociales en espa\~nol \cite{perez2022}. Seg\'un la ficha del modelo, el analizador de emoci\'on se entrena con el corpus EmoEvent \cite{plaza2020}, que sigue las seis emociones b\'asicas de Ekman \cite{ekman1992} m\'as una clase \texttt{others}. Los resultados publicados por sus autores no se trasladan a este estudio como garant\'ia de desempe\~no local.
+
+\section{Datos y alcance}
+La entrada unificada contiene \textbf{16.471 filas} y 32 columnas: 12.089 de Facebook, 4.152 de Instagram y 230 de YouTube, vinculadas a 3.252 publicaciones o videos. No se detectaron identificadores de comentario duplicados. Se excluyeron 586 filas con texto vac\'io, quedando \textbf{15.885} textos analizables: 11.529 de Facebook, 4.126 de Instagram y 230 de YouTube (Tabla~\ref{tab:datos}). De los registros iniciales, 2.502 estaban marcados como respuestas; 2.484 de ellas, con texto, se conservaron como unidades textuales individuales, sin el contexto del hilo.
+
+\begin{table}[!t]
+\caption{Composici\'on del corpus por plataforma}
+\label{tab:datos}
+\centering
+\footnotesize
+\begin{tabular}{lrrr}
+\toprule
+Plataforma & Filas & Sin texto & Analizados \\
+\midrule
+Facebook  & 12.089 & 560 & 11.529 \\
+Instagram & 4.152 & 26 & 4.126 \\
+YouTube   & 230 & 0 & 230 \\
+\midrule
+Total     & 16.471 & 586 & 15.885 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+El alcance es transversal y descriptivo. Se excluyeron la evoluci\'on temporal, la comparaci\'on entre respuestas y comentarios principales, el an\'alisis de usuarios, la causalidad y las generalizaciones a toda la comunidad.
+
+\section{Metodolog\'ia}
+La Fig.~\ref{fig:crisp} resume el flujo. Cada fase est\'a implementada como un script o documento independiente en el repositorio del proyecto.
+
+\begin{figure*}[!t]
+\centering
+\begin{tikzpicture}[
+  node distance=0.45cm,
+  box/.style={draw, rounded corners=2pt, align=center, minimum width=2.55cm, minimum height=0.95cm, font=\footnotesize, inner sep=3pt},
+  note/.style={align=center, font=\scriptsize, text width=2.55cm},
+  arr/.style={-{Stealth[length=5pt]}, thick}]
+\node[box] (a) {1. Comprensi\'on\\del negocio};
+\node[box, right=of a] (b) {2. Comprensi\'on\\de los datos};
+\node[box, right=of b] (c) {3. Preparaci\'on};
+\node[box, right=of c] (d) {4. Modelado};
+\node[box, right=of d] (e) {5. Evaluaci\'on};
+\node[box, right=of e] (f) {6. Despliegue};
+\foreach \x/\y in {a/b,b/c,c/d,d/e,e/f} \draw[arr] (\x) -- (\y);
+\node[note, below=0.15cm of a] {alcance y preguntas};
+\node[note, below=0.15cm of b] {auditor\'ia de calidad (16.471 filas)};
+\node[note, below=0.15cm of c] {15.885 textos; muestras de 120 y 198};
+\node[note, below=0.15cm of d] {\texttt{pysentimiento} + reglas l\'exicas};
+\node[note, below=0.15cm of e] {dos anotadores, $n=120$};
+\node[note, below=0.15cm of f] {app Streamlit (solo agregados)};
+\end{tikzpicture}
+\caption{Fases de CRISP-DM ejecutadas y producto principal de cada una.}
+\label{fig:crisp}
+\end{figure*}
+
+\subsection{Comprensi\'on del negocio}
+Se defini\'o como prop\'osito apoyar la exploraci\'on acad\'emica de los comentarios recopilados, no medir la satisfacci\'on institucional ni representar a todos los estudiantes o ciudadanos. Las preguntas se acotaron a los temas recurrentes y a la distribuci\'on descriptiva de sentimiento y emociones.
+
+\subsection{Comprensi\'on de los datos}
+Un script de auditor\'ia perfil\'o tama\~nos, campos, faltantes, duplicados, plataformas, respuestas y contenido textual. Se detect\'o una cobertura muy desigual: YouTube aporta 230 filas frente a m\'as de once mil de Facebook, por lo que los conteos absolutos no son comparables como tasas de reacci\'on o alcance. Se registraron 4.288 comentarios con indicios de emojis o s\'imbolos y 1.280 textos identificados como solo emoji; ambos detectores son heur\'isticos.
+
+\subsection{Preparaci\'on}
+Se retiraron los textos vac\'ios, se normaliz\'o el texto para inspecci\'on, se mantuvo la forma original para el modelado y se preservaron las respuestas. No se eliminaron emojis: el analizador los procesa internamente y el an\'alisis auxiliar los representa mediante descripciones en texto. Esa representaci\'on puede aportar se\~nales de aprobaci\'on o afecto, pero sus palabras (por ejemplo, ``aplaudiendo'' o ``corazones'') pueden inflar frecuencias l\'exicas y no equivalen a menciones literales. Con semilla fija (314159) se generaron una muestra de evaluaci\'on de 120 comentarios (40 por plataforma) y una muestra de 198 comentarios (66 por plataforma) para revisar temas.
+
+\subsection{Modelado}
+El sentimiento (NEG, NEU, POS) y la emoci\'on (\texttt{joy}, \texttt{anger}, \texttt{sadness}, \texttt{fear}, \texttt{surprise}, \texttt{disgust}, \texttt{others}) se estimaron con los analizadores en espa\~nol de \texttt{pysentimiento} aplicados a los 15.885 comentarios, en CPU. Son clasificadores preentrenados: sus etiquetas no son anotaciones humanas. La clase \texttt{others} se presenta como ``otros / sin emoci\'on b\'asica clara'' para no confundirla con la clase NEU del modelo de sentimiento.
+
+Los temas se asignaron mediante reglas l\'exicas mutuamente excluyentes definidas tras revisar frecuencias de unigramas y bigramas. Son categor\'ias exploratorias, no t\'opicos aprendidos ni una codificaci\'on sem\'antica revisada comentario por comentario; la categor\'ia ``Otros / tema no identificado'' es residual y no representa un tema cohesivo.
+
+\subsection{Evaluaci\'on}
+Dos personas etiquetaron de forma independiente la muestra de 120 comentarios para sentimiento y emoci\'on. El acuerdo se calcul\'o sobre todas las filas con ambas etiquetas (las etiquetas ambiguas cuentan como acuerdo si ambos anotadores las asignaron). Las m\'etricas del modelo se calcularon solo en los casos concordantes y no ambiguos. No se calcul\'o un coeficiente de acuerdo corregido por azar (p.\,ej., $\kappa$ de Cohen); se reporta el acuerdo observado.
+
+\subsection{Despliegue}
+La aplicaci\'on, construida con Streamlit \cite{streamlit}, ofrece pesta\~nas de resumen, temas, sentimiento, emociones y m\'etodo, con filtros por plataforma y tipo de publicaci\'on. Solo exporta conteos agregados: no incluye texto, autores, identificadores, URL ni fechas, y los grupos menores de diez se agrupan como ``otros grupos de baja frecuencia''.
+
+\section{Resultados}
+\subsection{Distribuci\'on general}
+La Tabla~\ref{tab:sent-emo} muestra las distribuciones estimadas. El sentimiento fue mayoritariamente neutral, y dos de cada tres comentarios cayeron en la clase \texttt{others} de emoci\'on. Las emociones negativas espec\'ificas fueron poco frecuentes: enojo 5,0\pc, tristeza 2,9\pc, miedo 0,1\pc{} y disgusto menos de 0,1\pc{} (un solo comentario).
+
+\begin{table}[!t]
+\caption{Sentimiento y emoci\'on estimados ($N=15.885$)}
+\label{tab:sent-emo}
+\centering
+\footnotesize
+\begin{tabular}{@{}lrr@{\hspace{1.2em}}lrr@{}}
+\toprule
+\multicolumn{3}{c}{Sentimiento} & \multicolumn{3}{c}{Emoci\'on} \\
+\cmidrule(r){1-3}\cmidrule(l){4-6}
+Clase & $n$ & \% & Clase & $n$ & \% \\
+\midrule
+Neutral  & 9.250 & 58,2 & Otros (\texttt{others}) & 10.615 & 66,8 \\
+Positivo & 4.312 & 27,1 & Alegr\'ia   & 3.916 & 24,7 \\
+Negativo & 2.323 & 14,6 & Enojo      & 799 & 5,0 \\
+         &       &      & Tristeza   & 466 & 2,9 \\
+         &       &      & Sorpresa   & 79 & 0,5 \\
+         &       &      & Miedo      & 9 & 0,1 \\
+         &       &      & Disgusto   & 1 & $<$0,1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Diferencias descriptivas por plataforma}
+La Fig.~\ref{fig:plat} desagrega ambas distribuciones. Instagram concentra m\'as comentarios positivos (37,5\pc) y de alegr\'ia (32,1\pc) que Facebook (23,1\pc{} y 21,7\pc), mientras que Facebook tiene mayor proporci\'on de negativos (16,7\pc{} frente a 9,0\pc) y de enojo (5,5\pc{} frente a 3,8\pc). YouTube muestra una proporci\'on de positivos a\'un mayor (43,9\pc), pero con solo 230 comentarios. Son diferencias descriptivas: no se aplicaron pruebas de significancia y la composici\'on de publicaciones y la cobertura de captura difieren entre plataformas.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{fig_plataformas.pdf}
+\caption{Distribuci\'on porcentual de (a) sentimiento y (b) emoci\'on estimados por plataforma. Calculada a partir de los agregados de la aplicaci\'on; ``Sorpresa y otras'' agrupa sorpresa y las clases de baja frecuencia.}
+\label{fig:plat}
+\end{figure}
+
+\subsection{Temas por reglas l\'exicas}
+La Tabla~\ref{tab:temas} resume la asignaci\'on tem\'atica. Dos tercios del corpus (66,0\pc) quedaron en la categor\'ia residual. Entre las categor\'ias espec\'ificas predomin\'o ``Felicitaciones y reconocimiento'' (14,8\pc). Los t\'erminos m\'as frecuentes incluyeron ``manos'', ``aplaudiendo'', ``felicitaciones'', ``gracias'', ``excelente'', ``corazones'', ``educaci\'on'', ``estudiantes'' y ``matr\'icula''; parte de los primeros procede de la descripci\'on autom\'atica de emojis.
+
+\begin{table}[!t]
+\caption{Categor\'ias tem\'aticas exploratorias ($N=15.885$)}
+\label{tab:temas}
+\centering
+\footnotesize
+\begin{tabular}{lrr}
+\toprule
+Categor\'ia & $n$ & \% \\
+\midrule
+Otros / tema no identificado       & 10.486 & 66,0 \\
+Felicitaciones y reconocimiento    & 2.346  & 14,8 \\
+Vida acad\'emica e investigaci\'on   & 989    & 6,2 \\
+Informaci\'on y tr\'amites           & 914    & 5,8 \\
+Admisiones e inscripciones         & 579    & 3,6 \\
+Programas de acceso y bienestar    & 459    & 2,9 \\
+Eventos y actividades              & 112    & 0,7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Evaluaci\'on frente a anotaci\'on humana}
+El acuerdo observado entre las dos personas fue 81,7\pc{} para sentimiento (98/120) y 75,8\pc{} para emoci\'on (91/120). Tras excluir los casos ambiguos, quedaron 78 comentarios para sentimiento y 67 para emoci\'on (Tabla~\ref{tab:eval}).
+
+\begin{table}[!t]
+\caption{Acuerdo entre anotadores y desempe\~no del modelo}
+\label{tab:eval}
+\centering
+\footnotesize
+\begin{tabular}{lrrrr}
+\toprule
+Tarea & Acuerdo & $n$ usable & Exactitud & Macro-F1 \\
+\midrule
+Sentimiento & 81,7\pc{} & 78 & 74,4\pc{} & 0,739 \\
+Emoci\'on    & 75,8\pc{} & 67 & 74,6\pc{} & 0,429 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+En sentimiento, la matriz de confusi\'on (Tabla~\ref{tab:conf}) muestra que el error dominante es clasificar como neutral comentarios que las personas juzgaron positivos (14 de 46). Esto produce una precisi\'on perfecta para POS (1,000) pero un recall de 0,674, y una precisi\'on de solo 0,471 para NEU. En emoci\'on ocurre algo an\'alogo: 13 de 45 comentarios de alegr\'ia fueron asignados a \texttt{others}. El macro-F1 de emoci\'on (0,429) es bajo porque promedia las siete clases y asigna cero a las que no tuvieron soporte (miedo y sorpresa, sin casos) o no fueron acertadas (disgusto, con 3 casos y recall 0); no es una estimaci\'on estable del desempe\~no general.
+
+\begin{table}[!t]
+\caption{Matriz de confusi\'on de sentimiento (filas: anotaci\'on humana acordada; columnas: modelo)}
+\label{tab:conf}
+\centering
+\footnotesize
+\begin{tabular}{lrrrrrr}
+\toprule
+ & POS & NEG & NEU & $P$ & $R$ & $F_1$ \\
+\midrule
+POS & 31 & 1 & 14 & 1,000 & 0,674 & 0,805 \\
+NEG & 0 & 11 & 4 & 0,846 & 0,733 & 0,786 \\
+NEU & 0 & 1 & 16 & 0,471 & 0,941 & 0,627 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discusi\'on}
+\textbf{Predominio de lo neutral y de \texttt{others}.} Los comentarios en cuentas institucionales incluyen muchos mensajes breves de felicitaci\'on, preguntas o interacciones sin carga emocional expl\'icita. Esto es coherente con la categor\'ia ``Felicitaciones y reconocimiento'' y con el peso de los textos de solo emoji (1.280), pero el dise\~no no permite separar cu\'anto del predominio neutral es contenido real y cu\'anto es conservadurismo del modelo.
+
+\textbf{Posible subestimaci\'on de lo positivo.} En la muestra evaluada el modelo tendi\'o a degradar a neutral o \texttt{others} comentarios que las personas consideraron positivos o de alegr\'ia. Si ese patr\'on se mantuviera en el corpus completo, las proporciones positivas de la Tabla~\ref{tab:sent-emo} ser\'ian cotas inferiores. Con una muestra de 120 comentarios y un filtrado a casos concordantes, esta es una hip\'otesis a verificar, no un hallazgo.
+
+\textbf{Clases raras.} Con miedo (9) y disgusto (1) pr\'acticamente ausentes, sus porcentajes no deben sobreinterpretarse; en este corpus el modelo de emoci\'on asign\'o casi exclusivamente alegr\'ia, enojo, tristeza u \texttt{others} (99,4\pc{} de los comentarios).
+
+\textbf{Temas.} Que 66\pc{} del corpus quede en la categor\'ia residual muestra que las reglas iniciales son un punto de partida. Ampliarlas mediante codificaci\'on manual de la muestra de 198 comentarios, o contrastarlas con un modelo tem\'atico no supervisado, permitir\'ia una taxonom\'ia m\'as defendible.
+
+\textbf{Emojis.} Conservarlos evita perder se\~nales de afecto, pero su interpretaci\'on depende del contexto y su descripci\'on textual afecta las frecuencias de t\'erminos. No se realiz\'o un experimento de ablaci\'on, por lo que no se cuantifica su efecto sobre las etiquetas.
+
+\section{Limitaciones y consideraciones \'eticas}
+\begin{enumerate}
+\item \textbf{Evaluaci\'on exploratoria.} Las m\'etricas se calculan sobre un subconjunto concordante y no ambiguo de 120 comentarios; el filtrado puede favorecer los casos claros y elevar las m\'etricas respecto del conjunto completo.
+\item \textbf{Desbalance de plataformas.} La recolecci\'on var\'ia mucho y no hay denominadores de impresiones o alcance.
+\item \textbf{Contexto limitado.} Las respuestas se analizaron sin su hilo; mensajes como ``s\'i'' pueden ser ambiguos.
+\item \textbf{Cobertura.} La extracci\'on disponible no necesariamente representa todas las publicaciones o comentarios de las cuentas.
+\item \textbf{Alcance temporal.} No se analiz\'o la evoluci\'on en el tiempo.
+\end{enumerate}
+Respecto a la privacidad, el conjunto por comentario contiene texto, nombres de usuario e identificadores de terceros. Por ello la aplicaci\'on publica \'unicamente agregados con supresi\'on de grupos menores de diez, y cualquier redistribuci\'on del conjunto por comentario requiere revisi\'on \'etica y de condiciones de uso previas. Las etiquetas son estimaciones de modelos y no deben usarse para evaluar o se\~nalar a personas.
+
+\section{Conclusiones y trabajo futuro}
+Se complet\'o un flujo reproducible CRISP-DM, desde la auditor\'ia hasta una aplicaci\'on Streamlit, que aplic\'o modelos en espa\~nol a 15.885 comentarios con texto. Predominan el sentimiento neutral (58,2\pc) y la clase \texttt{others} en emoci\'on (66,8\pc); las reglas tem\'aticas identificaron categor\'ias espec\'ificas en cerca de un tercio del corpus. Los resultados sirven para explorar y generar hip\'otesis sobre los comentarios capturados, no para medir la opini\'on de toda la comunidad.
+
+Como trabajo futuro se proponen: (i) revisar los desacuerdos entre anotadores y ampliar la muestra anotada, reportando un coeficiente corregido por azar; (ii) ampliar y validar las reglas tem\'aticas con codificaci\'on manual; (iii) un experimento de ablaci\'on de emojis; (iv) incorporar el an\'alisis temporal y del hilo conversacional; y (v) contrastar los analizadores con otros modelos en espa\~nol.
+
+\section*{Disponibilidad y reproducibilidad}
+Los resultados agregados pueden explorarse en \url{https://comentarios-unillanos.streamlit.app}. El c\'odigo y la documentaci\'on por fase est\'an en \url{https://github.com/CamiloLVZ/analisis_de_comentarios_unillanos}. El flujo se ejecuta con \texttt{unify\_raw\_data.py}, \texttt{audit.py}, \texttt{prepare.py}, \texttt{analyze.py}, \texttt{evaluate.py} y \texttt{build\_app\_data.py}, y la aplicaci\'on con \texttt{streamlit run}. Las dependencias principales son \texttt{pandas} 3.1.1, \texttt{pysentimiento} 0.7.3, \texttt{torch} 2.15.0, \texttt{transformers} 5.23.0 y \texttt{streamlit} 1.67.0. La unificaci\'on reproduce byte a byte la entrada can\'onica (coincidencia de SHA-256) y el muestreo usa semilla fija.
+
+\begin{thebibliography}{00}
+\bibitem{chapman2000} P. Chapman \emph{et al.}, ``CRISP-DM 1.0: Step-by-step data mining guide,'' SPSS Inc., 2000.
+\bibitem{perez2021} J. M. P\'erez \emph{et al.}, ``pysentimiento: A Python toolkit for sentiment analysis and SocialNLP tasks,'' arXiv:2106.09462, 2021.
+\bibitem{perez2022} J. M. P\'erez, D. A. Furman, L. A. Alemany, and F. Luque, ``RoBERTuito: a pre-trained language model for social media text in Spanish,'' in \emph{Proc. 13th Language Resources and Evaluation Conf. (LREC)}, 2022, pp. 7235--7243.
+\bibitem{plaza2020} F. M. Plaza-del-Arco, C. Strapparava, L. A. Ure\~na-L\'opez, and M. T. Mart\'in-Valdivia, ``EmoEvent: A multilingual emotion corpus based on different events,'' in \emph{Proc. 12th Language Resources and Evaluation Conf. (LREC)}, 2020, pp. 1492--1498.
+\bibitem{ekman1992} P. Ekman, ``An argument for basic emotions,'' \emph{Cognition and Emotion}, vol. 6, no. 3--4, pp. 169--200, 1992.
+\bibitem{streamlit} Streamlit Inc., ``Streamlit documentation.'' [Online]. Available: \url{https://docs.streamlit.io/}
+\end{thebibliography}
+
+\end{document}

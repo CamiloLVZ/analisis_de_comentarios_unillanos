@@ -32,6 +32,7 @@ def main() -> None:
         "themes.csv": ["platform", "post_type", "theme"],
         "sentiment.csv": ["platform", "post_type", "sentiment_label"],
         "emotions.csv": ["platform", "post_type", "emotion_label"],
+        "theme_sentiment.csv": ["platform", "post_type", "theme", "sentiment_label"],
     }
     for filename, groups in products.items():
         result = scores.groupby(groups, dropna=False).size().rename("n").reset_index()
@@ -75,7 +76,7 @@ def main() -> None:
     output_inventory = {
         "overview.json": {"bytes": int((OUT / "overview.json").stat().st_size), "format": "json"}
     }
-    for name in ["themes.csv", "sentiment.csv", "emotions.csv", "sentiment_confidence.csv"]:
+    for name in ["themes.csv", "sentiment.csv", "emotions.csv", "sentiment_confidence.csv", "theme_sentiment.csv"]:
         output_inventory[name] = {
             "bytes": int((OUT / name).stat().st_size),
             "format": "csv",
@@ -90,8 +91,6 @@ def main() -> None:
     manifest_path = Path(__file__).resolve().parent / "outputs" / "deployment_manifest.json"
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    # A small, self-contained folder for deployment. It intentionally excludes
-    # the original dataset, model scores, IDs, and all analysis dependencies.
     if not APP_FILE.exists():
         raise FileNotFoundError(f"Falta la aplicación canónica: {APP_FILE}")
     BUNDLE.mkdir(parents=True, exist_ok=True)
@@ -99,13 +98,17 @@ def main() -> None:
     (BUNDLE / "README.md").write_text(
         "# Paquete de despliegue Streamlit\n\n"
         "Este directorio contiene únicamente la aplicación y datos agregados anonimizados, "
-        "incluidos los conteos por banda de confianza del sentimiento. "
+        "incluidos los conteos temáticos refinados, sentimiento condicionado a temas y bandas de confianza.\n\n"
         "No incluye CSV de comentarios, autores, IDs, URLs, archivos crudos ni modelos.\n\n"
         "Instale `requirements.txt` y ejecute `streamlit run app.py`. Para desplegar, use este directorio como raíz del repositorio de la app.\n",
         encoding="utf-8",
     )
     manifest["deployment_bundle"] = "crisp_dm/06_deployment/deploy_bundle"
-    manifest["bundle_contents"] = ["app.py", "requirements.txt", "README.md", "data/app/overview.json", "data/app/themes.csv", "data/app/sentiment.csv", "data/app/emotions.csv", "data/app/sentiment_confidence.csv"]
+    manifest["bundle_contents"] = [
+        "app.py", "requirements.txt", "README.md",
+        "data/app/overview.json", "data/app/themes.csv", "data/app/sentiment.csv",
+        "data/app/emotions.csv", "data/app/sentiment_confidence.csv", "data/app/theme_sentiment.csv"
+    ]
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Datos agregados para Streamlit: {len(scores):,} comentarios; sin campos identificables.")
 
