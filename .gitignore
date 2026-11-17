@@ -11,3 +11,7 @@ data/processed/model_outputs/*
 !data/preparados/.gitkeep
 !data/processed/model_outputs/.gitkeep
 .streamlit/secrets.toml
+*.aux
+*.log
+*.out
+tmp/
