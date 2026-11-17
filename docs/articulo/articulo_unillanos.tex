@@ -132,7 +132,7 @@ Se excluyeron registros vac\'ios y se gener\'o una versi\'on normalizada del tex
 \subsection{Modelado}
 El procesamiento afectivo se ejecut\'o mediante inferencia en CPU con RoBERTuito. La polaridad se clasific\'o en positiva (POS), neutral (NEU) o negativa (NEG). Para emoci\'on, la clase \texttt{others} se reporta como ``sin emoci\'on b\'asica identificable'' para evitar colisiones conceptuales con la neutralidad de sentimiento.
 
-Para la asignaci\'on tem\'atica, se construy\'o un clasificador de reglas l\'exicas determin\'isticas. Se establecieron categor\'ias sustantivas evaluadas con orden de precedencia fija mediante expresiones regulares con delimitadores de frontera de palabra (\texttt{\textbackslash b}). Dicha precedencia se congel\'o formalmente mediante su hash criptogr\'afico SHA-256 (\texttt{a69292d738828d2bbd1c8569b5dea235b404e7cd59708e811868bf0f969f3266}) antes de contrastarla con las anotaciones humanas.
+Para la asignaci\'on tem\'atica, se construy\'o un clasificador de reglas l\'exicas determin\'isticas. Se establecieron categor\'ias sustantivas evaluadas con orden de precedencia fija mediante expresiones regulares con delimitadores de frontera de palabra (\texttt{\textbackslash b}). Dicha precedencia se congel\'o formalmente mediante su hash criptogr\'afico SHA-256 (\texttt{a69292d7\allowbreak{}38828d2b\allowbreak{}bd1c8569\allowbreak{}b5dea235\allowbreak{}b404e7cd\allowbreak{}59708e81\allowbreak{}1868bf0f\allowbreak{}969f3266}) antes de contrastarla con las anotaciones humanas.
 
 \subsection{Evaluaci\'on}
 La evaluaci\'on const\'o de dos fases humanas independientes realizadas a ciegas por ambos autores: una valoraci\'on afectiva sobre 120 comentarios y una auditor\'ia tem\'atica sobre 198 comentarios, cuantificando coeficientes de acuerdo $\kappa$ y contrastando las etiquetas concordantes contra las reglas congeladas.
@@ -189,16 +189,16 @@ La Tabla~\ref{tab:temas_actualizados} expone la asignaci\'on tem\'atica obtenida
 \toprule
 \textbf{Categor\'ia tem\'atica} & \textbf{$N$} & \textbf{\% Total} & \textbf{\% Facebook} & \textbf{\% Instagram} & \textbf{\% YouTube} & \textbf{\% Inicial} \\
 \midrule
-Protesta y movilizaci\'on & 603 & 3,8\% & 5,1\% & 0,2\% & 0,4\% & — \\
+Protesta y movilizaci\'on & 603 & 3,8\% & 5,1\% & 0,2\% & 0,4\% & --- \\
 Programas de acceso y bienestar & 421 & 2,7\% & 3,4\% & 0,7\% & 0,4\% & 2,9\% \\
 Admisiones, inscripciones y matr\'iculas & 678 & 4,3\% & 5,0\% & 2,3\% & 3,0\% & 3,6\% \\
 Informaci\'on, tr\'amites y certificados & 460 & 2,9\% & 3,1\% & 2,4\% & 3,5\% & 5,8\% \\
 Oferta acad\'emica e investigaci\'on & 1.426 & 9,0\% & 9,1\% & 8,6\% & 12,6\% & 6,2\% \\
-Infraestructura, sedes y tecnolog\'ia & 234 & 1,5\% & 1,5\% & 1,4\% & 2,2\% & — \\
+Infraestructura, sedes y tecnolog\'ia & 234 & 1,5\% & 1,5\% & 1,4\% & 2,2\% & --- \\
 Eventos, cultura y actividades institucionales & 153 & 1,0\% & 0,8\% & 1,3\% & 2,2\% & 0,7\% \\
 Felicitaciones y expresiones de aprecio & 2.405 & 15,1\% & 14,5\% & 16,3\% & 24,8\% & 14,8\% \\
 \midrule
-Sin contenido tem\'atico suficiente (social/emoji/menci\'on) & 4.004 & 25,2\% & 19,5\% & 41,4\% & 20,9\% & — \\
+Sin contenido tem\'atico suficiente (social/emoji/menci\'on) & 4.004 & 25,2\% & 19,5\% & 41,4\% & 20,9\% & --- \\
 Otros temas no identificados (residual sustantivo) & 5.501 & 34,6\% & 38,0\% & 25,5\% & 30,0\% & 66,0\% \\
 \midrule
 \textbf{Total corpus analizado} & \textbf{15.885} & \textbf{100,0\%} & \textbf{100,0\%} & \textbf{100,0\%} & \textbf{100,0\%} & \textbf{100,0\%} \\
@@ -218,12 +218,12 @@ Destaca la inclusi\'on en primer orden de precedencia de ``Protesta y movilizaci
 \subsection{Cruce descriptivo de tema y sentimiento}
 La Tabla~\ref{tab:tema_sentimiento_actualizado} presenta la distribuci\'on de polaridad en cada categor\'ia tem\'atica. Sobresale que ``Felicitaciones y expresiones de aprecio'' concentra un 82,5\pc{} de sentimiento positivo. Al respecto, es necesario enfatizar una \textbf{salvedad metodol\'ogica por construcci\'on}: esta categor\'ia se define mediante expresiones de elogio, cortes\'ia y reconocimiento, t\'erminos fuertemente correlacionados con la etiqueta positiva en los modelos de PLN; en consecuencia, dicha asociaci\'on no constituye un hallazgo emp\'irico independiente, sino un resultado inherente al dise\~no léxico de la regla.
 
-\begin{table}[htbp]
+\begin{table*}[!t]
 \centering
 \footnotesize
 \caption{Distribuci\'on de polaridad de sentimiento estimada por \'area tem\'atica ($N = 15.885$). Se indica el porcentaje de celdas suprimidas por baja frecuencia ($n < 10$).}
 \label{tab:tema_sentimiento_actualizado}
-\begin{tabular}{lrrrrr}
+\begin{tabular}{@{}p{0.32\textwidth}rrrrr@{}}
 \toprule
 \textbf{Categor\'ia tem\'atica} & \textbf{$N$} & \textbf{\% NEG} & \textbf{\% NEU} & \textbf{\% POS} & \textbf{\% Supr.} \\
 \midrule
@@ -239,22 +239,22 @@ Felicitaciones y expresiones de aprecio & 2.405 & 1,3\% & 15,1\% & 82,5\% & 1,1\
 Sin contenido tem\'atico suficiente & 4.004 & 2,5\% & 84,3\% & 12,8\% & 0,5\% \\
 Otros temas no identificados & 5.501 & 21,6\% & 60,0\% & 18,4\% & 0,0\% \\
 \midrule
-\textbf{Total corpus} & \textbf{15.885} & \textbf{14,6\%} & \textbf{58,2\%} & \textbf{27,1\%} & \textbf{—} \\
+\textbf{Total corpus} & \textbf{15.885} & \textbf{14,6\%} & \textbf{58,2\%} & \textbf{27,1\%} & \textbf{---} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Validaci\'on humana de la taxonom\'ia tem\'atica}
 Ambos autores evaluaron a ciegas una muestra estratificada de 198 comentarios (66 por plataforma). El acuerdo observado global fue del 60,6\pc{} (120/198), correspondiente a un $\kappa = 0,515$ (acuerdo moderado). Al excluir los comentarios se\~nalados con ambigüedad por los evaluadores ($n = 144$), el acuerdo ascendi\'o a \textbf{71,5\pc} con un $\kappa = \mathbf{0,623}$, se\~nalando una concordancia sustancial \cite{landis1977}. El an\'alisis revel\'o que el 27\pc{} de los comentarios presentaba ambigüedad sem\'antica inherente y el 47\pc{} depend\'ia estrictamente del contexto del post para desambiguarse.
 
 Los 80 casos discordantes fueron resueltos mediante consenso humano deliberado. De las 198 filas, 4 persistieron como ambiguas consensuadas y fueron excluidas, consolidando 194 casos evaluables frente a las reglas congeladas (Tabla~\ref{tab:evaluacion_reglas_tematicas}). Para prevenir sobreinterpretaciones, se aplic\'o la regla de corte estricta $n < 10$ tanto sobre el soporte humano como sobre el total de predicciones del modelo.
 
-\begin{table}[htbp]
+\begin{table*}[!t]
 \centering
 \footnotesize
 \caption{M\'etricas de validaci\'on de las reglas l\'exicas frente al consenso humano ($n = 194$). Intervalos de Wilson al 95\pc. Celdas con denominador menor a diez ($n < 10$) se declaran no interpretables.}
 \label{tab:evaluacion_reglas_tematicas}
-\begin{tabular}{lrrrr}
+\begin{tabular}{@{}p{0.23\textwidth}p{0.10\textwidth}p{0.28\textwidth}p{0.28\textwidth}@{}}
 \toprule
 \textbf{Categor\'ia tem\'atica} & \textbf{Soporte} & \textbf{Precisi\'on (IC 95\%)} & \textbf{Recall (IC 95\%)} \\
 \midrule
@@ -269,7 +269,7 @@ Sin contenido suficiente & 61 & 81,2\% [68,1\%, 89,8\%] & 63,9\% [51,4\%, 74,8\%
 \multicolumn{4}{l}{\textit{Categor\'ias peque\~nas (Bienestar, Admisiones, Infraestructura, Eventos): n < 10}} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \begin{figure}[!t]
 \centering
