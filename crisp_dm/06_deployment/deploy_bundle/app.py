@@ -25,7 +25,7 @@ ROOT = next(
 DATA = ROOT / "data" / "app"
 MIN_GROUP = 10
 
-st.set_page_config(page_title="Análisis de comentarios Unillanos", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Análisis de comentarios Unillanos", layout="wide")
 
 # Paletas de color semánticas y armónicas
 SENTIMENT_COLORS = {
@@ -144,17 +144,6 @@ def classify_text_theme(text: str, compiled_rules: list, raw_rules: dict) -> dic
     }
 
 
-@st.cache_resource
-def get_pysentimiento_analyzers():
-    try:
-        from pysentimiento import create_analyzer
-        sent_analyzer = create_analyzer(task="sentiment", lang="es")
-        emo_analyzer = create_analyzer(task="emotion", lang="es")
-        return sent_analyzer, emo_analyzer, None
-    except Exception as e:
-        return None, None, str(e)
-
-
 @st.cache_data
 def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     overview = json.loads((DATA / "overview.json").read_text(encoding="utf-8"))
@@ -242,7 +231,7 @@ metric3.metric("Tipos de publicación", f"{len(selected_types)} / {len(overview[
 metric4.metric("Temas observados", themes_f["theme"].nunique() if not themes_f.empty else 0)
 
 tab_summary, tab_topics, tab_theme_sent, tab_sentiment, tab_emotions, tab_advanced, tab_infer, tab_method = st.tabs([
-    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Visualizaciones avanzadas", "🧪 Probador en vivo", "Observaciones"
+    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Visualizaciones avanzadas", "Clasificador de temas", "Observaciones"
 ])
 
 # -----------------------------------------------------------------------------
@@ -688,128 +677,79 @@ with tab_advanced:
         st.info("Visualizaciones avanzadas no disponibles para la configuración seleccionada.")
 
 # -----------------------------------------------------------------------------
-# TAB 7: PROBADOR EN VIVO (SIMULADOR DE INFERENCIA)
+# TAB 7: CLASIFICADOR DE TEMAS EN TIEMPO REAL
 # -----------------------------------------------------------------------------
 with tab_infer:
-    st.subheader("🧪 Probador interactivo de inferencia en tiempo real")
-    st.caption("Pruebe el clasificador temático determinístico de CRISP-DM y la estimación afectiva sobre comentarios nuevos o hipotéticos.")
+    st.subheader("Clasificador temático en tiempo real")
+    st.caption("Evalúe comentarios institucionales con las reglas léxicas determinísticas compiladas y auditadas bajo el estándar CRISP-DM.")
 
     col_in_1, col_in_2 = st.columns([5, 5])
 
     PRESETS = {
         "Seleccione un ejemplo predefinido...": "",
-        "🎓 Felicitaciones institucional": "¡Muchas felicitaciones a todos los nuevos graduandos de la Universidad de los Llanos! Un gran orgullo para la región 👏🎓",
-        "📝 Consulta de admisiones": "Buenos días, ¿dónde puedo consultar las fechas de inscripciones para el próximo semestre y los requisitos de matrícula?",
-        "📢 Protesta y asamblea estudiantil": "Convocamos a toda la comunidad universitaria a la asamblea general y movilización pacífica por garantías académicas y presupuesto digno.",
-        "📄 Información y trámites": "Buenas tardes, ¿en qué oficina o ventanilla puedo solicitar el certificado de notas y homologación de materias?",
-        "🔬 Oferta académica e investigación": "Excelente proyecto de investigación y desarrollo agropecuario liderado por los docentes de Unillanos.",
-        "🚌 Bienestar y servicios": "¿El comedor universitario y las rutas de transporte funcionarán con normalidad durante esta semana?",
-        "🏢 Infraestructura y sedes": "Se necesita urgente mantenimiento en los laboratorios de cómputo y aulas de la sede Barcelona.",
-        "💬 Expresión breve (Sin contenido suficiente)": "👏🔥 Felicitaciones!",
-        "❓ Pregunta atípica (Residual / Otros)": "¿Alguien sabe si el fin de semana se puede ingresar en bicicleta a la cancha principal?"
+        "Felicitaciones institucional": "Muchas felicitaciones a todos los nuevos graduandos de la Universidad de los Llanos, un gran orgullo para la región.",
+        "Consulta de admisiones": "Buenos días, ¿dónde puedo consultar las fechas de inscripciones para el próximo semestre y los requisitos de matrícula?",
+        "Protesta y asamblea estudiantil": "Convocamos a toda la comunidad universitaria a la asamblea general y movilización pacífica por garantías académicas y presupuesto digno.",
+        "Información y trámites": "Buenas tardes, ¿en qué oficina o ventanilla puedo solicitar el certificado de notas y homologación de materias?",
+        "Oferta académica e investigación": "Excelente proyecto de investigación y desarrollo agropecuario liderado por los docentes de Unillanos.",
+        "Bienestar y servicios": "¿El comedor universitario y las rutas de transporte funcionarán con normalidad durante esta semana?",
+        "Infraestructura y sedes": "Se necesita urgente mantenimiento en los laboratorios de cómputo y aulas de la sede Barcelona.",
+        "Expresión breve (Sin contenido suficiente)": "Felicitaciones a todos!",
+        "Pregunta atípica (Residual / Otros)": "¿Alguien sabe si el fin de semana se puede ingresar en bicicleta a la cancha principal?"
     }
 
     with col_in_1:
         st.markdown("### 1. Ingrese el comentario a evaluar")
         selected_preset = st.selectbox("Cargar ejemplo ilustrativo:", list(PRESETS.keys()))
-        initial_val = PRESETS[selected_preset] if selected_preset != "Seleccione un ejemplo predefinido..." else "Excelente noticia para la comunidad universitaria, muchas felicitaciones a los graduandos!"
+        initial_val = PRESETS[selected_preset] if selected_preset != "Seleccione un ejemplo predefinido..." else "Excelente noticia para la comunidad universitaria, muchas felicitaciones a los graduandos."
 
         user_input = st.text_area(
             "Texto del comentario:",
             value=initial_val,
             height=130,
-            help="Escriba cualquier comentario para evaluar la clasificación temática y afectiva."
+            help="Escriba cualquier comentario para evaluar la clasificación temática con las reglas determinísticas del proyecto."
         )
 
-        c_btn, c_chk = st.columns([1, 1])
-        with c_btn:
-            eval_button = st.button("🚀 Evaluar comentario", type="primary", use_container_width=True)
-        with c_chk:
-            enable_neural = st.checkbox("Cargar analizador neuronal (RoBERTuito)", value=False, help="Infiere sentimiento y emociones con PyTorch RoBERTuito si está disponible en el entorno.")
+        eval_button = st.button("Clasificar comentario", type="primary", use_container_width=True)
 
-        st.caption("Nota: El clasificador temático opera con expresiones regulares compiladas con orden de precedencia estricto (congelado formalmente).")
+        st.info("""
+        **Funcionamiento de la clasificación temática:**
+        - Opera mediante un árbol determinístico de reglas léxicas compiladas con expresiones regulares y delimitadores de frontera (`\\b`).
+        - Evalúa las categorías sustantivas en un orden de precedencia fija congelada formalmente mediante su hash criptográfico SHA-256 (`a69292d7...`).
+        - Si el texto tiene 2 o menos palabras o carece de sustancia proposicional, se clasifica como *Sin contenido temático suficiente*.
+        - Si no coincide con ninguna palabra clave predefinida, se deriva al residual *Otros temas no identificados*.
+        """)
 
     with col_in_2:
-        st.markdown("### 2. Resultados de inferencia")
+        st.markdown("### 2. Resultado de la clasificación")
 
         compiled_rules, raw_rules = get_compiled_theme_rules()
         theme_result = classify_text_theme(user_input, compiled_rules, raw_rules)
 
-        st.markdown("#### 📌 Asignación Temática (Reglas Léxicas CRISP-DM)")
         cat_name = theme_result["category"]
 
         if "Sin contenido" in cat_name:
-            st.warning(f"**Categoría:** {cat_name}")
+            st.warning(f"**Categoría asignada:** {cat_name}")
         elif "Otros temas" in cat_name:
-            st.info(f"**Categoría:** {cat_name}")
+            st.info(f"**Categoría asignada:** {cat_name}")
         else:
-            st.success(f"**Categoría:** {cat_name}")
+            st.success(f"**Categoría asignada:** {cat_name}")
 
         st.markdown(f"- **Diagnóstico:** {theme_result['reason']}")
         if theme_result.get("match"):
-            st.markdown(f"- **Fragmento coincidente:** `{theme_result['match']}`")
+            st.markdown(f"- **Fragmento de texto coincidente:** `{theme_result['match']}`")
         if theme_result.get("keyword_pattern"):
-            st.markdown(f"- **Patrón activado:** `{theme_result['keyword_pattern']}`")
+            st.markdown(f"- **Patrón léxico activado:** `{theme_result['keyword_pattern']}`")
         if theme_result.get("rule_index"):
-            st.markdown(f"- **Precedencia:** Regla #{theme_result['rule_index']} de {len(compiled_rules)}")
+            st.markdown(f"- **Orden de precedencia:** Regla #{theme_result['rule_index']} de {len(compiled_rules)}")
         if theme_result.get("description"):
             st.caption(f"Descripción de la categoría: {theme_result['description']}")
 
         st.divider()
-
-        st.markdown("#### 🎭 Inferencia de Sentimiento y Emoción")
-
-        if enable_neural:
-            with st.spinner("Cargando analizadores neuronales en memoria..."):
-                sent_analyzer, emo_analyzer, err = get_pysentimiento_analyzers()
-
-            if sent_analyzer and emo_analyzer:
-                try:
-                    s_res = sent_analyzer.predict(user_input)
-                    e_res = emo_analyzer.predict(user_input)
-
-                    sent_pred = s_res.output
-                    emo_pred = e_res.output
-                    emo_es = EMOTION_ES_MAP.get(emo_pred.lower(), emo_pred)
-
-                    c_sent, c_emo = st.columns(2)
-                    with c_sent:
-                        sent_label_map = {"POS": "Positivo", "NEU": "Neutral", "NEG": "Negativo"}
-                        st.metric("Sentimiento estimado", sent_label_map.get(sent_pred, sent_pred), f"P={s_res.probas.get(sent_pred, 0.0):.1%}")
-                    with c_emo:
-                        st.metric("Emoción predominante", emo_es, f"P={e_res.probas.get(emo_pred, 0.0):.1%}")
-
-                    if HAS_PLOTLY:
-                        probas_df = pd.DataFrame([
-                            {"Polaridad": "Positivo", "Probabilidad": s_res.probas.get("POS", 0.0) * 100, "code": "POS"},
-                            {"Polaridad": "Neutral", "Probabilidad": s_res.probas.get("NEU", 0.0) * 100, "code": "NEU"},
-                            {"Polaridad": "Negativo", "Probabilidad": s_res.probas.get("NEG", 0.0) * 100, "code": "NEG"}
-                        ])
-                        fig_s = px.bar(
-                            probas_df,
-                            x="Probabilidad",
-                            y="Polaridad",
-                            orientation="h",
-                            color="code",
-                            color_discrete_map=SENTIMENT_COLORS,
-                            text_auto=".1f"
-                        )
-                        fig_s.update_layout(showlegend=False, height=180, margin=dict(l=10, r=10, t=10, b=10), xaxis_title="%")
-                        st.plotly_chart(fig_s, use_container_width=True)
-                except Exception as ex:
-                    st.error(f"Error durante la inferencia neuronal: {ex}")
-            else:
-                st.info("⚠️ Los analizadores RoBERTuito profundos requieren dependencias de PyTorch en el entorno local. En este contenedor web ligero de Streamlit Cloud, las evaluaciones afectivas de los 15.885 comentarios se encuentran precalculadas en las pestañas anteriores para mantener la aplicación rápida y sin consumir la cuota de memoria RAM del servidor.")
-        else:
-            st.caption("Active la casilla 'Cargar analizador neuronal (RoBERTuito)' para calcular la distribución de probabilidades con transformadores.")
-            if cat_name == "Felicitaciones y expresiones de aprecio":
-                st.markdown("💡 *Comentario de reconocimiento/elogio: correlación típica esperada hacia polaridad Positiva y Alegría.*")
-            elif cat_name == "Protesta y movilización":
-                st.markdown("💡 *Comentario de movilización o reivindicación: correlación típica hacia polaridad Neutral / Negativa.*")
-            elif "Sin contenido" in cat_name:
-                st.markdown("💡 *Comentario social breve: correlación típica hacia polaridad Neutral o Alegría (según emojis).*")
-            else:
-                st.markdown("💡 *Consulta o trámite institucional: correlación típica hacia polaridad Neutral informativa.*")
+        st.markdown("""
+        **Transparencia algorítmica:**
+        A diferencia de los modelos supervisados de caja negra, las reglas léxicas determinísticas permiten una auditoría directa y verificable de cada decisión clasificatoria, garantizando reproducibilidad absoluta en el pipeline de datos institucionales.
+        """)
 
 # -----------------------------------------------------------------------------
 # TAB 8: MÉTODO Y LÍMITES
