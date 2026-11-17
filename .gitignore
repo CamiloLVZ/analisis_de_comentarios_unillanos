@@ -1,17 +1,42 @@
+# Python / Entorno
 .venv/
 .venv_project/
 __pycache__/
 *.pyc
-
 .env
-
 .ipynb_checkpoints/
+
+# Archivos temporales y de compilación
+tmp/
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+docs/articulo/tablas_actualizadas.tex
+verificacion_reglas.py
+
+# Datos derivados con textos o identificadores personales (privacidad)
 data/preparados/*
 data/processed/model_outputs/*
 !data/preparados/.gitkeep
 !data/processed/model_outputs/.gitkeep
 .streamlit/secrets.toml
-*.aux
-*.log
-*.out
-tmp/
+
+# Datos y scripts legacy / históricos de scraping
+data/legacy/
+data/raw/youtube/comments/comments_api_raw.json
+data/raw/youtube/videos/videos_api_raw.json
+scripts/legacy/
+scripts/build_labeling_package.py
+scripts/generate_script_pdf.py
+
+# Documentación interna de trabajo y notas intermedias
+ARTICULO_FINAL.md
+FLUJO_DE_TRABAJO.md
+PLAN_MAESTRO.md
+docs/AUDITORIA_REGLAS.md
+docs/DIAGNOSTICO_MEJORA_TEMATICA.md
+docs/GUIA_ETIQUETADO_TEMAS.md
+docs/PLAN_MEJORA_TEMATICA.md
+docs/RESULTADO_IMPLEMENTACION_MEJORA_TEMATICA.md

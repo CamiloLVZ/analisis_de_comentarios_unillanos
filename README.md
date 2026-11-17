@@ -44,17 +44,14 @@ La primera ejecución de modelado descarga los analizadores de sentimiento y emo
 
 ## Estructura
 
-- `FLUJO_DE_TRABAJO.md`: guía para estudiantes/agentes y registro de avance.
-- `PLAN_MAESTRO.md`: objetivo, preguntas, alcance, fases, riesgos y productos.
-- `crisp_dm/01...06_*/`: cada fase contiene su documentación, scripts, salidas y decisiones.
-- `data/raw/`: capturas originales; no modificar.
-- `data/final/comments_unified.csv`: entrada canónica actual.
-- `data/preparados/` y `data/processed/model_outputs/`: datos derivados locales con textos/IDs; no desplegar.
-- `data/legacy/processed/`: listados y lotes históricos de scraping, fuera del flujo CRISP-DM actual.
-- `crisp_dm/06_deployment/deploy_bundle/`: app canónica y única copia de las tablas agregadas seguras, recomendado como raíz del despliegue público.
-- `scripts/legacy/`: scripts históricos de descarga y scraping; no se ejecutan en el flujo de análisis.
-- `ARTICULO_FINAL.md`: artículo simplificado con resultados realmente producidos.
+- `crisp_dm/`: Metodología CRISP-DM estructurada en sus seis fases (01 a 06), con código fuente reproducible, auditorías de calidad y tablas agregadas.
+- `crisp_dm/06_deployment/deploy_bundle/`: Aplicación web interactiva en Streamlit (`app.py`), empaquetada con sus dependencias y tablas agregadas seguras.
+- `data/raw/`: Capturas originales de comentarios y publicaciones de Facebook, Instagram y YouTube.
+- `data/final/comments_unified.csv`: Corpus canónico unificado y auditado (15.885 comentarios analizables).
+- `docs/articulo/`: Artículo científico en formato IEEE (`articulo_unillanos.pdf`), código fuente LaTeX (`articulo_unillanos.tex`), figuras vectoriales y paquete de envío (`comentarios-unillanos.zip`).
+- `docs/GUION_VIDEO_PRESENTACION_UNILLANOS.pdf`: Guion técnico del video de presentación (3 minutos) con interpretación analítica de las visualizaciones.
+- `scripts/`: Utilidades del proyecto para la reproducción de figuras vectoriales del artículo (`generate_article_figures.py`).
 
 ## Privacidad y alcance
 
-La app no muestra texto, autor, ID, URLs o fechas. Los datos de trabajo por comentario son locales y están ignorados por Git. No se analiza evolución temporal, no se comparan respuestas con comentarios principales y los hallazgos no representan necesariamente a toda la comunidad universitaria. Consulte [plan maestro](PLAN_MAESTRO.md) y la documentación de cada fase antes de interpretar resultados.
+La aplicación Streamlit no expone textos individuales, nombres de usuario, identificadores ni enlaces. Opera exclusivamente sobre agregaciones precalculadas con supresión estricta de celdas con conteos reducidos ($n < 10$). Los datos de trabajo por comentario son de uso interno y están protegidos por `.gitignore`. No se realizan inferencias causales ni generalizaciones sobre la totalidad de la comunidad universitaria. Consulte la documentación técnica de cada fase CRISP-DM y el artículo científico para profundizar en los resultados.
