@@ -43,13 +43,13 @@ HUMAN_TO_RULE_MAP = {
 def wilson_interval(successes: float, n: float, z: float = 1.96) -> Tuple[Optional[float], Optional[float]]:
     if n <= 0:
         return None, None
-    p = successes / n
-    denom = 1.0 + (z**2) / n
-    center = (p + (z**2) / (2.0 * n)) / denom
-    half_width = (z * math.sqrt((p * (1.0 - p) + (z**2) / (4.0 * n)) / n)) / denom
+    p = float(successes) / float(n)
+    denom = 1.0 + (z**2) / float(n)
+    center = (p + (z**2) / (2.0 * float(n))) / denom
+    half_width = (z * math.sqrt((p * (1.0 - p) + (z**2) / (4.0 * float(n))) / float(n))) / denom
     lower = max(0.0, center - half_width)
     upper = min(1.0, center + half_width)
-    return round(lower, 4), round(upper, 4)
+    return round(float(lower), 4), round(float(upper), 4)
 
 
 def cohen_kappa(y1: List[str], y2: List[str]) -> Tuple[float, float]:
@@ -157,8 +157,16 @@ def main() -> None:
 
     desacuerdos_df = pd.DataFrame(desacuerdos)
     desacuerdos_path = args.clave.parent / "desacuerdos_para_resolver.csv"
-    desacuerdos_df.to_csv(desacuerdos_path, index=False, encoding="utf-8-sig")
-    print(f"Desacuerdos exportados ({len(desacuerdos_df)} filas) a: {desacuerdos_path.name}")
+    if desacuerdos_path.exists():
+        existing_cons = pd.read_csv(desacuerdos_path, encoding="utf-8-sig")
+        if "tema_final" in existing_cons and (existing_cons["tema_final"].fillna("").astype(str).str.strip() != "").any():
+            print(f"Archivo existente de desacuerdos con tema_final detectado: {desacuerdos_path.name} (se conserva sin sobrescribir).")
+        else:
+            desacuerdos_df.to_csv(desacuerdos_path, index=False, encoding="utf-8-sig")
+            print(f"Desacuerdos exportados ({len(desacuerdos_df)} filas) a: {desacuerdos_path.name}")
+    else:
+        desacuerdos_df.to_csv(desacuerdos_path, index=False, encoding="utf-8-sig")
+        print(f"Desacuerdos exportados ({len(desacuerdos_df)} filas) a: {desacuerdos_path.name}")
 
     # Paso 2: Solo si existe tema_final completo
     consenso_file = args.consenso or desacuerdos_path
@@ -261,20 +269,43 @@ def main() -> None:
                 "status": "interpretable" if support_unw >= 10 else "n<10: no interpretable"
             }
 
-        # Cobertura real
+        # Matriz de confusión (sin ponderar y ponderada)
+        conf_matrix_unw = {t: {p: 0 for p in categories} for t in categories}
+        conf_matrix_w = {t: {p: 0.0 for p in categories} for t in categories}
+        for _, row in ev_df.iterrows():
+            t = row["target_rule"]
+            p = row["assigned_rule"]
+            w = row["weight"]
+            if t in categories and p in categories:
+                conf_matrix_unw[t][p] += 1
+                conf_matrix_w[t][p] = round(conf_matrix_w[t][p] + w, 2)
+
+        # Cobertura real (sin ponderar y ponderada)
         spec_human = ev_df[~ev_df["human_theme"].isin(["Otro tema identificable", "Sin contenido temático", "Ambiguo"])]
-        left_in_other = (spec_human["assigned_rule"] == "Otros temas no identificados").sum()
-        left_in_sin = (spec_human["assigned_rule"] == "Sin contenido temático suficiente (social/emoji/mención)").sum()
+        left_in_other_unw = int((spec_human["assigned_rule"] == "Otros temas no identificados").sum())
+        left_in_sin_unw = int((spec_human["assigned_rule"] == "Sin contenido temático suficiente (social/emoji/mención)").sum())
+        spec_total_unw = len(spec_human)
+
+        left_in_other_w = float(spec_human.loc[spec_human["assigned_rule"] == "Otros temas no identificados", "weight"].sum())
+        left_in_sin_w = float(spec_human.loc[spec_human["assigned_rule"] == "Sin contenido temático suficiente (social/emoji/mención)", "weight"].sum())
+        spec_total_w = float(spec_human["weight"].sum())
 
         report["evaluation_against_rules"] = {
             "n_evaluated": n_eval,
             "metrics_by_category": cat_metrics,
+            "confusion_matrix_unweighted": conf_matrix_unw,
+            "confusion_matrix_weighted": conf_matrix_w,
             "coverage_leakage": {
-                "specific_human_cases": len(spec_human),
-                "left_in_otros_unweighted": int(left_in_other),
-                "left_in_sin_contenido_unweighted": int(left_in_sin),
-                "pct_left_in_otros": round(left_in_other / len(spec_human), 4) if len(spec_human) else 0.0,
-                "pct_left_in_sin_contenido": round(left_in_sin / len(spec_human), 4) if len(spec_human) else 0.0
+                "specific_human_cases_unweighted": spec_total_unw,
+                "left_in_otros_unweighted": left_in_other_unw,
+                "left_in_sin_contenido_unweighted": left_in_sin_unw,
+                "pct_left_in_otros_unweighted": round(left_in_other_unw / spec_total_unw, 4) if spec_total_unw else 0.0,
+                "pct_left_in_sin_contenido_unweighted": round(left_in_sin_unw / spec_total_unw, 4) if spec_total_unw else 0.0,
+                "specific_human_cases_weighted": round(spec_total_w, 2),
+                "left_in_otros_weighted": round(left_in_other_w, 2),
+                "left_in_sin_contenido_weighted": round(left_in_sin_w, 2),
+                "pct_left_in_otros_weighted": round(left_in_other_w / spec_total_w, 4) if spec_total_w else 0.0,
+                "pct_left_in_sin_contenido_weighted": round(left_in_sin_w / spec_total_w, 4) if spec_total_w else 0.0
             }
         }
 
@@ -307,9 +338,72 @@ def main() -> None:
             "|---|---:|---|---|---:|---:|"
         ])
         for cat, d in report["evaluation_against_rules"]["metrics_by_category"].items():
-            p_ci = f"{d['precision_ci95']}" if isinstance(d['precision_ci95'], list) else d['precision_ci95']
-            r_ci = f"{d['recall_ci95']}" if isinstance(d['recall_ci95'], list) else d['recall_ci95']
+            if isinstance(d['precision_ci95'], (list, tuple)):
+                p_ci = f"[{d['precision_ci95'][0]:.1%}, {d['precision_ci95'][1]:.1%}]"
+            else:
+                p_ci = d['precision_ci95']
+            if isinstance(d['recall_ci95'], (list, tuple)):
+                r_ci = f"[{d['recall_ci95'][0]:.1%}, {d['recall_ci95'][1]:.1%}]"
+            else:
+                r_ci = d['recall_ci95']
             md_lines.append(f"| {cat} | {d['support_unweighted']} | {d['precision_unweighted']:.1%} ({p_ci}) | {d['recall_unweighted']:.1%} ({r_ci}) | {d['precision_weighted']:.1%} | {d['recall_weighted']:.1%} |")
+
+        cov = report["evaluation_against_rules"]["coverage_leakage"]
+        md_lines.extend([
+            "",
+            "## 3. Cobertura Real y Fuga hacia Residuales",
+            "- **Casos específicos etiquetados por humanos (sin ponderar):** " f"{cov['specific_human_cases_unweighted']}",
+            f"  - Dejados en 'Otros temas no identificados': {cov['left_in_otros_unweighted']} ({cov['pct_left_in_otros_unweighted']:.1%})",
+            f"  - Dejados en 'Sin contenido temático suficiente': {cov['left_in_sin_contenido_unweighted']} ({cov['pct_left_in_sin_contenido_unweighted']:.1%})",
+            "- **Casos específicos etiquetados por humanos (ponderados por plataforma):** " f"{cov['specific_human_cases_weighted']}",
+            f"  - Dejados en 'Otros temas no identificados': {cov['left_in_otros_weighted']} ({cov['pct_left_in_otros_weighted']:.1%})",
+            f"  - Dejados en 'Sin contenido temático suficiente': {cov['left_in_sin_contenido_weighted']} ({cov['pct_left_in_sin_contenido_weighted']:.1%})",
+            "",
+            "## 4. Matriz de Confusión (Filas: Consenso Humano; Columnas: Reglas Léxicas)",
+            "",
+            "### A. Sin Ponderar (Conteos Muestrales)",
+            ""
+        ])
+
+        # Tabla de matriz de confusión sin ponderar
+        short_names = {
+            "Protesta y movilización": "Protesta",
+            "Programas de acceso y bienestar": "Bienestar",
+            "Admisiones, inscripciones y matrículas": "Admisiones",
+            "Información, trámites y certificados": "Trámites",
+            "Oferta académica e investigación": "Oferta",
+            "Infraestructura, sedes y tecnología": "Infraestr.",
+            "Eventos, cultura y actividades institucionales": "Eventos",
+            "Felicitaciones y expresiones de aprecio": "Felicit.",
+            "Otros temas no identificados": "Otros",
+            "Sin contenido temático suficiente (social/emoji/mención)": "SinContenido"
+        }
+        header_cols = [short_names.get(c, c) for c in categories]
+        md_lines.append("| Humano \\ Regla | " + " | ".join(header_cols) + " | Total |")
+        md_lines.append("|:---|" + "---:|" * len(categories) + "---:|")
+        for r_cat in categories:
+            r_label = short_names.get(r_cat, r_cat)
+            row_vals = [str(conf_matrix_unw[r_cat][c_cat]) for c_cat in categories]
+            r_tot = sum(conf_matrix_unw[r_cat][c_cat] for c_cat in categories)
+            md_lines.append(f"| **{r_label}** | " + " | ".join(row_vals) + f" | **{r_tot}** |")
+        pred_tot = [str(sum(conf_matrix_unw[r_cat][c_cat] for r_cat in categories)) for c_cat in categories]
+        md_lines.append("| **Total Regla** | " + " | ".join(pred_tot) + f" | **{n_eval}** |")
+
+        md_lines.extend([
+            "",
+            "### B. Ponderada por Plataforma (Estimación Poblacional N=15.885)",
+            ""
+        ])
+        md_lines.append("| Humano \\ Regla | " + " | ".join(header_cols) + " | Total |")
+        md_lines.append("|:---|" + "---:|" * len(categories) + "---:|")
+        for r_cat in categories:
+            r_label = short_names.get(r_cat, r_cat)
+            row_vals = [f"{conf_matrix_w[r_cat][c_cat]:.1f}" for c_cat in categories]
+            r_tot = sum(conf_matrix_w[r_cat][c_cat] for c_cat in categories)
+            md_lines.append(f"| **{r_label}** | " + " | ".join(row_vals) + f" | **{r_tot:.1f}** |")
+        pred_tot_w = [f"{sum(conf_matrix_w[r_cat][c_cat] for r_cat in categories):.1f}" for c_cat in categories]
+        tot_w_all = sum(sum(conf_matrix_w[r_cat][c_cat] for r_cat in categories) for c_cat in categories)
+        md_lines.append("| **Total Regla** | " + " | ".join(pred_tot_w) + f" | **{tot_w_all:.1f}** |")
     else:
         md_lines.extend([
             "## 2. Comparación contra Reglas Léxicas",

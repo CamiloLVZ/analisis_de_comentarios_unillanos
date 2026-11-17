@@ -65,3 +65,34 @@ Otros temas no identificados & 5,501 & 21.6\% & 60.0\% & 18.4\% & 0.0\% \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+% ------------------------------------------------------------------------------
+% TABLA 3: Evaluación de desempeño de reglas léxicas frente al consenso humano
+% Muestra estratificada de revisión (n = 198, evaluables n = 194 tras excluir ambiguos)
+% Columnas: Categoría & Soporte (n) & Precisión (IC 95\%) & Recall (IC 95\%) & Precisión Pond. & Recall Pond. \\
+% ------------------------------------------------------------------------------
+\begin{table}[htbp]
+\centering
+\small
+\caption{Métricas de validación de las reglas léxicas frente al consenso humano independiente ($n = 194$). Intervalos de confianza de Wilson al 95\%. Celdas con soporte muestral $n < 10$ se reportan como no interpretables para evitar inferencias espurias.}
+\label{tab:evaluacion_reglas_tematicas}
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{Categoría temática} & \textbf{Soporte} & \textbf{Precisión (IC 95\%)} & \textbf{Recall (IC 95\%)} & \textbf{Prec. Pond.} & \textbf{Rec. Pond.} \\
+\midrule
+Protesta y movilización & 12 & 100.0\% [51.0\%, 100.0\%] & 33.3\% [13.8\%, 60.9\%] & 100.0\% & 46.9\% \\
+Programas de acceso y bienestar & 4 & \multicolumn{2}{c}{\textit{n < 10: no interpretable}} & 0.0\% & 0.0\% \\
+Admisiones, inscripciones y matrículas & 6 & \multicolumn{2}{c}{\textit{n < 10: no interpretable}} & 49.1\% & 49.5\% \\
+Información, trámites y certificados & 19 & 80.0\% [37.5\%, 96.4\%] & 21.1\% [8.5\%, 43.3\%] & 99.3\% & 32.8\% \\
+Oferta académica e investigación & 13 & 38.1\% [20.8\%, 59.1\%] & 61.5\% [35.5\%, 82.3\%] & 69.0\% & 86.8\% \\
+Infraestructura, sedes y tecnología & 6 & \multicolumn{2}{c}{\textit{n < 10: no interpretable}} & 1.0\% & 4.4\% \\
+Eventos, cultura y actividades institucionales & 9 & \multicolumn{2}{c}{\textit{n < 10: no interpretable}} & 27.4\% & 31.7\% \\
+Felicitaciones y expresiones de aprecio & 50 & 86.1\% [72.7\%, 93.4\%] & 74.0\% [60.5\%, 84.1\%] & 93.1\% & 77.8\% \\
+\midrule
+Otros temas no identificados (residual) & 14 & 20.3\% [12.0\%, 32.3\%] & 85.7\% [60.1\%, 96.0\%] & 18.8\% & 93.9\% \\
+Sin contenido temático suficiente & 61 & 81.2\% [68.1\%, 89.8\%] & 63.9\% [51.4\%, 74.8\%] & 76.4\% & 44.5\% \\
+\midrule
+\textbf{Total evaluados} & \textbf{194} & \multicolumn{4}{l}{\textit{Acuerdo inter-anotador previo: P$_o$ = 60.6\%, $\kappa$ = 0.515 (sin amb.: P$_o$ = 71.5\%, $\kappa$ = 0.623)}} \\
+\bottomrule
+\end{tabular}
+\end{table}

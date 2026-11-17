@@ -16,5 +16,401 @@
   "ambiguous_count": 54,
   "needs_context_count": 93,
   "disagreements_count": 80,
-  "evaluation_against_rules": null
+  "evaluation_against_rules": {
+    "n_evaluated": 194,
+    "metrics_by_category": {
+      "Protesta y movilización": {
+        "support_unweighted": 12,
+        "precision_unweighted": 1.0,
+        "precision_ci95": [
+          0.5101,
+          1.0
+        ],
+        "recall_unweighted": 0.3333,
+        "recall_ci95": [
+          0.1381,
+          0.6094
+        ],
+        "precision_weighted": 1.0,
+        "recall_weighted": 0.4685,
+        "status": "interpretable"
+      },
+      "Programas de acceso y bienestar": {
+        "support_unweighted": 4,
+        "precision_unweighted": 0.0,
+        "precision_ci95": "n<10: no interpretable",
+        "recall_unweighted": 0.0,
+        "recall_ci95": "n<10: no interpretable",
+        "precision_weighted": 0.0,
+        "recall_weighted": 0.0,
+        "status": "n<10: no interpretable"
+      },
+      "Admisiones, inscripciones y matrículas": {
+        "support_unweighted": 6,
+        "precision_unweighted": 0.3333,
+        "precision_ci95": "n<10: no interpretable",
+        "recall_unweighted": 0.3333,
+        "recall_ci95": "n<10: no interpretable",
+        "precision_weighted": 0.491,
+        "recall_weighted": 0.4951,
+        "status": "n<10: no interpretable"
+      },
+      "Información, trámites y certificados": {
+        "support_unweighted": 19,
+        "precision_unweighted": 0.8,
+        "precision_ci95": [
+          0.3755,
+          0.9638
+        ],
+        "recall_unweighted": 0.2105,
+        "recall_ci95": [
+          0.0851,
+          0.4333
+        ],
+        "precision_weighted": 0.9927,
+        "recall_weighted": 0.3277,
+        "status": "interpretable"
+      },
+      "Oferta académica e investigación": {
+        "support_unweighted": 13,
+        "precision_unweighted": 0.381,
+        "precision_ci95": [
+          0.2075,
+          0.5912
+        ],
+        "recall_unweighted": 0.6154,
+        "recall_ci95": [
+          0.3552,
+          0.8229
+        ],
+        "precision_weighted": 0.6901,
+        "recall_weighted": 0.8679,
+        "status": "interpretable"
+      },
+      "Infraestructura, sedes y tecnología": {
+        "support_unweighted": 6,
+        "precision_unweighted": 0.25,
+        "precision_ci95": "n<10: no interpretable",
+        "recall_unweighted": 0.1667,
+        "recall_ci95": "n<10: no interpretable",
+        "precision_weighted": 0.0098,
+        "recall_weighted": 0.0436,
+        "status": "n<10: no interpretable"
+      },
+      "Eventos, cultura y actividades institucionales": {
+        "support_unweighted": 9,
+        "precision_unweighted": 0.6667,
+        "precision_ci95": "n<10: no interpretable",
+        "recall_unweighted": 0.2222,
+        "recall_ci95": "n<10: no interpretable",
+        "precision_weighted": 0.2742,
+        "recall_weighted": 0.3166,
+        "status": "n<10: no interpretable"
+      },
+      "Felicitaciones y expresiones de aprecio": {
+        "support_unweighted": 50,
+        "precision_unweighted": 0.8605,
+        "precision_ci95": [
+          0.7274,
+          0.9344
+        ],
+        "recall_unweighted": 0.74,
+        "recall_ci95": [
+          0.6045,
+          0.8413
+        ],
+        "precision_weighted": 0.9313,
+        "recall_weighted": 0.7782,
+        "status": "interpretable"
+      },
+      "Otros temas no identificados": {
+        "support_unweighted": 14,
+        "precision_unweighted": 0.2034,
+        "precision_ci95": [
+          0.1204,
+          0.3227
+        ],
+        "recall_unweighted": 0.8571,
+        "recall_ci95": [
+          0.6006,
+          0.9599
+        ],
+        "precision_weighted": 0.1875,
+        "recall_weighted": 0.939,
+        "status": "interpretable"
+      },
+      "Sin contenido temático suficiente (social/emoji/mención)": {
+        "support_unweighted": 61,
+        "precision_unweighted": 0.8125,
+        "precision_ci95": [
+          0.6806,
+          0.8981
+        ],
+        "recall_unweighted": 0.6393,
+        "recall_ci95": [
+          0.5139,
+          0.7483
+        ],
+        "precision_weighted": 0.7639,
+        "recall_weighted": 0.4445,
+        "status": "interpretable"
+      }
+    },
+    "confusion_matrix_unweighted": {
+      "Protesta y movilización": {
+        "Protesta y movilización": 4,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 2,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 0,
+        "Otros temas no identificados": 4,
+        "Sin contenido temático suficiente (social/emoji/mención)": 2
+      },
+      "Programas de acceso y bienestar": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 1,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 0,
+        "Infraestructura, sedes y tecnología": 2,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 0,
+        "Otros temas no identificados": 0,
+        "Sin contenido temático suficiente (social/emoji/mención)": 1
+      },
+      "Admisiones, inscripciones y matrículas": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 2,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 1,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 1,
+        "Otros temas no identificados": 2,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0
+      },
+      "Información, trámites y certificados": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 1,
+        "Admisiones, inscripciones y matrículas": 2,
+        "Información, trámites y certificados": 4,
+        "Oferta académica e investigación": 1,
+        "Infraestructura, sedes y tecnología": 1,
+        "Eventos, cultura y actividades institucionales": 1,
+        "Felicitaciones y expresiones de aprecio": 1,
+        "Otros temas no identificados": 8,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0
+      },
+      "Oferta académica e investigación": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 1,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 8,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 0,
+        "Otros temas no identificados": 4,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0
+      },
+      "Infraestructura, sedes y tecnología": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 2,
+        "Infraestructura, sedes y tecnología": 1,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 0,
+        "Otros temas no identificados": 3,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0
+      },
+      "Eventos, cultura y actividades institucionales": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 1,
+        "Oferta académica e investigación": 1,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 2,
+        "Felicitaciones y expresiones de aprecio": 1,
+        "Otros temas no identificados": 4,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0
+      },
+      "Felicitaciones y expresiones de aprecio": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 5,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 37,
+        "Otros temas no identificados": 3,
+        "Sin contenido temático suficiente (social/emoji/mención)": 5
+      },
+      "Otros temas no identificados": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 0,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 1,
+        "Otros temas no identificados": 12,
+        "Sin contenido temático suficiente (social/emoji/mención)": 1
+      },
+      "Sin contenido temático suficiente (social/emoji/mención)": {
+        "Protesta y movilización": 0,
+        "Programas de acceso y bienestar": 0,
+        "Admisiones, inscripciones y matrículas": 0,
+        "Información, trámites y certificados": 0,
+        "Oferta académica e investigación": 1,
+        "Infraestructura, sedes y tecnología": 0,
+        "Eventos, cultura y actividades institucionales": 0,
+        "Felicitaciones y expresiones de aprecio": 2,
+        "Otros temas no identificados": 19,
+        "Sin contenido temático suficiente (social/emoji/mención)": 39
+      }
+    },
+    "confusion_matrix_weighted": {
+      "Protesta y movilización": {
+        "Protesta y movilización": 586.56,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 66.0,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 0.0,
+        "Otros temas no identificados": 362.24,
+        "Sin contenido temático suficiente (social/emoji/mención)": 237.2
+      },
+      "Programas de acceso y bienestar": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 174.68,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 0.0,
+        "Infraestructura, sedes y tecnología": 178.16,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 0.0,
+        "Otros temas no identificados": 0.0,
+        "Sin contenido temático suficiente (social/emoji/mención)": 174.68
+      },
+      "Admisiones, inscripciones y matrículas": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 349.36,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 3.48,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 3.48,
+        "Otros temas no identificados": 349.36,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0.0
+      },
+      "Información, trámites y certificados": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 174.68,
+        "Admisiones, inscripciones y matrículas": 125.04,
+        "Información, trámites y certificados": 474.4,
+        "Oferta académica e investigación": 62.52,
+        "Infraestructura, sedes y tecnología": 174.68,
+        "Eventos, cultura y actividades institucionales": 174.68,
+        "Felicitaciones y expresiones de aprecio": 3.48,
+        "Otros temas no identificados": 258.08,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0.0
+      },
+      "Oferta académica e investigación": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 62.52,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 889.76,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 0.0,
+        "Otros temas no identificados": 72.96,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0.0
+      },
+      "Infraestructura, sedes y tecnología": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 6.96,
+        "Infraestructura, sedes y tecnología": 3.48,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 0.0,
+        "Otros temas no identificados": 69.48,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0.0
+      },
+      "Eventos, cultura y actividades institucionales": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 3.48,
+        "Oferta académica e investigación": 62.52,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 66.0,
+        "Felicitaciones y expresiones de aprecio": 3.48,
+        "Otros temas no identificados": 72.96,
+        "Sin contenido temático suficiente (social/emoji/mención)": 0.0
+      },
+      "Felicitaciones y expresiones de aprecio": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 194.52,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 2602.36,
+        "Otros temas no identificados": 240.68,
+        "Sin contenido temático suficiente (social/emoji/mención)": 306.68
+      },
+      "Otros temas no identificados": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 0.0,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 3.48,
+        "Otros temas no identificados": 1015.84,
+        "Sin contenido temático suficiente (social/emoji/mención)": 62.52
+      },
+      "Sin contenido temático suficiente (social/emoji/mención)": {
+        "Protesta y movilización": 0.0,
+        "Programas de acceso y bienestar": 0.0,
+        "Admisiones, inscripciones y matrículas": 0.0,
+        "Información, trámites y certificados": 0.0,
+        "Oferta académica e investigación": 3.48,
+        "Infraestructura, sedes y tecnología": 0.0,
+        "Eventos, cultura y actividades institucionales": 0.0,
+        "Felicitaciones y expresiones de aprecio": 178.16,
+        "Otros temas no identificados": 2976.52,
+        "Sin contenido temático suficiente (social/emoji/mención)": 2526.76
+      }
+    },
+    "coverage_leakage": {
+      "specific_human_cases_unweighted": 119,
+      "left_in_otros_unweighted": 28,
+      "left_in_sin_contenido_unweighted": 8,
+      "pct_left_in_otros_unweighted": 0.2353,
+      "pct_left_in_sin_contenido_unweighted": 0.0672,
+      "specific_human_cases_weighted": 8590.71,
+      "left_in_otros_weighted": 1425.8,
+      "left_in_sin_contenido_weighted": 718.56,
+      "pct_left_in_otros_weighted": 0.166,
+      "pct_left_in_sin_contenido_weighted": 0.0836
+    }
+  }
 }
