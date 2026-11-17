@@ -73,6 +73,25 @@ EMOTION_ES_MAP = {
     "others": "Otros"
 }
 
+POST_TYPE_COLORS = {
+    "Imagen": "#3498db",
+    "Video": "#e74c3c",
+    "Carrusel": "#9b59b6",
+    "Texto": "#2ecc71"
+}
+
+POST_TYPE_MAP = {
+    "photo": "Imagen",
+    "image": "Imagen",
+    "imagen": "Imagen",
+    "sidecar": "Carrusel",
+    "carousel": "Carrusel",
+    "carrusel": "Carrusel",
+    "video": "Video",
+    "text": "Texto",
+    "texto": "Texto",
+}
+
 
 def strip_accents(text: str) -> str:
     return "".join(c for c in unicodedata.normalize("NFKD", str(text)) if not unicodedata.combining(c))
@@ -144,8 +163,8 @@ def classify_text_theme(text: str, compiled_rules: list, raw_rules: dict) -> dic
     }
 
 
-@st.cache_data
-def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+@st.cache_data(show_spinner=False)
+def load_data(cache_bust: str = "v3_force_4_types") -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     overview = json.loads((DATA / "overview.json").read_text(encoding="utf-8"))
     themes = pd.read_csv(DATA / "themes.csv", encoding="utf-8-sig")
     sentiment = pd.read_csv(DATA / "sentiment.csv", encoding="utf-8-sig")
@@ -154,12 +173,21 @@ def load_data() -> tuple[dict, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Data
     confidence = pd.read_csv(confidence_path, encoding="utf-8-sig") if confidence_path.exists() else pd.DataFrame()
     ts_path = DATA / "theme_sentiment.csv"
     theme_sentiment = pd.read_csv(ts_path, encoding="utf-8-sig") if ts_path.exists() else pd.DataFrame()
+
+    # Normalización forzosa en memoria para garantizar exclusivamente las 4 categorías unificadas
+    for df in (themes, sentiment, emotions, confidence, theme_sentiment):
+        if not df.empty and "post_type" in df.columns:
+            df["post_type"] = df["post_type"].astype(str).str.lower().map(lambda x: POST_TYPE_MAP.get(x, x.capitalize()))
+
+    overview["post_types"] = ["Carrusel", "Imagen", "Texto", "Video"]
     return overview, themes, sentiment, emotions, confidence, theme_sentiment
 
 
 def filtered(df: pd.DataFrame, platforms: list[str], post_types: list[str]) -> pd.DataFrame:
-    result = df[df["platform"].isin(platforms)]
-    result = result[result["post_type"].isin(post_types)]
+    p_lower = [str(p).lower() for p in platforms]
+    result = df[df["platform"].astype(str).str.lower().isin(p_lower)]
+    pt_target = [POST_TYPE_MAP.get(str(pt).lower(), str(pt).capitalize()) for pt in post_types]
+    result = result[result["post_type"].isin(pt_target)]
     return result
 
 
@@ -216,8 +244,8 @@ with st.sidebar:
     st.header("Filtros")
     platform_options = sorted(overview["platforms"])
     selected_platforms = st.multiselect("Plataformas", platform_options, default=platform_options, format_func=str.capitalize)
-    type_options = sorted(overview["post_types"])
-    selected_types = st.multiselect("Tipo de publicación", type_options, default=type_options, format_func=str.capitalize)
+    type_options = ["Carrusel", "Imagen", "Texto", "Video"]
+    selected_types = st.multiselect("Tipo de publicación", type_options, default=type_options)
 
 themes_f = filtered(themes, selected_platforms, selected_types)
 sentiment_f = filtered(sentiment, selected_platforms, selected_types)
@@ -227,7 +255,7 @@ selected_n = int(themes_f["n"].sum())
 metric1, metric2, metric3, metric4 = st.columns(4)
 metric1.metric("Comentarios analizados", f"{selected_n:,}")
 metric2.metric("Plataformas activas", f"{len(selected_platforms)} / {len(overview['platforms'])}")
-metric3.metric("Tipos de publicación", f"{len(selected_types)} / {len(overview['post_types'])}")
+metric3.metric("Tipos de publicación", f"{len(selected_types)} / 4")
 metric4.metric("Temas observados", themes_f["theme"].nunique() if not themes_f.empty else 0)
 
 tab_summary, tab_topics, tab_theme_sent, tab_sentiment, tab_emotions, tab_advanced, tab_infer, tab_method = st.tabs([
@@ -253,12 +281,41 @@ with tab_summary:
             st.bar_chart(plat_df.set_index("Plataforma")["Comentarios"], horizontal=True)
 
     with col_p2:
-        st.markdown("**Participación por tipo de publicación**")
-        type_df = themes_f.groupby("post_type")["n"].sum().sort_values(ascending=False).rename("Comentarios").reset_index()
-        type_df["Tipo"] = type_df["post_type"].str.capitalize()
-        fig_type = make_pie_chart(type_df, "Tipo", "Comentarios")
-        if fig_type:
-            st.plotly_chart(fig_type, use_container_width=True)
+        st.markdown("**Volumen por tipo de publicación**")
+        type_df = themes_f.groupby("post_type")["n"].sum().rename("Comentarios").reset_index()
+        type_df["Tipo"] = type_df["post_type"].map(lambda x: POST_TYPE_MAP.get(str(x).lower(), str(x).capitalize()))
+        type_df = type_df.groupby("Tipo")["Comentarios"].sum().reset_index()
+
+        for cat in ["Carrusel", "Imagen", "Texto", "Video"]:
+            if cat not in type_df["Tipo"].values:
+                type_df.loc[len(type_df)] = {"Tipo": cat, "Comentarios": 0}
+
+        total_types = int(type_df["Comentarios"].sum())
+        type_df["Porcentaje"] = (type_df["Comentarios"] / total_types * 100).round(1) if total_types else 0
+        type_df = type_df.sort_values("Comentarios", ascending=True)
+
+        if HAS_PLOTLY:
+            fig_types = px.bar(
+                type_df,
+                x="Comentarios",
+                y="Tipo",
+                orientation="h",
+                color="Tipo",
+                color_discrete_map=POST_TYPE_COLORS,
+                text=[f"{n:,} ({p}%)" for n, p in zip(type_df["Comentarios"], type_df["Porcentaje"])]
+            )
+            fig_types.update_traces(
+                textposition="auto",
+                marker=dict(line=dict(color="#ffffff", width=1))
+            )
+            fig_types.update_layout(
+                showlegend=False,
+                margin=dict(l=20, r=20, t=30, b=20),
+                height=360,
+                xaxis_title="Comentarios",
+                yaxis_title=""
+            )
+            st.plotly_chart(fig_types, use_container_width=True)
         else:
             st.bar_chart(type_df.set_index("Tipo")["Comentarios"], horizontal=True)
 
