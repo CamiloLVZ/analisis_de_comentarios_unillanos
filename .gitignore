@@ -16,17 +16,10 @@ tmp/
 docs/articulo/tablas_actualizadas.tex
 verificacion_reglas.py
 
-# Datos derivados con textos o identificadores personales (privacidad)
-data/preparados/*
-data/processed/model_outputs/*
-!data/preparados/.gitkeep
-!data/processed/model_outputs/.gitkeep
+# Configuración sensible
 .streamlit/secrets.toml
 
-# Datos y scripts legacy / históricos de scraping
-data/legacy/
-data/raw/youtube/comments/comments_api_raw.json
-data/raw/youtube/videos/videos_api_raw.json
+# Scripts legacy / auxiliares
 scripts/legacy/
 scripts/build_labeling_package.py
 scripts/generate_script_pdf.py
