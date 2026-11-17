@@ -109,3 +109,14 @@ No existieron discrepancias sustanciales respecto a las directrices del plan mae
 - Se implementó la interfaz de cruce temático-afectivo en Streamlit de forma segura.
 - Se mantuvieron intactas las inferencias pesadas de ML.
 - No se desplegó remotamente ni se publicaron credenciales, respetando el alcance del agente.
+
+---
+
+## 7. Correcciones Metodológicas y Fechadas (16 de noviembre de 2026)
+
+Con el fin de mantener la máxima precisión y transparencia analítica, se incorporan las siguientes correcciones formales sobre el reporte previo:
+1. **Precisión de Porcentajes:** El porcentaje exacto de la categoría "Sin contenido temático suficiente" en la versión preliminar es **25,7 %** ($4.090 / 15.885 = 0,25747$), no 25,8 %.
+2. **Atribución del Crecimiento en "Oferta académica e investigación":** El aumento de volumen observado en esta categoría (de 989 a 1.941 comentarios en la fase intermedia) no se debió primordialmente a los delimitadores de palabra en `cursos?` (que tuvieron un efecto correctivo focalizado en 81 casos), sino a la incorporación de términos adicionales de amplio espectro léxico (`estudiantes`, `profesor`, `grado`, `academia`, `educación`, etc.).
+3. **Reclasificación de Protesta:** Al remover el término suelto `\beducaci[oó]n\b` y crear la categoría `Protesta y movilización` con patrones estrechos, 467 comentarios que antes caían en Oferta académica fueron reclasificados correctamente en Protesta, estabilizando Oferta académica en 1.426 comentarios (9,0 %).
+4. **Clarificación Terminológica:** Se sustituyen las expresiones "reglas supervisadas" o "supervisado por dominio" por **"reglas léxicas definidas manualmente"**, reflejando con exactitud que el método responde a un diccionario determinista de expresiones regulares y no a algoritmos de aprendizaje de máquina supervisado.
+5. **Enfoque de la Herramienta:** Se retiran expresiones asociadas a "gestión universitaria", "auditoría" o toma de decisiones de directivos, reafirmando que la aplicación en Streamlit y los reportes constituyen un ejercicio analítico descriptivo y exploratorio.

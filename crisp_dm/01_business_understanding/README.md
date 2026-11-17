@@ -6,17 +6,17 @@
 
 ## Contexto y problema
 
-El proyecto cuenta con comentarios recolectados de las páginas institucionales de Unillanos en Facebook, Instagram y YouTube. Para la toma de decisiones institucionales y la gestión universitaria, el valor principal radica en identificar **de qué habla la comunidad** (admisiones, programas de bienestar, trámites y certificados, oferta académica, infraestructura y sedes, actividades culturales y eventos, o reconocimiento institucional).
+El proyecto cuenta con comentarios recolectados de las páginas institucionales de Unillanos en Facebook, Instagram y YouTube. Para el análisis exploratorio de la conversación pública, el interés principal radica en identificar **de qué habla la comunidad** (protesta y movilización, admisiones, programas de bienestar, trámites y certificados, oferta académica, infraestructura y sedes, actividades culturales y eventos, o expresiones de aprecio).
 
-Analizar polaridades afectivas o emociones abstractas sin contexto temático ofrece utilidad limitada; por tanto, el sistema organiza los comentarios prioritariamente por áreas de conversación y, en segundo nivel, examina el clima emocional asociado a cada una.
+Analizar polaridades afectivas o emociones abstractas sin contexto temático ofrece utilidad descriptiva limitada; por tanto, el sistema organiza los comentarios prioritariamente por áreas temáticas y, en segundo nivel, examina el clima emocional asociado a cada una.
 
 ## Objetivo y preguntas
 
-El objetivo general es estructurar una taxonomía temática transparente mediante reglas léxicas supervisadas por dominio, describir la polaridad del sentimiento (positivo/negativo/neutral) y las emociones básicas, y comunicar resultados agregados en Streamlit.
+El objetivo general es estructurar una taxonomía temática transparente mediante reglas léxicas definidas manualmente, describir la polaridad del sentimiento (positivo/negativo/neutral) y las emociones básicas, y comunicar resultados agregados en Streamlit.
 
 Preguntas priorizadas:
 
-1. ¿Qué temas específicos de gestión, vida académica y bienestar emergen en los comentarios recopilados?
+1. ¿Qué temas específicos de vida universitaria, trámites y bienestar emergen en los comentarios recopilados?
 2. ¿Cómo se distribuyen los comentarios entre contenido proposicional sustantivo y reacciones estrictamente sociales/emojis/menciones?
 3. ¿Cómo varía la polaridad de sentimiento al condicionarse por área temática institucional?
 4. ¿Qué diferencias descriptivas aparecen por plataforma o tipo de publicación, considerando el tamaño desigual de los grupos?
@@ -46,4 +46,4 @@ Preguntas priorizadas:
 - **Riesgo:** Sobreclasificación por palabras genéricas en reglas léxicas.  
   *Mitigación:* Delimitación por fronteras de palabra (`\b`), sustitución de palabras interrogativas sueltas por sintagmas de trámite y preclasificación de contenido mínimo.
 - **Riesgo:** Atribuir validación humana a componentes heurísticos.  
-  *Mitigación:* Se distingue formalmente entre la evaluación de sentimiento/emoción (120 casos con doble anotación humana) y la taxonomía temática (supervisión por reglas léxicas sin ground-truth manual).
+  *Mitigación:* Se distingue formalmente entre la evaluación de sentimiento/emoción (120 casos con doble anotación humana) y la taxonomía temática (clasificación por reglas léxicas definidas manualmente sin ground-truth manual).

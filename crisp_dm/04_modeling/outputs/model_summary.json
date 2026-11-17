@@ -17,19 +17,21 @@
   "sentiment_model": "pysentimiento robertuito-sentiment-analysis (Spanish default)",
   "emotion_model": "pysentimiento robertuito-emotion-analysis (Spanish default)",
   "input_text": "Original comment text; pysentimiento applies its own social-media preprocessing.",
-  "topic_method": "Clasificación por reglas léxicas supervisadas con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
+  "topic_method": "Clasificación por reglas léxicas definidas manualmente con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
   "theme_rules": "crisp_dm/04_modeling/theme_rules.json",
   "model_outputs": "data/processed/model_outputs/scored_comments.csv",
   "topic_terms": "crisp_dm/04_modeling/outputs/top_terms.csv",
   "theme_counts": {
-    "Otros temas no identificados": 5469,
-    "Sin contenido temático suficiente (social/emoji/mención)": 4090,
-    "Felicitaciones y reconocimiento institucional": 2377,
-    "Oferta académica e investigación": 1941,
-    "Admisiones, inscripciones y matrículas": 691,
-    "Programas de acceso y bienestar": 480,
-    "Información, trámites y certificados": 462,
-    "Infraestructura, sedes y tecnología": 229,
-    "Eventos, cultura y actividades institucionales": 146
-  }
+    "Otros temas no identificados": 5501,
+    "Sin contenido temático suficiente (social/emoji/mención)": 4004,
+    "Felicitaciones y expresiones de aprecio": 2405,
+    "Oferta académica e investigación": 1426,
+    "Admisiones, inscripciones y matrículas": 678,
+    "Protesta y movilización": 603,
+    "Información, trámites y certificados": 460,
+    "Programas de acceso y bienestar": 421,
+    "Infraestructura, sedes y tecnología": 234,
+    "Eventos, cultura y actividades institucionales": 153
+  },
+  "theme_rules_sha256": "a69292d738828d2bbd1c8569b5dea235b404e7cd59708e811868bf0f969f3266"
 }

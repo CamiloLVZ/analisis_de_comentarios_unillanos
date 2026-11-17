@@ -16,12 +16,13 @@
   "themes": [
     "Admisiones, inscripciones y matrículas",
     "Eventos, cultura y actividades institucionales",
-    "Felicitaciones y reconocimiento institucional",
+    "Felicitaciones y expresiones de aprecio",
     "Información, trámites y certificados",
     "Infraestructura, sedes y tecnología",
     "Oferta académica e investigación",
     "Otros temas no identificados",
     "Programas de acceso y bienestar",
+    "Protesta y movilización",
     "Sin contenido temático suficiente (social/emoji/mención)"
   ],
   "sentiment_classes": [

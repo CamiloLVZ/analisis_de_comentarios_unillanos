@@ -1,6 +1,19 @@
 {
-  "method": "Clasificación por reglas léxicas supervisadas con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
+  "method": "Clasificación por reglas léxicas definidas manualmente con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
   "categories": [
+    {
+      "name": "Protesta y movilización",
+      "keywords": [
+        "hambre de educacion",
+        "habre de educacion",
+        "hambredeeducacion",
+        "huelga\\w*",
+        "\\bprotest\\w*",
+        "\\bmovilizaci\\w*",
+        "\\bmanifestaci\\w*",
+        "\\bplanton\\b"
+      ]
+    },
     {
       "name": "Programas de acceso y bienestar",
       "keywords": [
@@ -80,7 +93,6 @@
         "\\bgraduad\\w*",
         "\\bgrados?\\b",
         "\\begresad\\w*",
-        "\\beducaci[oó]n\\b",
         "\\bacademia\\b",
         "\\bacad[eé]mic\\w*",
         "\\btesis\\b"
@@ -129,7 +141,7 @@
       ]
     },
     {
-      "name": "Felicitaciones y reconocimiento institucional",
+      "name": "Felicitaciones y expresiones de aprecio",
       "keywords": [
         "\\bfelicit\\w*",
         "\\bfelicidades\\b",

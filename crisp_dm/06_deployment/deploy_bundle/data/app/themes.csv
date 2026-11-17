@@ -1,54 +1,57 @@
 ﻿platform,post_type,theme,n
-facebook,photo,"Admisiones, inscripciones y matrículas",456
-facebook,photo,"Eventos, cultura y actividades institucionales",72
-facebook,photo,Felicitaciones y reconocimiento institucional,1135
-facebook,photo,"Información, trámites y certificados",273
-facebook,photo,"Infraestructura, sedes y tecnología",129
-facebook,photo,Oferta académica e investigación,1078
-facebook,photo,Otros temas no identificados,3211
-facebook,photo,Programas de acceso y bienestar,370
-facebook,photo,Sin contenido temático suficiente (social/emoji/mención),1740
+facebook,photo,"Admisiones, inscripciones y matrículas",448
+facebook,photo,"Eventos, cultura y actividades institucionales",75
+facebook,photo,Felicitaciones y expresiones de aprecio,1148
+facebook,photo,"Información, trámites y certificados",272
+facebook,photo,"Infraestructura, sedes y tecnología",132
+facebook,photo,Oferta académica e investigación,727
+facebook,photo,Otros temas no identificados,3217
+facebook,photo,Programas de acceso y bienestar,335
+facebook,photo,Protesta y movilización,431
+facebook,photo,Sin contenido temático suficiente (social/emoji/mención),1679
 facebook,text,"Admisiones, inscripciones y matrículas",15
-facebook,text,Felicitaciones y reconocimiento institucional,29
-facebook,text,Oferta académica e investigación,30
-facebook,text,Otros grupos de baja frecuencia,8
-facebook,text,Otros temas no identificados,138
+facebook,text,Felicitaciones y expresiones de aprecio,30
+facebook,text,Oferta académica e investigación,27
+facebook,text,Otros grupos de baja frecuencia,9
+facebook,text,Otros temas no identificados,139
 facebook,text,Sin contenido temático suficiente (social/emoji/mención),64
-facebook,video,"Admisiones, inscripciones y matrículas",119
+facebook,video,"Admisiones, inscripciones y matrículas",114
 facebook,video,"Eventos, cultura y actividades institucionales",17
-facebook,video,Felicitaciones y reconocimiento institucional,492
+facebook,video,Felicitaciones y expresiones de aprecio,499
 facebook,video,"Información, trámites y certificados",76
 facebook,video,"Infraestructura, sedes y tecnología",38
-facebook,video,Oferta académica e investigación,414
-facebook,video,Otros temas no identificados,1015
-facebook,video,Programas de acceso y bienestar,78
-facebook,video,Sin contenido temático suficiente (social/emoji/mención),532
+facebook,video,Oferta académica e investigación,290
+facebook,video,Otros temas no identificados,1025
+facebook,video,Programas de acceso y bienestar,55
+facebook,video,Protesta y movilización,161
+facebook,video,Sin contenido temático suficiente (social/emoji/mención),506
 instagram,image,"Admisiones, inscripciones y matrículas",31
-instagram,image,Felicitaciones y reconocimiento institucional,96
+instagram,image,Felicitaciones y expresiones de aprecio,97
 instagram,image,"Información, trámites y certificados",15
-instagram,image,Oferta académica e investigación,39
+instagram,image,Oferta académica e investigación,37
 instagram,image,Otros grupos de baja frecuencia,8
-instagram,image,Otros temas no identificados,123
+instagram,image,Otros temas no identificados,124
 instagram,image,Sin contenido temático suficiente (social/emoji/mención),196
 instagram,sidecar,"Admisiones, inscripciones y matrículas",17
-instagram,sidecar,"Eventos, cultura y actividades institucionales",12
-instagram,sidecar,Felicitaciones y reconocimiento institucional,193
+instagram,sidecar,"Eventos, cultura y actividades institucionales",13
+instagram,sidecar,Felicitaciones y expresiones de aprecio,193
 instagram,sidecar,"Infraestructura, sedes y tecnología",16
-instagram,sidecar,Oferta académica e investigación,84
-instagram,sidecar,Otros grupos de baja frecuencia,12
-instagram,sidecar,Otros temas no identificados,276
+instagram,sidecar,Oferta académica e investigación,80
+instagram,sidecar,Otros grupos de baja frecuencia,13
+instagram,sidecar,Otros temas no identificados,278
 instagram,sidecar,Sin contenido temático suficiente (social/emoji/mención),361
 instagram,video,"Admisiones, inscripciones y matrículas",46
-instagram,video,"Eventos, cultura y actividades institucionales",38
-instagram,video,Felicitaciones y reconocimiento institucional,375
-instagram,video,"Información, trámites y certificados",79
-instagram,video,"Infraestructura, sedes y tecnología",36
-instagram,video,Oferta académica e investigación,262
-instagram,video,Otros temas no identificados,639
+instagram,video,"Eventos, cultura y actividades institucionales",40
+instagram,video,Felicitaciones y expresiones de aprecio,381
+instagram,video,"Información, trámites y certificados",78
+instagram,video,"Infraestructura, sedes y tecnología",37
+instagram,video,Oferta académica e investigación,236
+instagram,video,Otros grupos de baja frecuencia,8
+instagram,video,Otros temas no identificados,649
 instagram,video,Programas de acceso y bienestar,22
 instagram,video,Sin contenido temático suficiente (social/emoji/mención),1150
-youtube,video,Felicitaciones y reconocimiento institucional,57
-youtube,video,Oferta académica e investigación,34
-youtube,video,Otros grupos de baja frecuencia,25
-youtube,video,Otros temas no identificados,67
-youtube,video,Sin contenido temático suficiente (social/emoji/mención),47
+youtube,video,Felicitaciones y expresiones de aprecio,57
+youtube,video,Oferta académica e investigación,29
+youtube,video,Otros grupos de baja frecuencia,27
+youtube,video,Otros temas no identificados,69
+youtube,video,Sin contenido temático suficiente (social/emoji/mención),48

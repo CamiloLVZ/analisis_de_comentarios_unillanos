@@ -58,9 +58,9 @@ except FileNotFoundError:
 
 st.title("Voces en la conversación")
 st.caption("Estructura temática, polaridad de sentimiento y emociones en comentarios institucionales de Unillanos")
-st.info("Exploración descriptiva de comentarios institucionales capturados. La taxonomía temática prioriza áreas de gestión y desacopla interacciones sociales o emojis; sentimiento y emoción son estimaciones automáticas preentrenadas.")
+st.info("Exploración descriptiva de comentarios institucionales capturados. La taxonomía temática clasifica mediante reglas léxicas definidas manualmente y desacopla interacciones sociales o emojis; sentimiento y emoción son estimaciones automáticas preentrenadas.")
 if overview.get("evaluation_status") == "evaluated_with_two_human_annotators":
-    st.info("La evaluación de sentimiento y emoción se basa en una muestra manual de 120 comentarios y reporta métricas solo en casos concordantes no ambiguos; la taxonomía temática opera con reglas léxicas supervisadas por dominio y no constituye un modelo validado humanamente.")
+    st.info("La evaluación de sentimiento y emoción se basa en una muestra manual de 120 comentarios y reporta métricas solo en casos concordantes no ambiguos; la taxonomía temática opera con reglas léxicas definidas manualmente y no constituye un modelo validado humanamente.")
 elif overview.get("evaluation_status") != "evaluated_with_small_manual_sample":
     st.warning("La evaluación local contra etiquetas manuales aún no está completada. Interprete las clases del modelo como resultados exploratorios.")
 
@@ -106,6 +106,7 @@ with tab_topics:
 
 with tab_theme_sent:
     st.subheader("Sentimiento condicionado por tema institucional")
+    st.warning("Advertencia metodológica: La categoría de felicitaciones y expresiones de aprecio se define con vocabulario de elogio, que el modelo de sentimiento asocia intrínsecamente con polaridad positiva. Por tanto, parte significativa de esa correlación positiva es de construcción y no representa un hallazgo empírico independiente.")
     if not theme_sentiment.empty:
         ts_f = filtered(theme_sentiment, selected_platforms, selected_types)
         theme_list = sorted(ts_f["theme"].unique())
@@ -122,7 +123,7 @@ with tab_theme_sent:
                     st.bar_chart(sent_dist.set_index("Sentimiento")["Comentarios"])
             else:
                 st.info("Sin registros suficientes para esta categoría bajo los filtros activos.")
-        st.caption("Permite evaluar cómo varía la polaridad afectiva según el ámbito de interacción universitaria.")
+        st.caption("Permite explorar de forma descriptiva cómo varía la polaridad afectiva según la temática identificada en el comentario.")
     else:
         st.info("Datos de cruce temático no disponibles.")
 

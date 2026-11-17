@@ -4,7 +4,7 @@
 
 **Título:** Temas institucionales, polaridad de sentimiento y emociones en los comentarios de redes sociales de la Universidad de los Llanos.
 
-**Propósito:** Construir un análisis descriptivo y reproducible sobre los comentarios recolectados de las cuentas institucionales de Facebook, Instagram y YouTube, priorizando el descubrimiento de áreas temáticas clave para la gestión universitaria y presentando sus resultados agregados en una aplicación Streamlit.
+**Propósito:** Construir un análisis descriptivo y reproducible sobre los comentarios recolectados de las cuentas institucionales de Facebook, Instagram y YouTube, caracterizando áreas temáticas mediante reglas léxicas definidas manualmente y presentando sus resultados agregados en una aplicación Streamlit.
 
 **Unidad principal:** Comentario individual disponible en `data/final/comments_unified.csv`. Se conservan comentarios principales y respuestas. La interpretación de cada comentario se hace sin concatenar el texto de la publicación original para preservar la autenticidad de la opinión ciudadana y evitar contaminación de contexto.
 
@@ -12,7 +12,7 @@
 
 ### Objetivo general
 
-Estructurar un mapa temático comprensivo de los comentarios institucionales mediante reglas léxicas supervisadas por dominio, evaluando conjuntamente la polaridad de sentimiento y las emociones en español, y comunicando resultados agregados y limitaciones en Streamlit.
+Estructurar un mapa temático comprensivo de los comentarios institucionales mediante reglas léxicas definidas manualmente, evaluando conjuntamente la polaridad de sentimiento y las emociones en español, y comunicando resultados agregados y limitaciones en Streamlit.
 
 ### Objetivos específicos
 
@@ -55,8 +55,8 @@ Se identificaron 1.280 comentarios compuestos exclusivamente por emojis (`emoji_
 | 1. Comprensión del negocio | Delimitar el problema, priorizando áreas temáticas sobre polaridades abstractas. | `crisp_dm/01_business_understanding/README.md`. | Enfoque temático formalizado; exclusión de representatividad poblacional. |
 | 2. Comprensión de datos | Auditar esquema, cobertura de `post_text`, calidad y faltantes. | `crisp_dm/02_data_understanding/` scripts y reportes. | Perfil completo; trazabilidad de 16.471 a 15.885 comentarios. |
 | 3. Preparación | Retirar vacíos, derivar banderas (`emoji_only`, `word_count`) y texto normalizado. | `data/preparados/prepared_comments.csv`. | Limpieza reproducible sin alterar texto original; muestras estratificadas. |
-| 4. Modelado | Asignar temas con expresiones regulares delimitadas (`\b`) y clasificar sentimiento/emociones. | `theme_rules.json`, `analyze.py`, `scored_comments.csv`. | Residual temático reducido de 66 % a 34,4 %; 4.090 casos aislados en contenido mínimo; modelos afectivos intactos. |
-| 5. Evaluación | Comparar concordancia en 120 casos para sentimiento/emoción; auditar consistencia temática. | `evaluation_report.md`, `evaluate.py`. | Reporte de 74,4 % en sentimiento y 74,6 % en emoción sobre concordantes; límites éticos explícitos. |
+| 4. Modelado | Asignar temas con expresiones regulares delimitadas (`\b`) y clasificar sentimiento/emociones. | `theme_rules.json`, `analyze.py`, `scored_comments.csv`. | Residual temático reducido de 66 % a 34,6 %; 4.004 casos aislados en contenido mínimo; modelos afectivos intactos. |
+| 5. Evaluación | Comparar concordancia en 120 casos para sentimiento/emoción; verificar consistencia temática. | `evaluation_report.md`, `evaluate.py`. | Reporte de 74,4 % en sentimiento y 74,6 % en emoción sobre concordantes; límites éticos explícitos. |
 | 6. Despliegue | Agregación segura ($n \ge 10$), visualización por tema y verificación local. | `deploy_bundle/app.py`, datos en `data/app/`. | App verificada localmente; suma total exacta en 15.885; sin datos privados expuestos. |
 
 ## 7. Decisiones analíticas clave
@@ -65,4 +65,4 @@ Se identificaron 1.280 comentarios compuestos exclusivamente por emojis (`emoji_
 2. **Desarticulación del Residual:** Separación explícita de `"Sin contenido temático suficiente (social/emoji/mención)"` para evitar la sobreestimación del desconocimiento temático.
 3. **Delimitación Léxica:** Empleo estricto de límites de palabra (`\b`) para eliminar colisiones demostradas (p. ej., `\bcursos?\b`).
 4. **Independencia Contextual:** El texto del post (`post_text`) no se concatena al comentario del usuario para prevenir sesgos de atribución.
-5. **Transparencia en Evaluación:** Al no existir anotación humana independiente para la muestra temática de 198 comentarios, se declaran las reglas como heurísticas supervisadas y no se fabrican métricas artificiales con IA.
+5. **Transparencia en Evaluación:** Al no existir anotación humana independiente para la muestra temática de 198 comentarios, se declaran las reglas como reglas léxicas definidas manualmente y no se fabrican métricas artificiales con IA.

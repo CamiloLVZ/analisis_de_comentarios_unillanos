@@ -2,7 +2,7 @@
 
 ## Estado
 
-**Completada con revisión independiente de dos personas para sentimiento y emoción; taxonomía temática supervisada por reglas de dominio.** Cada anotador etiquetó sentimiento y emoción en una muestra de 120 comentarios (40 por plataforma). Las anotaciones originales se conservaron y se compararon antes de contrastar el modelo. La muestra de temas (`theme_review_sample.csv`, 198 filas) no cuenta con etiquetas humanas independientes, por lo que la taxonomía temática se evalúa mediante cobertura, ausencia de colisiones y consistencia de categorías.
+**Completada con revisión independiente de dos personas para sentimiento y emoción; taxonomía temática con reglas léxicas definidas manualmente.** Cada anotador etiquetó sentimiento y emoción en una muestra de 120 comentarios (40 por plataforma). Las anotaciones originales se conservaron y se compararon antes de contrastar el modelo. La muestra de temas (`theme_review_sample.csv`, 198 filas) no cuenta con etiquetas humanas independientes, por lo que la taxonomía temática se evalúa mediante cobertura, ausencia de colisiones y consistencia de categorías.
 
 ## Procedimiento
 
@@ -48,5 +48,5 @@ Al no existir anotación humana independiente en `theme_review_sample.csv`, se e
 
 - El acuerdo entre personas no demuestra que la etiqueta acordada sea una verdad absoluta; sirve para detectar ambigüedad y fijar una referencia reproducible.
 - La muestra es pequeña y estratificada por plataforma; no representa proporcionalmente el volumen total recolectado.
-- La taxonomía temática opera con reglas supervisadas por dominio y carece de validación humana en muestra independiente.
+- La taxonomía temática opera con reglas léxicas definidas manualmente y carece de validación humana en muestra independiente.
 - No se deben alterar las etiquetas originales para forzar coincidencias artificiales con los modelos.

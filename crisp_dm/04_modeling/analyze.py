@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import argparse
+import hashlib
 import re
 import unicodedata
 from collections import Counter
@@ -108,7 +109,9 @@ def main() -> None:
         raise ValueError("No hay comentarios para analizar")
     PHASE_OUT.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(parents=True, exist_ok=True)
-    theme_rules = json.loads(THEME_RULES.read_text(encoding="utf-8"))
+    theme_rules_bytes = THEME_RULES.read_bytes()
+    theme_rules_sha = hashlib.sha256(theme_rules_bytes).hexdigest()
+    theme_rules = json.loads(theme_rules_bytes.decode("utf-8"))
     compiled_cats = compile_theme_rules(theme_rules)
 
     if args.themes_only:
@@ -135,9 +138,10 @@ def main() -> None:
         if summary_file.exists():
             summary = json.loads(summary_file.read_text(encoding="utf-8"))
             summary["topic_method"] = theme_rules["method"]
+            summary["theme_rules_sha256"] = theme_rules_sha
             summary["theme_counts"] = {str(k): int(v) for k, v in scores["theme"].value_counts().items()}
             summary_file.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
-        print("Temas reasignados con las reglas actuales; los scores no se modificaron.")
+        print(f"Temas reasignados con las reglas actuales; SHA-256: {theme_rules_sha}")
         return
 
     if df["comment_id"].duplicated().any():
@@ -178,6 +182,7 @@ def main() -> None:
         "input_text": "Original comment text; pysentimiento applies its own social-media preprocessing.",
         "topic_method": theme_rules["method"],
         "theme_rules": THEME_RULES.relative_to(ROOT).as_posix(),
+        "theme_rules_sha256": theme_rules_sha,
         "model_outputs": SCORES.relative_to(ROOT).as_posix(),
         "topic_terms": TERMS.relative_to(ROOT).as_posix(),
         "theme_counts": {str(k): int(v) for k, v in scores["theme"].value_counts().items()},

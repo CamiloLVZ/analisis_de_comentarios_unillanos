@@ -2,7 +2,7 @@
 
 ## Resumen
 
-Este proyecto presenta un análisis descriptivo y reproducible de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube de la Universidad de los Llanos. Se siguió la metodología CRISP-DM para auditar y preparar los datos, estructurar una taxonomía temática supervisada por dominio, estimar sentimiento y emociones en español mediante `pysentimiento` (RoBERTuito) y construir una aplicación Streamlit basada en agregados seguros. Tras excluir 586 registros sin texto, se analizaron de forma exhaustiva 15.885 comentarios. La dimensión temática se priorizó como eje organizativo: mediante expresiones regulares compiladas con límites de palabra (`\b`), se eliminaron colisiones léxicas y se diferenció el contenido puramente social o de emojis (25,8 %, 4.090 casos) de las áreas sustantivas universitarias, reduciendo el residual no identificado del 66,0 % original a 34,4 % (5.469 casos). En la dimensión afectiva, el sentimiento global estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %, mientras que la emoción predominante fue `others` (66,8 %), seguida de alegría (24,7 %). Al evaluar una muestra de 120 comentarios anotada de forma independiente y ciega por dos evaluadores humanos, se obtuvo un acuerdo de 81,7 % en sentimiento y 75,8 % en emoción; en los casos concordantes no ambiguos, la exactitud fue de 74,4 % para sentimiento ($N=78$) y 74,6 % para emoción ($N=67$). La aplicación desplegada permite explorar no solo volúmenes temáticos, sino la polaridad de sentimiento condicionada a cada área institucional.
+Este proyecto presenta un análisis descriptivo y reproducible de 16.471 comentarios recopilados de publicaciones institucionales de Facebook, Instagram y YouTube de la Universidad de los Llanos. Se siguió la metodología CRISP-DM para auditar y preparar los datos, estructurar una taxonomía temática definida manualmente, estimar sentimiento y emociones en español mediante `pysentimiento` (RoBERTuito) y construir una aplicación Streamlit basada en agregados seguros. Tras excluir 586 registros sin texto, se analizaron de forma exhaustiva 15.885 comentarios. La dimensión temática se priorizó como eje organizativo: mediante expresiones regulares compiladas con límites de palabra (`\b`), se eliminaron colisiones léxicas y se diferenció el contenido puramente social o de emojis (25,2 %, 4.004 casos) de las áreas sustantivas universitarias, reduciendo el residual no identificado del 66,0 % original a 34,6 % (5.501 casos). En la dimensión afectiva, el sentimiento global estimado fue neutral en 58,2 %, positivo en 27,1 % y negativo en 14,6 %, mientras que la emoción predominante fue `others` (66,8 %), seguida de alegría (24,7 %). Al evaluar una muestra de 120 comentarios anotada de forma independiente y ciega por dos evaluadores humanos, se obtuvo un acuerdo de 81,7 % en sentimiento y 75,8 % en emoción; en los casos concordantes no ambiguos, la exactitud fue de 74,4 % para sentimiento ($N=78$) y 74,6 % para emoción ($N=67$). La aplicación desplegada permite explorar no solo volúmenes temáticos, sino la polaridad de sentimiento condicionada a cada área institucional.
 
 **Palabras clave:** CRISP-DM, analítica de texto, clasificación temática, análisis de sentimiento, redes sociales universitarias, Streamlit.
 
@@ -57,15 +57,16 @@ Adicionalmente, se estableció un pre-clasificador de contenido mínimo que asig
 **Distribución Temática ($N = 15.885$):**
 | Categoría Temática | Comentarios | Porcentaje |
 |---|---:|---:|
-| Otros temas no identificados (residual sustantivo) | 5.469 | 34,4 % |
-| Sin contenido temático suficiente (social/emoji/mención) | 4.090 | 25,8 % |
-| Felicitaciones y reconocimiento institucional | 2.377 | 15,0 % |
-| Oferta académica e investigación | 1.941 | 12,2 % |
-| Admisiones, inscripciones y matrículas | 691 | 4,4 % |
-| Programas de acceso y bienestar | 480 | 3,0 % |
-| Información, trámites y certificados | 462 | 2,9 % |
-| Infraestructura, sedes y tecnología | 229 | 1,4 % |
-| Eventos, cultura y actividades institucionales | 146 | 0,9 % |
+| Otros temas no identificados (residual sustantivo) | 5.501 | 34,6 % |
+| Sin contenido temático suficiente (social/emoji/mención) | 4.004 | 25,2 % |
+| Felicitaciones y expresiones de aprecio | 2.405 | 15,1 % |
+| Oferta académica e investigación | 1.426 | 9,0 % |
+| Admisiones, inscripciones y matrículas | 678 | 4,3 % |
+| Protesta y movilización | 603 | 3,8 % |
+| Información, trámites y certificados | 460 | 2,9 % |
+| Programas de acceso y bienestar | 421 | 2,7 % |
+| Infraestructura, sedes y tecnología | 234 | 1,5 % |
+| Eventos, cultura y actividades institucionales | 153 | 1,0 % |
 
 #### Sentimiento y Emoción
 Calculados con RoBERTuito (`pysentimiento`):
@@ -85,7 +86,7 @@ Se evaluó una muestra balanceada de 120 comentarios (40 por plataforma) anotada
 La aplicación en `crisp_dm/06_deployment/deploy_bundle/app.py` se actualizó para ofrecer:
 1. Vista global y distribución por plataforma.
 2. Desglose temático refinado con desarticulación del residual.
-3. Módulo interactivo de **Sentimiento por tema institucional**, permitiendo auditar la polaridad interna de Admisiones, Bienestar, Infraestructura, etc.
+3. Módulo interactivo de **Sentimiento por tema institucional**, permitiendo explorar de forma descriptiva la polaridad interna de Admisiones, Bienestar, Infraestructura, etc.
 4. Diagnósticos de confianza y consideraciones metodológicas completas.
 5. Agregación segura con umbral de supresión ($n < 10$).
 
@@ -122,7 +123,7 @@ streamlit run crisp_dm/06_deployment/deploy_bundle/app.py
 
 ## 7. Conclusiones
 
-Se consolidó un sistema analítico CRISP-DM robusto, reproducible y transparente sobre los comentarios institucionales de Unillanos. Al priorizar la dimensión temática y refactorizar las reglas léxicas, se logró desarticular el residual ambiguo (reduciéndolo a la mitad) y aislar las interacciones puramente sociales de las áreas temáticas estratégicas. El cruce condicionado de temas y sentimientos entrega por primera vez una herramienta de analítica descriptiva accionable para orientar la gestión y comunicación institucional de la universidad.
+Se consolidó un sistema analítico CRISP-DM robusto, reproducible y transparente sobre los comentarios institucionales de Unillanos. Al priorizar la dimensión temática y estructurar las reglas léxicas definidas manualmente, se logró desarticular el residual ambiguo (reduciéndolo a la mitad) y aislar las interacciones puramente sociales de las áreas temáticas estratégicas. El cruce temático-afectivo entrega una herramienta de exploración descriptiva sobre la conversación institucional de la universidad.
 
 ## Referencias técnicas
 

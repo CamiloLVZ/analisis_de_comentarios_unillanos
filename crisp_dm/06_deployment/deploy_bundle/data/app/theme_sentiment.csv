@@ -1,85 +1,91 @@
 ﻿platform,post_type,theme,sentiment_label,n
-facebook,photo,"Admisiones, inscripciones y matrículas",NEG,144
-facebook,photo,"Admisiones, inscripciones y matrículas",NEU,300
+facebook,photo,"Admisiones, inscripciones y matrículas",NEG,139
+facebook,photo,"Admisiones, inscripciones y matrículas",NEU,297
 facebook,photo,"Admisiones, inscripciones y matrículas",POS,12
-facebook,photo,"Eventos, cultura y actividades institucionales",NEU,23
+facebook,photo,"Eventos, cultura y actividades institucionales",NEU,25
 facebook,photo,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,7
-facebook,photo,"Eventos, cultura y actividades institucionales",POS,42
-facebook,photo,Felicitaciones y reconocimiento institucional,NEG,31
-facebook,photo,Felicitaciones y reconocimiento institucional,NEU,211
-facebook,photo,Felicitaciones y reconocimiento institucional,POS,893
-facebook,photo,"Información, trámites y certificados",NEG,64
+facebook,photo,"Eventos, cultura y actividades institucionales",POS,43
+facebook,photo,Felicitaciones y expresiones de aprecio,NEG,31
+facebook,photo,Felicitaciones y expresiones de aprecio,NEU,211
+facebook,photo,Felicitaciones y expresiones de aprecio,POS,906
+facebook,photo,"Información, trámites y certificados",NEG,63
 facebook,photo,"Información, trámites y certificados",NEU,191
 facebook,photo,"Información, trámites y certificados",POS,18
-facebook,photo,"Infraestructura, sedes y tecnología",NEG,41
+facebook,photo,"Infraestructura, sedes y tecnología",NEG,44
 facebook,photo,"Infraestructura, sedes y tecnología",NEU,69
 facebook,photo,"Infraestructura, sedes y tecnología",POS,19
-facebook,photo,Oferta académica e investigación,NEG,302
-facebook,photo,Oferta académica e investigación,NEU,540
-facebook,photo,Oferta académica e investigación,POS,236
-facebook,photo,Otros temas no identificados,NEG,748
-facebook,photo,Otros temas no identificados,NEU,2057
-facebook,photo,Otros temas no identificados,POS,406
-facebook,photo,Programas de acceso y bienestar,NEG,47
-facebook,photo,Programas de acceso y bienestar,NEU,305
+facebook,photo,Oferta académica e investigación,NEG,225
+facebook,photo,Oferta académica e investigación,NEU,286
+facebook,photo,Oferta académica e investigación,POS,216
+facebook,photo,Otros temas no identificados,NEG,746
+facebook,photo,Otros temas no identificados,NEU,2060
+facebook,photo,Otros temas no identificados,POS,411
+facebook,photo,Programas de acceso y bienestar,NEG,38
+facebook,photo,Programas de acceso y bienestar,NEU,279
 facebook,photo,Programas de acceso y bienestar,POS,18
-facebook,photo,Sin contenido temático suficiente (social/emoji/mención),NEG,65
-facebook,photo,Sin contenido temático suficiente (social/emoji/mención),NEU,1604
+facebook,photo,Protesta y movilización,NEG,94
+facebook,photo,Protesta y movilización,NEU,336
+facebook,photo,Protesta y movilización,Otros grupos de baja frecuencia,1
+facebook,photo,Sin contenido temático suficiente (social/emoji/mención),NEG,62
+facebook,photo,Sin contenido temático suficiente (social/emoji/mención),NEU,1546
 facebook,photo,Sin contenido temático suficiente (social/emoji/mención),POS,71
 facebook,text,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,15
 facebook,text,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,1
-facebook,text,Felicitaciones y reconocimiento institucional,Otros grupos de baja frecuencia,3
-facebook,text,Felicitaciones y reconocimiento institucional,POS,26
+facebook,text,Felicitaciones y expresiones de aprecio,Otros grupos de baja frecuencia,3
+facebook,text,Felicitaciones y expresiones de aprecio,POS,27
 facebook,text,"Información, trámites y certificados",Otros grupos de baja frecuencia,4
 facebook,text,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,2
-facebook,text,Oferta académica e investigación,NEU,11
-facebook,text,Oferta académica e investigación,Otros grupos de baja frecuencia,9
-facebook,text,Oferta académica e investigación,POS,10
+facebook,text,Oferta académica e investigación,NEU,10
+facebook,text,Oferta académica e investigación,Otros grupos de baja frecuencia,17
 facebook,text,Otros temas no identificados,NEG,26
 facebook,text,Otros temas no identificados,NEU,83
-facebook,text,Otros temas no identificados,POS,29
+facebook,text,Otros temas no identificados,POS,30
 facebook,text,Programas de acceso y bienestar,Otros grupos de baja frecuencia,1
+facebook,text,Protesta y movilización,Otros grupos de baja frecuencia,1
 facebook,text,Sin contenido temático suficiente (social/emoji/mención),NEU,60
 facebook,text,Sin contenido temático suficiente (social/emoji/mención),Otros grupos de baja frecuencia,4
-facebook,video,"Admisiones, inscripciones y matrículas",NEG,39
-facebook,video,"Admisiones, inscripciones y matrículas",NEU,73
+facebook,video,"Admisiones, inscripciones y matrículas",NEG,36
+facebook,video,"Admisiones, inscripciones y matrículas",NEU,71
 facebook,video,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,7
 facebook,video,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,6
 facebook,video,"Eventos, cultura y actividades institucionales",POS,11
-facebook,video,Felicitaciones y reconocimiento institucional,NEU,61
-facebook,video,Felicitaciones y reconocimiento institucional,Otros grupos de baja frecuencia,8
-facebook,video,Felicitaciones y reconocimiento institucional,POS,423
+facebook,video,Felicitaciones y expresiones de aprecio,NEU,61
+facebook,video,Felicitaciones y expresiones de aprecio,Otros grupos de baja frecuencia,8
+facebook,video,Felicitaciones y expresiones de aprecio,POS,430
 facebook,video,"Información, trámites y certificados",NEG,25
 facebook,video,"Información, trámites y certificados",NEU,44
 facebook,video,"Información, trámites y certificados",Otros grupos de baja frecuencia,7
 facebook,video,"Infraestructura, sedes y tecnología",NEU,15
 facebook,video,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,9
 facebook,video,"Infraestructura, sedes y tecnología",POS,14
-facebook,video,Oferta académica e investigación,NEG,103
-facebook,video,Oferta académica e investigación,NEU,173
-facebook,video,Oferta académica e investigación,POS,138
-facebook,video,Otros temas no identificados,NEG,202
-facebook,video,Otros temas no identificados,NEU,581
-facebook,video,Otros temas no identificados,POS,232
-facebook,video,Programas de acceso y bienestar,NEG,33
-facebook,video,Programas de acceso y bienestar,NEU,36
+facebook,video,Oferta académica e investigación,NEG,75
+facebook,video,Oferta académica e investigación,NEU,92
+facebook,video,Oferta académica e investigación,POS,123
+facebook,video,Otros temas no identificados,NEG,204
+facebook,video,Otros temas no identificados,NEU,582
+facebook,video,Otros temas no identificados,POS,239
+facebook,video,Programas de acceso y bienestar,NEG,19
+facebook,video,Programas de acceso y bienestar,NEU,27
 facebook,video,Programas de acceso y bienestar,Otros grupos de baja frecuencia,9
-facebook,video,Sin contenido temático suficiente (social/emoji/mención),NEU,489
+facebook,video,Protesta y movilización,NEG,43
+facebook,video,Protesta y movilización,NEU,117
+facebook,video,Protesta y movilización,Otros grupos de baja frecuencia,1
+facebook,video,Sin contenido temático suficiente (social/emoji/mención),NEU,463
 facebook,video,Sin contenido temático suficiente (social/emoji/mención),Otros grupos de baja frecuencia,9
 facebook,video,Sin contenido temático suficiente (social/emoji/mención),POS,34
 instagram,image,"Admisiones, inscripciones y matrículas",NEU,28
 instagram,image,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,3
 instagram,image,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,2
-instagram,image,Felicitaciones y reconocimiento institucional,NEU,21
-instagram,image,Felicitaciones y reconocimiento institucional,POS,75
+instagram,image,Felicitaciones y expresiones de aprecio,NEU,21
+instagram,image,Felicitaciones y expresiones de aprecio,POS,76
 instagram,image,"Información, trámites y certificados",NEU,14
 instagram,image,"Información, trámites y certificados",Otros grupos de baja frecuencia,1
 instagram,image,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,4
 instagram,image,Oferta académica e investigación,NEG,12
-instagram,image,Oferta académica e investigación,NEU,12
-instagram,image,Oferta académica e investigación,POS,15
+instagram,image,Oferta académica e investigación,NEU,11
+instagram,image,Oferta académica e investigación,POS,14
 instagram,image,Otros temas no identificados,NEG,21
-instagram,image,Otros temas no identificados,NEU,81
+instagram,image,Otros temas no identificados,NEU,82
 instagram,image,Otros temas no identificados,POS,21
 instagram,image,Programas de acceso y bienestar,Otros grupos de baja frecuencia,2
 instagram,image,Sin contenido temático suficiente (social/emoji/mención),NEU,169
@@ -87,57 +93,61 @@ instagram,image,Sin contenido temático suficiente (social/emoji/mención),Otros
 instagram,image,Sin contenido temático suficiente (social/emoji/mención),POS,25
 instagram,sidecar,"Admisiones, inscripciones y matrículas",NEU,14
 instagram,sidecar,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,3
-instagram,sidecar,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,12
-instagram,sidecar,Felicitaciones y reconocimiento institucional,NEU,18
-instagram,sidecar,Felicitaciones y reconocimiento institucional,Otros grupos de baja frecuencia,1
-instagram,sidecar,Felicitaciones y reconocimiento institucional,POS,174
+instagram,sidecar,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,3
+instagram,sidecar,"Eventos, cultura y actividades institucionales",POS,10
+instagram,sidecar,Felicitaciones y expresiones de aprecio,NEU,18
+instagram,sidecar,Felicitaciones y expresiones de aprecio,Otros grupos de baja frecuencia,1
+instagram,sidecar,Felicitaciones y expresiones de aprecio,POS,174
 instagram,sidecar,"Información, trámites y certificados",Otros grupos de baja frecuencia,7
 instagram,sidecar,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,16
 instagram,sidecar,Oferta académica e investigación,NEG,17
-instagram,sidecar,Oferta académica e investigación,NEU,24
-instagram,sidecar,Oferta académica e investigación,POS,43
-instagram,sidecar,Otros temas no identificados,NEG,55
-instagram,sidecar,Otros temas no identificados,NEU,145
-instagram,sidecar,Otros temas no identificados,POS,76
+instagram,sidecar,Oferta académica e investigación,NEU,23
+instagram,sidecar,Oferta académica e investigación,POS,40
+instagram,sidecar,Otros temas no identificados,NEG,54
+instagram,sidecar,Otros temas no identificados,NEU,146
+instagram,sidecar,Otros temas no identificados,POS,78
 instagram,sidecar,Programas de acceso y bienestar,Otros grupos de baja frecuencia,5
+instagram,sidecar,Protesta y movilización,Otros grupos de baja frecuencia,1
 instagram,sidecar,Sin contenido temático suficiente (social/emoji/mención),NEG,10
 instagram,sidecar,Sin contenido temático suficiente (social/emoji/mención),NEU,248
 instagram,sidecar,Sin contenido temático suficiente (social/emoji/mención),POS,103
 instagram,video,"Admisiones, inscripciones y matrículas",NEU,36
 instagram,video,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,10
-instagram,video,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,9
-instagram,video,"Eventos, cultura y actividades institucionales",POS,29
-instagram,video,Felicitaciones y reconocimiento institucional,NEU,53
-instagram,video,Felicitaciones y reconocimiento institucional,Otros grupos de baja frecuencia,6
-instagram,video,Felicitaciones y reconocimiento institucional,POS,316
-instagram,video,"Información, trámites y certificados",NEG,14
+instagram,video,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,10
+instagram,video,"Eventos, cultura y actividades institucionales",POS,30
+instagram,video,Felicitaciones y expresiones de aprecio,NEU,53
+instagram,video,Felicitaciones y expresiones de aprecio,Otros grupos de baja frecuencia,6
+instagram,video,Felicitaciones y expresiones de aprecio,POS,322
+instagram,video,"Información, trámites y certificados",NEG,13
 instagram,video,"Información, trámites y certificados",NEU,55
 instagram,video,"Información, trámites y certificados",POS,10
-instagram,video,"Infraestructura, sedes y tecnología",NEG,10
+instagram,video,"Infraestructura, sedes y tecnología",NEG,11
 instagram,video,"Infraestructura, sedes y tecnología",NEU,21
 instagram,video,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,5
-instagram,video,Oferta académica e investigación,NEG,47
-instagram,video,Oferta académica e investigación,NEU,63
-instagram,video,Oferta académica e investigación,POS,152
+instagram,video,Oferta académica e investigación,NEG,41
+instagram,video,Oferta académica e investigación,NEU,58
+instagram,video,Oferta académica e investigación,POS,137
 instagram,video,Otros temas no identificados,NEG,123
-instagram,video,Otros temas no identificados,NEU,304
-instagram,video,Otros temas no identificados,POS,212
+instagram,video,Otros temas no identificados,NEU,306
+instagram,video,Otros temas no identificados,POS,220
 instagram,video,Programas de acceso y bienestar,Otros grupos de baja frecuencia,22
+instagram,video,Protesta y movilización,Otros grupos de baja frecuencia,8
 instagram,video,Sin contenido temático suficiente (social/emoji/mención),NEG,27
 instagram,video,Sin contenido temático suficiente (social/emoji/mención),NEU,859
 instagram,video,Sin contenido temático suficiente (social/emoji/mención),POS,264
 youtube,video,"Admisiones, inscripciones y matrículas",Otros grupos de baja frecuencia,7
-youtube,video,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,4
-youtube,video,Felicitaciones y reconocimiento institucional,Otros grupos de baja frecuencia,9
-youtube,video,Felicitaciones y reconocimiento institucional,POS,48
+youtube,video,"Eventos, cultura y actividades institucionales",Otros grupos de baja frecuencia,5
+youtube,video,Felicitaciones y expresiones de aprecio,Otros grupos de baja frecuencia,9
+youtube,video,Felicitaciones y expresiones de aprecio,POS,48
 youtube,video,"Información, trámites y certificados",Otros grupos de baja frecuencia,8
-youtube,video,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,4
-youtube,video,Oferta académica e investigación,Otros grupos de baja frecuencia,12
-youtube,video,Oferta académica e investigación,POS,22
-youtube,video,Otros temas no identificados,NEG,15
+youtube,video,"Infraestructura, sedes y tecnología",Otros grupos de baja frecuencia,5
+youtube,video,Oferta académica e investigación,Otros grupos de baja frecuencia,9
+youtube,video,Oferta académica e investigación,POS,20
+youtube,video,Otros temas no identificados,NEG,16
 youtube,video,Otros temas no identificados,NEU,41
-youtube,video,Otros temas no identificados,POS,11
-youtube,video,Programas de acceso y bienestar,Otros grupos de baja frecuencia,2
-youtube,video,Sin contenido temático suficiente (social/emoji/mención),NEU,29
+youtube,video,Otros temas no identificados,POS,12
+youtube,video,Programas de acceso y bienestar,Otros grupos de baja frecuencia,1
+youtube,video,Protesta y movilización,Otros grupos de baja frecuencia,1
+youtube,video,Sin contenido temático suficiente (social/emoji/mención),NEU,30
 youtube,video,Sin contenido temático suficiente (social/emoji/mención),Otros grupos de baja frecuencia,4
 youtube,video,Sin contenido temático suficiente (social/emoji/mención),POS,14
