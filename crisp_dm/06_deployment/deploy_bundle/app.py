@@ -159,7 +159,7 @@ metric3.metric("Tipos de publicación", f"{len(selected_types)} / {len(overview[
 metric4.metric("Temas observados", themes_f["theme"].nunique() if not themes_f.empty else 0)
 
 tab_summary, tab_topics, tab_theme_sent, tab_sentiment, tab_emotions, tab_advanced, tab_method = st.tabs([
-    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Visualizaciones avanzadas", "Método y límites"
+    "Resumen", "Temas", "Sentimiento por tema", "Sentimiento global", "Emociones", "Visualizaciones avanzadas", "Observaciones"
 ])
 
 # -----------------------------------------------------------------------------
@@ -495,44 +495,47 @@ with tab_advanced:
 
         platforms_list = sorted(plat_theme["platform"].unique())
         themes_list = sorted(list(set(plat_theme["theme"].unique()) | set(theme_sent["theme"].unique())))
-        sentiments_list = ["POS", "NEU", "NEG"]
-        all_nodes = platforms_list + themes_list + sentiments_list
-        node_map = {name: i for i, name in enumerate(all_nodes)}
+        sentiments_list = sorted(list(theme_sent["sentiment_label"].unique()))
 
-        sankey_sources = [node_map[r["platform"]] for _, r in plat_theme.iterrows()]
-        sankey_targets = [node_map[r["theme"]] for _, r in plat_theme.iterrows()]
+        node_keys = [f"p_{p}" for p in platforms_list] + [f"t_{t}" for t in themes_list] + [f"s_{s}" for s in sentiments_list]
+        node_labels = [p.capitalize() for p in platforms_list] + themes_list + [s if s != "Otros grupos de baja frecuencia" else "Baja frecuencia (<10)" for s in sentiments_list]
+        node_map = {k: i for i, k in enumerate(node_keys)}
+
+        sankey_sources = [node_map[f"p_{r['platform']}"] for _, r in plat_theme.iterrows()]
+        sankey_targets = [node_map[f"t_{r['theme']}"] for _, r in plat_theme.iterrows()]
         sankey_values = plat_theme["n"].tolist()
 
-        sankey_sources += [node_map[r["theme"]] for _, r in theme_sent.iterrows()]
-        sankey_targets += [node_map[r["sentiment_label"]] for _, r in theme_sent.iterrows()]
+        sankey_sources += [node_map[f"t_{r['theme']}"] for _, r in theme_sent.iterrows()]
+        sankey_targets += [node_map[f"s_{r['sentiment_label']}"] for _, r in theme_sent.iterrows()]
         sankey_values += theme_sent["n"].tolist()
 
-        # Colores para los nodos de Sankey
         node_colors = []
-        for n in all_nodes:
-            if n in PLATFORM_COLORS:
-                node_colors.append(PLATFORM_COLORS[n])
-            elif n in SENTIMENT_COLORS:
-                node_colors.append(SENTIMENT_COLORS[n])
-            else:
-                node_colors.append("#3498db")
+        for p in platforms_list:
+            node_colors.append(PLATFORM_COLORS.get(p, "#1877F2"))
+        for t in themes_list:
+            node_colors.append("#3498db")
+        for s in sentiments_list:
+            node_colors.append(SENTIMENT_COLORS.get(s, "#bdc3c7"))
 
-        fig_sankey = go.Figure(go.Sankey(
-            node=dict(
-                label=[n.capitalize() if n in platforms_list else n for n in all_nodes],
-                color=node_colors,
-                pad=15,
-                thickness=20
-            ),
-            link=dict(
-                source=sankey_sources,
-                target=sankey_targets,
-                value=sankey_values,
-                color="rgba(180, 180, 180, 0.3)"
-            )
-        ))
-        fig_sankey.update_layout(height=560, margin=dict(l=20, r=20, t=20, b=20))
-        st.plotly_chart(fig_sankey, use_container_width=True)
+        if not plat_theme.empty and not theme_sent.empty:
+            fig_sankey = go.Figure(go.Sankey(
+                node=dict(
+                    label=node_labels,
+                    color=node_colors,
+                    pad=15,
+                    thickness=20
+                ),
+                link=dict(
+                    source=sankey_sources,
+                    target=sankey_targets,
+                    value=sankey_values,
+                    color="rgba(180, 180, 180, 0.3)"
+                )
+            ))
+            fig_sankey.update_layout(height=560, margin=dict(l=20, r=20, t=20, b=20))
+            st.plotly_chart(fig_sankey, use_container_width=True)
+        else:
+            st.info("Sin registros suficientes para construir el diagrama de flujo bajo los filtros activos.")
 
         st.divider()
 
@@ -545,53 +548,59 @@ with tab_advanced:
             st.markdown("### 3. Jerarquía temática y afectiva (Sunburst)")
             st.caption("Estructura jerárquica multinivel interactiva: haz clic en cualquier segmento para hacer zoom (*drill-down*) desde la macro-categoría hacia el tema y su polaridad.")
 
-            sun_df = adv_ts.copy()
-            sun_df["macro"] = sun_df["theme"].apply(
-                lambda t: "Sin contenido" if "Sin contenido" in t else ("Residual" if "Otros temas" in t else "Temas específicos")
-            )
-            fig_sunburst = px.sunburst(
-                sun_df,
-                path=["macro", "theme", "sentiment_label"],
-                values="n",
-                color="sentiment_label",
-                color_discrete_map=SENTIMENT_COLORS
-            )
-            fig_sunburst.update_traces(textinfo="label+percent parent")
-            fig_sunburst.update_layout(height=480, margin=dict(l=10, r=10, t=20, b=20))
-            st.plotly_chart(fig_sunburst, use_container_width=True)
+            if not adv_ts.empty:
+                sun_df = adv_ts.copy()
+                sun_df["macro"] = sun_df["theme"].apply(
+                    lambda t: "Sin contenido" if "Sin contenido" in t else ("Residual" if "Otros temas" in t else "Temas específicos")
+                )
+                fig_sunburst = px.sunburst(
+                    sun_df,
+                    path=["macro", "theme", "sentiment_label"],
+                    values="n",
+                    color="sentiment_label",
+                    color_discrete_map=SENTIMENT_COLORS
+                )
+                fig_sunburst.update_traces(textinfo="label+percent parent")
+                fig_sunburst.update_layout(height=480, margin=dict(l=10, r=10, t=20, b=20))
+                st.plotly_chart(fig_sunburst, use_container_width=True)
+            else:
+                st.info("Sin registros suficientes para el gráfico jerárquico.")
 
         with col_adv_2:
             st.markdown("### 4. Perfil emocional por plataforma (Radar)")
             st.caption("Compara las siluetas porcentuales de emociones entre Facebook, Instagram y YouTube, reflejando la 'huella afectiva' relativa de cada comunidad digital.")
 
             emotions_adv = filtered(emotions, selected_platforms, selected_types).copy()
-            emotions_adv["emo_es"] = emotions_adv["emotion_label"].map(EMOTION_ES_MAP).fillna(emotions_adv["emotion_label"])
+            if not emotions_adv.empty:
+                emotions_adv["emo_es"] = emotions_adv["emotion_label"].map(EMOTION_ES_MAP).fillna(emotions_adv["emotion_label"])
 
-            emo_plat = emotions_adv.groupby(["platform", "emo_es"])["n"].sum().unstack(fill_value=0)
-            emo_plat_pct = (emo_plat.div(emo_plat.sum(axis=1), axis=0) * 100).round(1)
-            radar_categories = list(emo_plat_pct.columns)
+                emo_plat = emotions_adv.groupby(["platform", "emo_es"])["n"].sum().unstack(fill_value=0)
+                emo_plat_pct = (emo_plat.div(emo_plat.sum(axis=1), axis=0) * 100).round(1)
+                radar_categories = list(emo_plat_pct.columns)
 
-            fig_radar = go.Figure()
-            for p in emo_plat_pct.index:
-                vals = emo_plat_pct.loc[p].tolist()
-                fig_radar.add_trace(go.Scatterpolar(
-                    r=vals + [vals[0]],
-                    theta=radar_categories + [radar_categories[0]],
-                    name=p.capitalize(),
-                    fill="toself",
-                    line=dict(color=PLATFORM_COLORS.get(p, "#333333"), width=2),
-                    opacity=0.5
-                ))
+                fig_radar = go.Figure()
+                for p in emo_plat_pct.index:
+                    vals = emo_plat_pct.loc[p].tolist()
+                    fig_radar.add_trace(go.Scatterpolar(
+                        r=vals + [vals[0]],
+                        theta=radar_categories + [radar_categories[0]],
+                        name=p.capitalize(),
+                        fill="toself",
+                        line=dict(color=PLATFORM_COLORS.get(p, "#333333"), width=2),
+                        opacity=0.5
+                    ))
 
-            max_radial = max(emo_plat_pct.max().max() + 10, 40) if not emo_plat_pct.empty else 80
-            fig_radar.update_layout(
-                polar=dict(radialaxis=dict(visible=True, range=[0, max_radial], ticksuffix="%")),
-                showlegend=True,
-                legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
-                height=480,
-                margin=dict(l=20, r=20, t=30, b=30)
-            )
-            st.plotly_chart(fig_radar, use_container_width=True)
+                max_radial = max(float(emo_plat_pct.max().max()) + 10, 40) if not emo_plat_pct.empty else 80
+                fig_radar.update_layout(
+                    polar=dict(radialaxis=dict(visible=True, range=[0, max_radial], ticksuffix="%")),
+                    showlegend=True,
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
+                    height=480,
+                    margin=dict(l=20, r=20, t=30, b=30)
+                )
+                st.plotly_chart(fig_radar, use_container_width=True)
+            else:
+                st.info("Sin registros suficientes para el perfil radial.")
     else:
         st.info("Visualizaciones avanzadas no disponibles para la configuración seleccionada.")
 
