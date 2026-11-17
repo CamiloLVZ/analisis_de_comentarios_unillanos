@@ -21,55 +21,53 @@
     "metrics_by_category": {
       "Protesta y movilización": {
         "support_unweighted": 12,
-        "precision_unweighted": 1.0,
-        "precision_ci95": [
-          0.5101,
-          1.0
-        ],
+        "precision_unweighted": null,
+        "precision_ci95": "n<10: no interpretable",
         "recall_unweighted": 0.3333,
         "recall_ci95": [
           0.1381,
           0.6094
         ],
-        "precision_weighted": 1.0,
+        "precision_weighted": null,
         "recall_weighted": 0.4685,
-        "status": "interpretable"
+        "status": "n<10: no interpretable",
+        "n_predicted": 4
       },
       "Programas de acceso y bienestar": {
         "support_unweighted": 4,
-        "precision_unweighted": 0.0,
+        "precision_unweighted": null,
         "precision_ci95": "n<10: no interpretable",
-        "recall_unweighted": 0.0,
+        "recall_unweighted": null,
         "recall_ci95": "n<10: no interpretable",
-        "precision_weighted": 0.0,
-        "recall_weighted": 0.0,
-        "status": "n<10: no interpretable"
+        "precision_weighted": null,
+        "recall_weighted": null,
+        "status": "n<10: no interpretable",
+        "n_predicted": 1
       },
       "Admisiones, inscripciones y matrículas": {
         "support_unweighted": 6,
-        "precision_unweighted": 0.3333,
+        "precision_unweighted": null,
         "precision_ci95": "n<10: no interpretable",
-        "recall_unweighted": 0.3333,
+        "recall_unweighted": null,
         "recall_ci95": "n<10: no interpretable",
-        "precision_weighted": 0.491,
-        "recall_weighted": 0.4951,
-        "status": "n<10: no interpretable"
+        "precision_weighted": null,
+        "recall_weighted": null,
+        "status": "n<10: no interpretable",
+        "n_predicted": 6
       },
       "Información, trámites y certificados": {
         "support_unweighted": 19,
-        "precision_unweighted": 0.8,
-        "precision_ci95": [
-          0.3755,
-          0.9638
-        ],
+        "precision_unweighted": null,
+        "precision_ci95": "n<10: no interpretable",
         "recall_unweighted": 0.2105,
         "recall_ci95": [
           0.0851,
           0.4333
         ],
-        "precision_weighted": 0.9927,
+        "precision_weighted": null,
         "recall_weighted": 0.3277,
-        "status": "interpretable"
+        "status": "n<10: no interpretable",
+        "n_predicted": 5
       },
       "Oferta académica e investigación": {
         "support_unweighted": 13,
@@ -85,27 +83,30 @@
         ],
         "precision_weighted": 0.6901,
         "recall_weighted": 0.8679,
-        "status": "interpretable"
+        "status": "interpretable",
+        "n_predicted": 21
       },
       "Infraestructura, sedes y tecnología": {
         "support_unweighted": 6,
-        "precision_unweighted": 0.25,
+        "precision_unweighted": null,
         "precision_ci95": "n<10: no interpretable",
-        "recall_unweighted": 0.1667,
+        "recall_unweighted": null,
         "recall_ci95": "n<10: no interpretable",
-        "precision_weighted": 0.0098,
-        "recall_weighted": 0.0436,
-        "status": "n<10: no interpretable"
+        "precision_weighted": null,
+        "recall_weighted": null,
+        "status": "n<10: no interpretable",
+        "n_predicted": 4
       },
       "Eventos, cultura y actividades institucionales": {
         "support_unweighted": 9,
-        "precision_unweighted": 0.6667,
+        "precision_unweighted": null,
         "precision_ci95": "n<10: no interpretable",
-        "recall_unweighted": 0.2222,
+        "recall_unweighted": null,
         "recall_ci95": "n<10: no interpretable",
-        "precision_weighted": 0.2742,
-        "recall_weighted": 0.3166,
-        "status": "n<10: no interpretable"
+        "precision_weighted": null,
+        "recall_weighted": null,
+        "status": "n<10: no interpretable",
+        "n_predicted": 3
       },
       "Felicitaciones y expresiones de aprecio": {
         "support_unweighted": 50,
@@ -121,7 +122,8 @@
         ],
         "precision_weighted": 0.9313,
         "recall_weighted": 0.7782,
-        "status": "interpretable"
+        "status": "interpretable",
+        "n_predicted": 43
       },
       "Otros temas no identificados": {
         "support_unweighted": 14,
@@ -137,7 +139,8 @@
         ],
         "precision_weighted": 0.1875,
         "recall_weighted": 0.939,
-        "status": "interpretable"
+        "status": "interpretable",
+        "n_predicted": 59
       },
       "Sin contenido temático suficiente (social/emoji/mención)": {
         "support_unweighted": 61,
@@ -153,7 +156,8 @@
         ],
         "precision_weighted": 0.7639,
         "recall_weighted": 0.4445,
-        "status": "interpretable"
+        "status": "interpretable",
+        "n_predicted": 48
       }
     },
     "confusion_matrix_unweighted": {

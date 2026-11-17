@@ -2,14 +2,16 @@
 
 ## Estado
 
-**Completada con revisión independiente de dos personas para sentimiento y emoción; taxonomía temática con reglas léxicas definidas manualmente.** Cada anotador etiquetó sentimiento y emoción en una muestra de 120 comentarios (40 por plataforma). Las anotaciones originales se conservaron y se compararon antes de contrastar el modelo. La muestra de temas (`theme_review_sample.csv`, 198 filas) no cuenta con etiquetas humanas independientes, por lo que la taxonomía temática se evalúa mediante cobertura, ausencia de colisiones y consistencia de categorías.
+**Completada con validación humana independiente de dos personas para sentimiento, emoción y taxonomía temática (reglas léxicas definidas manualmente).** Ambos autores etiquetaron sentimiento y emoción en una muestra de 120 comentarios (40 por plataforma), y la taxonomía temática en una muestra estratificada de 198 comentarios (66 por plataforma). Las anotaciones originales se conservaron y los desacuerdos fueron resueltos mediante consenso humano independiente antes de contrastar los modelos y las reglas.
 
 ## Procedimiento
 
-1. La investigadora y un segundo anotador etiquetaron sentimiento y emoción de forma independiente.
-2. Se compararon las etiquetas y se calculó el acuerdo para las 120 filas de cada tarea.
-3. Para las métricas del modelo se usaron solo los casos donde ambos anotadores coincidieron y la etiqueta no era ambigua.
-4. Se ejecutó `python crisp_dm/05_evaluation/evaluate.py`.
+1. Los dos autores del proyecto (Juan Camilo Londoño Velasquez y Juan David Burgos Atuesta) etiquetaron de forma independiente y a ciegas:
+   - Sentimiento y emoción en la muestra estratificada de 120 comentarios (`evaluation_sample.csv`).
+   - Categorías temáticas en la muestra estratificada de 198 comentarios (`theme_review_sample.csv`).
+2. Se calcularon métricas de acuerdo inter-anotador observado ($P_o$) y coeficiente $\kappa$ de Cohen tanto globales como excluyendo casos ambiguos.
+3. Para sentimiento y emoción, las métricas del modelo se calcularon sobre los casos concordantes no ambiguos (`evaluate.py`).
+4. Para la taxonomía temática, los desacuerdos fueron acordados mediante consenso humano y evaluados contra las reglas léxicas congeladas (`evaluate_themes.py`).
 
 Las anotaciones se guardan en `data/processed/model_outputs/evaluation_sample.csv`. El archivo contiene comentarios e IDs internos; es privado y no se incluye en el paquete público.
 
@@ -63,5 +65,5 @@ python crisp_dm/05_evaluation/evaluate_themes.py `
 
 - El acuerdo entre personas no demuestra que la etiqueta acordada sea una verdad absoluta; sirve para detectar ambigüedad y fijar una referencia reproducible.
 - La muestra es pequeña y estratificada por plataforma; no representa proporcionalmente el volumen total recolectado.
-- La taxonomía temática opera con reglas léxicas definidas manualmente y carece de validación humana en muestra independiente.
+- La taxonomía temática opera con reglas léxicas definidas manualmente; la muestra de validación humana ($n=198$) proporciona una evaluación descriptiva del acuerdo y cobertura, mas no una garantía infalible para el 100 % del corpus.
 - No se deben alterar las etiquetas originales para forzar coincidencias artificiales con los modelos.

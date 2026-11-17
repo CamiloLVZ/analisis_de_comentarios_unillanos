@@ -93,9 +93,9 @@ python crisp_dm/06_deployment/build_app_data.py
 
 ---
 
-## 5. Limitaciones y Tareas Pendientes Reales
+## 5. Limitaciones y Validación Humana Realizada
 
-1. **Ausencia de Anotación Humana en Temas:** La muestra `theme_review_sample.csv` (198 comentarios) mantiene sus columnas `theme_gold_1` y `theme_gold_2` vacías. Por rigor ético y metodológico, **no se fabricaron pseudoetiquetas con IA ni se calcularon métricas de F1 artificiales**. La taxonomía temática queda documentada formalmente como un sistema supervisado por reglas léxicas de dominio. Una validación humana independiente de esta muestra queda registrada como trabajo futuro.
+1. **Validación Humana de la Taxonomía Temática:** La muestra estratificada `theme_review_sample.csv` (198 comentarios) fue etiquetada de forma independiente por dos anotadores humanos a ciegas, resolviéndose los desacuerdos por consenso explícito. La taxonomía temática opera mediante reglas léxicas definidas manualmente (no supervisadas) evaluadas formalmente frente a dicho consenso humano, reportando un acuerdo inter-anotador sustancial ($\kappa = 0,623$ sin ambiguos) y métricas ponderadas con intervalos de Wilson al 95 %.
 2. **Evaluación Afectiva en Casos Concordantes:** Las métricas de exactitud de sentimiento (74,4 %) y emoción (74,6 %) provienen de un subconjunto de 78 y 67 casos concordantes y no ambiguos de una muestra de 120 comentarios. Este procedimiento puede favorecer casos prototípicos, por lo que no debe extrapolarse como garantía infalible para el corpus completo.
 3. **Desbalance de Plataformas:** La muestra capturada en YouTube ($N = 230$) es reducida frente a Facebook ($N = 11.529$), por lo que no permite comparaciones causales entre redes.
 4. **Independencia del Contexto del Post:** Conforme a la decisión metodológica inmutable, el texto del post (`post_text`) no se concatenó a los comentarios para no sesgar la opinión del usuario, por lo que comentarios elípticos dependientes de contexto (*"Totalmente de acuerdo"*) permanecen en la clase residual o sin contenido suficiente.

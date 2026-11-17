@@ -250,23 +250,33 @@ def main() -> None:
             fp_w = ev_df.loc[(ev_df["target_rule"] != cat) & (ev_df["assigned_rule"] == cat), "weight"].sum()
             fn_w = ev_df.loc[(ev_df["target_rule"] == cat) & (ev_df["assigned_rule"] != cat), "weight"].sum()
 
-            prec_unw = tp_unw / (tp_unw + fp_unw) if (tp_unw + fp_unw) > 0 else 0.0
-            rec_unw = tp_unw / (tp_unw + fn_unw) if (tp_unw + fn_unw) > 0 else 0.0
-            p_low, p_high = wilson_interval(tp_unw, tp_unw + fp_unw)
-            r_low, r_high = wilson_interval(tp_unw, tp_unw + fn_unw)
+            denom_prec = tp_unw + fp_unw
+            denom_rec = tp_unw + fn_unw  # = support_unw
 
-            prec_w = tp_w / (tp_w + fp_w) if (tp_w + fp_w) > 0 else 0.0
-            rec_w = tp_w / (tp_w + fn_w) if (tp_w + fn_w) > 0 else 0.0
+            prec_unw = tp_unw / denom_prec if denom_prec > 0 else 0.0
+            rec_unw = tp_unw / denom_rec if denom_rec > 0 else 0.0
+
+            prec_interpretable = denom_prec >= 10
+            rec_interpretable = denom_rec >= 10
+
+            p_low, p_high = wilson_interval(tp_unw, denom_prec) if prec_interpretable else (None, None)
+            r_low, r_high = wilson_interval(tp_unw, denom_rec) if rec_interpretable else (None, None)
+
+            denom_prec_w = tp_w + fp_w
+            denom_rec_w = tp_w + fn_w
+            prec_w = tp_w / denom_prec_w if denom_prec_w > 0 else 0.0
+            rec_w = tp_w / denom_rec_w if denom_rec_w > 0 else 0.0
 
             cat_metrics[cat] = {
                 "support_unweighted": support_unw,
-                "precision_unweighted": round(prec_unw, 4),
-                "precision_ci95": [p_low, p_high] if support_unw >= 10 else "n<10: no interpretable",
-                "recall_unweighted": round(rec_unw, 4),
-                "recall_ci95": [r_low, r_high] if support_unw >= 10 else "n<10: no interpretable",
-                "precision_weighted": round(prec_w, 4),
-                "recall_weighted": round(rec_w, 4),
-                "status": "interpretable" if support_unw >= 10 else "n<10: no interpretable"
+                "n_predicted": int(denom_prec),
+                "precision_unweighted": round(prec_unw, 4) if prec_interpretable else None,
+                "precision_ci95": [p_low, p_high] if prec_interpretable else "n<10: no interpretable",
+                "recall_unweighted": round(rec_unw, 4) if rec_interpretable else None,
+                "recall_ci95": [r_low, r_high] if rec_interpretable else "n<10: no interpretable",
+                "precision_weighted": round(prec_w, 4) if prec_interpretable else None,
+                "recall_weighted": round(rec_w, 4) if rec_interpretable else None,
+                "status": "interpretable" if (prec_interpretable and rec_interpretable) else "parcial o no interpretable (n<10)"
             }
 
         # Matriz de confusión (sin ponderar y ponderada)
@@ -338,15 +348,19 @@ def main() -> None:
             "|---|---:|---|---|---:|---:|"
         ])
         for cat, d in report["evaluation_against_rules"]["metrics_by_category"].items():
-            if isinstance(d['precision_ci95'], (list, tuple)):
-                p_ci = f"[{d['precision_ci95'][0]:.1%}, {d['precision_ci95'][1]:.1%}]"
+            if d['precision_unweighted'] is not None and isinstance(d['precision_ci95'], (list, tuple)):
+                p_col = f"{d['precision_unweighted']:.1%} [{d['precision_ci95'][0]:.1%}, {d['precision_ci95'][1]:.1%}]"
             else:
-                p_ci = d['precision_ci95']
-            if isinstance(d['recall_ci95'], (list, tuple)):
-                r_ci = f"[{d['recall_ci95'][0]:.1%}, {d['recall_ci95'][1]:.1%}]"
+                p_col = str(d['precision_ci95'])
+
+            if d['recall_unweighted'] is not None and isinstance(d['recall_ci95'], (list, tuple)):
+                r_col = f"{d['recall_unweighted']:.1%} [{d['recall_ci95'][0]:.1%}, {d['recall_ci95'][1]:.1%}]"
             else:
-                r_ci = d['recall_ci95']
-            md_lines.append(f"| {cat} | {d['support_unweighted']} | {d['precision_unweighted']:.1%} ({p_ci}) | {d['recall_unweighted']:.1%} ({r_ci}) | {d['precision_weighted']:.1%} | {d['recall_weighted']:.1%} |")
+                r_col = str(d['recall_ci95'])
+
+            p_w = f"{d['precision_weighted']:.1%}" if d['precision_weighted'] is not None else "—"
+            r_w = f"{d['recall_weighted']:.1%}" if d['recall_weighted'] is not None else "—"
+            md_lines.append(f"| {cat} | {d['support_unweighted']} | {p_col} | {r_col} | {p_w} | {r_w} |")
 
         cov = report["evaluation_against_rules"]["coverage_leakage"]
         md_lines.extend([

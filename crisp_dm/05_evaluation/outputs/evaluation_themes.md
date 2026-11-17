@@ -15,16 +15,16 @@
 
 | Categoría | Soporte | Precisión (IC 95%) | Recall (IC 95%) | Precisión Pond. | Recall Pond. |
 |---|---:|---|---|---:|---:|
-| Protesta y movilización | 12 | 100.0% ([51.0%, 100.0%]) | 33.3% ([13.8%, 60.9%]) | 100.0% | 46.9% |
-| Programas de acceso y bienestar | 4 | 0.0% (n<10: no interpretable) | 0.0% (n<10: no interpretable) | 0.0% | 0.0% |
-| Admisiones, inscripciones y matrículas | 6 | 33.3% (n<10: no interpretable) | 33.3% (n<10: no interpretable) | 49.1% | 49.5% |
-| Información, trámites y certificados | 19 | 80.0% ([37.5%, 96.4%]) | 21.1% ([8.5%, 43.3%]) | 99.3% | 32.8% |
-| Oferta académica e investigación | 13 | 38.1% ([20.8%, 59.1%]) | 61.5% ([35.5%, 82.3%]) | 69.0% | 86.8% |
-| Infraestructura, sedes y tecnología | 6 | 25.0% (n<10: no interpretable) | 16.7% (n<10: no interpretable) | 1.0% | 4.4% |
-| Eventos, cultura y actividades institucionales | 9 | 66.7% (n<10: no interpretable) | 22.2% (n<10: no interpretable) | 27.4% | 31.7% |
-| Felicitaciones y expresiones de aprecio | 50 | 86.1% ([72.7%, 93.4%]) | 74.0% ([60.5%, 84.1%]) | 93.1% | 77.8% |
-| Otros temas no identificados | 14 | 20.3% ([12.0%, 32.3%]) | 85.7% ([60.1%, 96.0%]) | 18.8% | 93.9% |
-| Sin contenido temático suficiente (social/emoji/mención) | 61 | 81.2% ([68.1%, 89.8%]) | 63.9% ([51.4%, 74.8%]) | 76.4% | 44.5% |
+| Protesta y movilización | 12 | n<10: no interpretable | 33.3% [13.8%, 60.9%] | — | 46.9% |
+| Programas de acceso y bienestar | 4 | n<10: no interpretable | n<10: no interpretable | — | — |
+| Admisiones, inscripciones y matrículas | 6 | n<10: no interpretable | n<10: no interpretable | — | — |
+| Información, trámites y certificados | 19 | n<10: no interpretable | 21.1% [8.5%, 43.3%] | — | 32.8% |
+| Oferta académica e investigación | 13 | 38.1% [20.8%, 59.1%] | 61.5% [35.5%, 82.3%] | 69.0% | 86.8% |
+| Infraestructura, sedes y tecnología | 6 | n<10: no interpretable | n<10: no interpretable | — | — |
+| Eventos, cultura y actividades institucionales | 9 | n<10: no interpretable | n<10: no interpretable | — | — |
+| Felicitaciones y expresiones de aprecio | 50 | 86.1% [72.7%, 93.4%] | 74.0% [60.5%, 84.1%] | 93.1% | 77.8% |
+| Otros temas no identificados | 14 | 20.3% [12.0%, 32.3%] | 85.7% [60.1%, 96.0%] | 18.8% | 93.9% |
+| Sin contenido temático suficiente (social/emoji/mención) | 61 | 81.2% [68.1%, 89.8%] | 63.9% [51.4%, 74.8%] | 76.4% | 44.5% |
 
 ## 3. Cobertura Real y Fuga hacia Residuales
 - **Casos específicos etiquetados por humanos (sin ponderar):** 119
