@@ -30,7 +30,7 @@ Los significados se derivan de `crisp_dm/02_data_understanding/unify_raw_data.py
 | `post_title` | Título de video de YouTube cuando está disponible. | No se usa en texto del comentario ni se publica. |
 | `post_text` | Descripción/caption de la publicación o video. | No clasificar como si fuera comentario; contexto incompleto, fuera de alcance. |
 | `post_created_at` | Fecha de la publicación/video. | Fuera del análisis temporal. |
-| `post_type` | Tipo de contenido informado por plataforma, por ejemplo foto/video/texto. | Agrupación opcional si cobertura suficiente. |
+| `post_type` | Tipo de contenido multimedia de la publicación estandarizado (imagen, video, carrusel, texto). | Filtro y agrupación analítica en la aplicación. |
 | `post_like_count` | Conteo de me gusta/reacciones de la publicación. | Fuera del alcance; no comparable entre plataformas. |
 | `post_comment_count` | Conteo de comentarios de la publicación. | Fuera del alcance; no normalizar métricas. |
 | `post_share_count` | Conteo de compartidos de la publicación. | Fuera del alcance. |

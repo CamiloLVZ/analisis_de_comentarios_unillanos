@@ -30,12 +30,14 @@ Para desplegar públicamente, usar `deploy_bundle/` como raíz del proyecto de l
 ## Contenido de la interfaz
 
 Streamlit ejecuta únicamente `deploy_bundle/app.py` y lee los archivos agregados en `data/app/`. Contiene:
-1. **Resumen:** Volumen por plataforma y filtros globales.
-2. **Temas:** Distribución de las 7 áreas sustantivas, la clase funcional "Sin contenido temático suficiente" y el residual "Otros temas no identificados".
+1. **Resumen:** Distribución por plataforma y formatos multimedia unificados (Imagen, Video, Carrusel, Texto).
+2. **Temas:** Distribución de las áreas sustantivas, la clase "Sin contenido temático suficiente" y el residual "Otros temas no identificados".
 3. **Sentimiento por tema:** Vista condicional que permite explorar cómo se distribuye la polaridad (POS/NEG/NEU) dentro de cada área temática de la universidad.
 4. **Sentimiento global:** Polaridad general y bandas de confianza diagnósticas.
 5. **Emociones:** Estimación global de emociones básicas.
-6. **Método y límites:** Explicación técnica de la taxonomía, conservación de emojis, independencia del texto del post y limitaciones éticas de evaluación.
+6. **Visualizaciones avanzadas:** Cuadrante de impacto (volumen vs. negatividad), diagrama de flujo Sankey, estructura jerárquica Sunburst y radar de huella emocional por plataforma.
+7. **Clasificador de temas:** Simulador interactivo en tiempo real con explicación transparente de la regla léxica activada, texto coincidente y orden de precedencia.
+8. **Observaciones:** Explicación técnica de la taxonomía, conservación de emojis, independencia del contexto del post y consideraciones éticas de evaluación.
 
 ## Cierre de fase
 
