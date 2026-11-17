@@ -59,6 +59,19 @@ def join_list(values):
     return "|".join(str(v) for v in (values or []))
 
 
+def normalize_post_type(value):
+    v = str(value or "").strip().lower()
+    if v in ("photo", "image", "imagen"):
+        return "imagen"
+    if v in ("sidecar", "carousel", "carrusel"):
+        return "carrusel"
+    if v in ("video", "reel"):
+        return "video"
+    if v in ("text", "texto"):
+        return "texto"
+    return v or "desconocido"
+
+
 def row_template():
     return {c: "" for c in COLUMNS}
 
@@ -107,7 +120,7 @@ def facebook_rows():
                 post_url=post.get("url") or r["post_url"],
                 post_text=post.get("text") or "",
                 post_created_at=iso_utc(post.get("createdAt")),
-                post_type=media[0].get("type", "") if media else "text",
+                post_type=normalize_post_type(media[0].get("type", "") if media else "text"),
                 post_like_count=post.get("reactions", ""),
                 post_comment_count=post.get("comments", ""),
                 post_share_count=post.get("shares", ""),
@@ -153,7 +166,7 @@ def instagram_rows():
                 post_url=post.get("url") or r["post_url"],
                 post_text=post.get("caption") or "",
                 post_created_at=iso_utc(post.get("timestamp")),
-                post_type=post.get("type", ""),
+                post_type=normalize_post_type(post.get("type", "")),
                 post_like_count=post.get("likesCount", ""),
                 post_comment_count=post.get("commentsCount", ""),
                 post_hashtags=join_list(post.get("hashtags")),

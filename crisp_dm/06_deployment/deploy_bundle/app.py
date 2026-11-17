@@ -215,9 +215,9 @@ st.info("Exploración descriptiva de comentarios institucionales capturados. La 
 with st.sidebar:
     st.header("Filtros")
     platform_options = sorted(overview["platforms"])
-    selected_platforms = st.multiselect("Plataformas", platform_options, default=platform_options)
+    selected_platforms = st.multiselect("Plataformas", platform_options, default=platform_options, format_func=str.capitalize)
     type_options = sorted(overview["post_types"])
-    selected_types = st.multiselect("Tipo de publicación", type_options, default=type_options)
+    selected_types = st.multiselect("Tipo de publicación", type_options, default=type_options, format_func=str.capitalize)
 
 themes_f = filtered(themes, selected_platforms, selected_types)
 sentiment_f = filtered(sentiment, selected_platforms, selected_types)
@@ -253,21 +253,12 @@ with tab_summary:
             st.bar_chart(plat_df.set_index("Plataforma")["Comentarios"], horizontal=True)
 
     with col_p2:
-        st.markdown("**Volumen por tipo de publicación**")
+        st.markdown("**Participación por tipo de publicación**")
         type_df = themes_f.groupby("post_type")["n"].sum().sort_values(ascending=False).rename("Comentarios").reset_index()
         type_df["Tipo"] = type_df["post_type"].str.capitalize()
-        if HAS_PLOTLY:
-            fig_types = px.bar(
-                type_df,
-                x="Comentarios",
-                y="Tipo",
-                orientation="h",
-                color="Tipo",
-                color_discrete_sequence=px.colors.qualitative.Safe,
-                text_auto=True
-            )
-            fig_types.update_layout(showlegend=False, margin=dict(l=20, r=20, t=30, b=20), height=360)
-            st.plotly_chart(fig_types, use_container_width=True)
+        fig_type = make_pie_chart(type_df, "Tipo", "Comentarios")
+        if fig_type:
+            st.plotly_chart(fig_type, use_container_width=True)
         else:
             st.bar_chart(type_df.set_index("Tipo")["Comentarios"], horizontal=True)
 

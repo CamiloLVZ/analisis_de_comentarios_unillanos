@@ -56,7 +56,19 @@ def main() -> None:
     empty_rows = int(df["text"].str.strip().eq("").sum())
     df = df[df["text"].str.strip().ne("")].copy()
     df["platform"] = df["platform"].fillna("unknown").astype(str).str.lower()
-    df["post_type"] = df["post_type"].fillna("unknown").astype(str).str.lower()
+    post_type_map = {
+        "photo": "imagen",
+        "image": "imagen",
+        "imagen": "imagen",
+        "sidecar": "carrusel",
+        "carousel": "carrusel",
+        "carrusel": "carrusel",
+        "video": "video",
+        "reel": "video",
+        "text": "texto",
+        "texto": "texto",
+    }
+    df["post_type"] = df["post_type"].fillna("desconocido").astype(str).str.lower().map(lambda x: post_type_map.get(x, x))
     df["is_reply"] = df["is_reply"].map(truthy)
     df["has_emoji"] = df["text"].map(has_emoji_or_symbol)
     df["emoji_only"] = df["has_emoji"] & ~df["text"].str.contains(r"[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9]", regex=True, na=False)

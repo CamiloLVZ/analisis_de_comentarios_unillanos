@@ -1,19 +1,19 @@
 ﻿platform,post_type,confidence_band,n
-facebook,photo,"0,6 a menor de 0,7",1620
-facebook,photo,"0,7 o más",4453
-facebook,photo,"Menor a 0,6",2391
-facebook,text,"0,6 a menor de 0,7",59
-facebook,text,"0,7 o más",148
-facebook,text,"Menor a 0,6",77
+facebook,imagen,"0,6 a menor de 0,7",1620
+facebook,imagen,"0,7 o más",4453
+facebook,imagen,"Menor a 0,6",2391
+facebook,texto,"0,6 a menor de 0,7",59
+facebook,texto,"0,7 o más",148
+facebook,texto,"Menor a 0,6",77
 facebook,video,"0,6 a menor de 0,7",463
 facebook,video,"0,7 o más",1551
 facebook,video,"Menor a 0,6",767
-instagram,image,"0,6 a menor de 0,7",110
-instagram,image,"0,7 o más",223
-instagram,image,"Menor a 0,6",175
-instagram,sidecar,"0,6 a menor de 0,7",160
-instagram,sidecar,"0,7 o más",490
-instagram,sidecar,"Menor a 0,6",321
+instagram,carrusel,"0,6 a menor de 0,7",160
+instagram,carrusel,"0,7 o más",490
+instagram,carrusel,"Menor a 0,6",321
+instagram,imagen,"0,6 a menor de 0,7",110
+instagram,imagen,"0,7 o más",223
+instagram,imagen,"Menor a 0,6",175
 instagram,video,"0,6 a menor de 0,7",361
 instagram,video,"0,7 o más",1219
 instagram,video,"Menor a 0,6",1067

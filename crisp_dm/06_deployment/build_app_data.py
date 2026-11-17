@@ -24,7 +24,19 @@ def main() -> None:
     for column in ["platform", "post_type", "theme", "sentiment_label", "emotion_label"]:
         if column not in scores:
             raise ValueError(f"Falta la columna {column}; revise la salida del modelado")
-    scores["post_type"] = scores["post_type"].fillna("unknown").astype(str)
+    post_type_map = {
+        "photo": "imagen",
+        "image": "imagen",
+        "imagen": "imagen",
+        "sidecar": "carrusel",
+        "carousel": "carrusel",
+        "carrusel": "carrusel",
+        "video": "video",
+        "reel": "video",
+        "text": "texto",
+        "texto": "texto",
+    }
+    scores["post_type"] = scores["post_type"].fillna("desconocido").astype(str).str.lower().map(lambda x: post_type_map.get(x, x))
     scores["platform"] = scores["platform"].fillna("unknown").astype(str)
     scores["emotion_label"] = scores["emotion_label"].replace({"others": "Otros / sin emoción básica clara"})
     OUT.mkdir(parents=True, exist_ok=True)

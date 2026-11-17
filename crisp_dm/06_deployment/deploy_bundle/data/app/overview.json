@@ -7,10 +7,9 @@
     "youtube": 230
   },
   "post_types": [
-    "image",
-    "photo",
-    "sidecar",
-    "text",
+    "carrusel",
+    "imagen",
+    "texto",
     "video"
   ],
   "themes": [

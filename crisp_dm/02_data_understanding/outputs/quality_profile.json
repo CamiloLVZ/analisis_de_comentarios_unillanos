@@ -93,7 +93,7 @@
     },
     "parent_comment_id": {
       "missing": 13969,
-      "empty_string": 13969
+      "empty_string": 0
     },
     "is_reply": {
       "missing": 0,
@@ -105,7 +105,7 @@
     },
     "text": {
       "missing": 586,
-      "empty_string": 586
+      "empty_string": 0
     },
     "created_at": {
       "missing": 0,
@@ -117,11 +117,11 @@
     },
     "reply_count": {
       "missing": 27,
-      "empty_string": 27
+      "empty_string": 0
     },
     "author_id": {
       "missing": 230,
-      "empty_string": 230
+      "empty_string": 0
     },
     "author_name": {
       "missing": 0,
@@ -129,43 +129,43 @@
     },
     "mentions": {
       "missing": 12324,
-      "empty_string": 12324
+      "empty_string": 0
     },
     "has_attachment": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "comment_url": {
       "missing": 230,
-      "empty_string": 230
+      "empty_string": 0
     },
     "react_like": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_love": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_care": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_haha": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_wow": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_sad": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "react_angry": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "post_id": {
       "missing": 0,
@@ -177,11 +177,11 @@
     },
     "post_title": {
       "missing": 16241,
-      "empty_string": 16241
+      "empty_string": 0
     },
     "post_text": {
       "missing": 118,
-      "empty_string": 118
+      "empty_string": 0
     },
     "post_created_at": {
       "missing": 0,
@@ -193,19 +193,19 @@
     },
     "post_like_count": {
       "missing": 230,
-      "empty_string": 230
+      "empty_string": 0
     },
     "post_comment_count": {
       "missing": 230,
-      "empty_string": 230
+      "empty_string": 0
     },
     "post_share_count": {
       "missing": 4382,
-      "empty_string": 4382
+      "empty_string": 0
     },
     "post_hashtags": {
       "missing": 14724,
-      "empty_string": 14724
+      "empty_string": 0
     },
     "post_author": {
       "missing": 0,
