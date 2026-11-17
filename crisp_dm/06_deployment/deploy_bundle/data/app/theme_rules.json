@@ -1,0 +1,169 @@
+{
+  "method": "Clasificación por reglas léxicas definidas manualmente con delimitadores de palabra y preclasificación de contenido mínimo. Las categorías no equivalen a un modelo temático validado humanamente.",
+  "categories": [
+    {
+      "name": "Protesta y movilización",
+      "keywords": [
+        "hambre de educacion",
+        "habre de educacion",
+        "hambredeeducacion",
+        "huelga\\w*",
+        "\\bprotest\\w*",
+        "\\bmovilizaci\\w*",
+        "\\bmanifestaci\\w*",
+        "\\bplanton\\b"
+      ]
+    },
+    {
+      "name": "Programas de acceso y bienestar",
+      "keywords": [
+        "matricula cero",
+        "matrícula cero",
+        "hambre cero",
+        "bienestar universitario",
+        "bienestar",
+        "\\bbecas?\\b",
+        "alimentaci[oó]n",
+        "apoyo econ[oó]mico",
+        "\\bsubsidios?\\b",
+        "\\bcomedor\\b"
+      ]
+    },
+    {
+      "name": "Admisiones, inscripciones y matrículas",
+      "keywords": [
+        "\\binscrip\\w*",
+        "\\badmis\\w*",
+        "\\baspirantes?\\b",
+        "\\badmitid\\w*",
+        "\\bpregrados?\\b",
+        "\\bposgrados?\\b",
+        "\\bmatriculas?\\b",
+        "\\bcupos?\\b",
+        "\\bpines?\\b",
+        "\\bsemestres?\\b",
+        "\\bhomologaci[oó]n\\w*",
+        "\\bcalendario acad[eé]mico\\b"
+      ]
+    },
+    {
+      "name": "Información, trámites y certificados",
+      "keywords": [
+        "c[oó]mo me",
+        "c[oó]mo puedo",
+        "c[oó]mo hago",
+        "d[oó]nde puedo",
+        "d[oó]nde queda",
+        "d[oó]nde est[aá]",
+        "cu[aá]nto cuesta",
+        "cu[aá]ndo inician",
+        "cu[aá]ndo empiezan",
+        "qu[eé] precio",
+        "qu[eé] costo",
+        "\\brequisitos?\\b",
+        "\\bhorarios?\\b",
+        "\\bsolicitud\\w*",
+        "\\btr[aá]mite\\w*",
+        "\\bcertificad\\w*",
+        "\\bconstancias?\\b",
+        "\\bdocumentos?\\b",
+        "\\bcorreos?\\b",
+        "atenci[oó]n al usuario",
+        "\\binformaci[oó]n\\b",
+        "m[aá]s informaci[oó]n",
+        "\\bcontacto\\b",
+        "\\btelefono\\b"
+      ]
+    },
+    {
+      "name": "Oferta académica e investigación",
+      "keywords": [
+        "\\bfacultad\\w*",
+        "\\bcarreras?\\b",
+        "\\bprogramas?\\b",
+        "\\bestudiantes?\\b",
+        "\\bdocentes?\\b",
+        "\\bprofesor\\w*",
+        "\\binvestigaci[oó]n\\w*",
+        "\\bsemilleros?\\b",
+        "\\bcursos?\\b",
+        "\\bclases?\\b",
+        "\\bpensum\\b",
+        "\\bgraduaci[oó]n\\w*",
+        "\\bgraduad\\w*",
+        "\\bgrados?\\b",
+        "\\begresad\\w*",
+        "\\bacademia\\b",
+        "\\bacad[eé]mic\\w*",
+        "\\btesis\\b"
+      ]
+    },
+    {
+      "name": "Infraestructura, sedes y tecnología",
+      "keywords": [
+        "\\bsedes?\\b",
+        "\\bbarcelona\\b",
+        "san antonio",
+        "boquemonte",
+        "\\blaboratorios?\\b",
+        "\\bbibliotecas?\\b",
+        "\\bcampus\\b",
+        "\\binternet\\b",
+        "\\bwifi\\b",
+        "\\baulas?\\b",
+        "\\btransportes?\\b",
+        "\\bbuses?\\b",
+        "\\brutas?\\b",
+        "\\bedifici\\w*",
+        "\\binstalacion\\w*",
+        "\\bparqueader\\w*"
+      ]
+    },
+    {
+      "name": "Eventos, cultura y actividades institucionales",
+      "keywords": [
+        "\\beventos?\\b",
+        "\\bferias?\\b",
+        "\\bencuentros?\\b",
+        "\\bconferencias?\\b",
+        "\\bforos?\\b",
+        "\\bjornadas?\\b",
+        "\\bfestival\\w*",
+        "\\binvitaci[oó]n\\w*",
+        "\\bcelebraci[oó]n\\w*",
+        "\\bcongresos?\\b",
+        "\\btalleres?\\b",
+        "semana universitaria",
+        "\\bconciertos?\\b",
+        "\\bactividad\\w*",
+        "\\bdeportes?\\b",
+        "\\btorneo\\w*"
+      ]
+    },
+    {
+      "name": "Felicitaciones y expresiones de aprecio",
+      "keywords": [
+        "\\bfelicit\\w*",
+        "\\bfelicidades\\b",
+        "\\bgracias\\b",
+        "\\bexcelente\\b",
+        "\\b[eé]xitos?\\b",
+        "\\borgullo\\w*",
+        "\\bbendici[oó]n\\w*",
+        "\\bbendiciones\\b",
+        "\\bfeliz\\b",
+        "\\bbravo\\b",
+        "\\bhermos\\w*",
+        "\\bmaravillos\\w*",
+        "\\benhorabuena\\b",
+        "\\bdios los bendiga\\b",
+        "\\bdios te bendiga\\b",
+        "\\bdios bendiga\\b",
+        "\\bbuen trabajo\\b",
+        "\\bgran labor\\b"
+      ]
+    }
+  ],
+  "insufficient_content_label": "Sin contenido temático suficiente (social/emoji/mención)",
+  "fallback": "Otros temas no identificados"
+}
